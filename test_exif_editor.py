@@ -1,7 +1,7 @@
 import hashlib
 from unittest import TestCase
 
-from ExifEditor import ExifEditor
+from exif_editor import ExifEditor
 from cli import Cli
 
 read_file = "./res/read.jpg"

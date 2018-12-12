@@ -15,4 +15,3 @@ class TestCli(TestCase):
         cli = Cli()
         self.assertRaises(CalledProcessError, lambda: cli.run_cmd(["cat", "./res/fooba.txt"]))
 
-

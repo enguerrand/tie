@@ -1,4 +1,4 @@
-from Cli import Cli
+from cli import Cli
 
 
 class ExifEditor:

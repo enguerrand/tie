@@ -1,7 +1,7 @@
 from subprocess import CalledProcessError
 from unittest import TestCase
 
-from Cli import Cli
+from cli import Cli
 
 
 class TestCli(TestCase):

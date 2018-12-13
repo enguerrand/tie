@@ -1,8 +1,8 @@
 import hashlib
 from unittest import TestCase
 
-from exif_editor import ExifEditor
-from cli import Cli
+from pytag.exif_editor import ExifEditor
+from pytag.cli import Cli
 
 read_file = "../res/read.jpg"
 write_file = "../res/write.jpg"

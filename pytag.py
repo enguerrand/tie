@@ -1,4 +1,4 @@
-from exif_editor import ExifEditor
+from pytag.exif_editor import ExifEditor
 
 
 class Pytag:

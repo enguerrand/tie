@@ -1,4 +1,4 @@
-from cli import Cli
+from pytag.cli import Cli
 
 
 class ExifEditor:

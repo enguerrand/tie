@@ -1,3 +1,5 @@
+from subprocess import CalledProcessError
+
 from pytag import cli
 import pytag.meta_data as md
 
@@ -14,9 +16,20 @@ def _write_exif_field(field_name: str, value: str, path: str):
 
 
 def get_meta_data(path: str) -> md.MetaData:
-    serialized = _read_exif_field(_field_name, path)
+    try:
+        serialized = _read_exif_field(_field_name, path)
+    except CalledProcessError as e:
+        if _is_file_not_found(e):
+            raise e
+        else:
+            return md.empty()
+
     return md.deserialize(serialized)
 
 
 def set_meta_data(path: str, data: md.MetaData):
     _write_exif_field(_field_name, data.serialize(), path)
+
+
+def _is_file_not_found(error: CalledProcessError):
+    return error.returncode == 255

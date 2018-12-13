@@ -9,7 +9,8 @@ class MetaData:
     def serialize(self) -> str:
         return json.dumps({"tags": self.tags})
 
-    def deserialize(serialized: str):
-        decoded = json.loads(serialized)
-        md = MetaData(decoded["tags"])
-        return md
+
+def deserialize(serialized: str):
+    decoded = json.loads(serialized)
+    md = MetaData(decoded["tags"])
+    return md

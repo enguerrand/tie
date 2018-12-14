@@ -14,6 +14,9 @@ write_file_md = "../res/write_md.jpg"
 
 class TestExifEditor(TestCase):
 
+    def setUp(self):
+        self.ee = ee.ExifEditor()
+
     def test_read_raw(self):
         value = ee._read_exif_field("Exif.Photo.UserComment", read_file)
         self.assertEqual('Some string with \'ä\' and "quotes', value)
@@ -29,7 +32,7 @@ class TestExifEditor(TestCase):
             self.assertEqual("d41d8cd98f00b204e9800998ecf8427e", md5_post)
 
     def test_read_md(self):
-        data = ee.get_meta_data(read_file_md)
+        data = self.ee.get_meta_data(read_file_md)
         self.assertEqual("42", data.ver)
         self.assertEqual(["My Dummy Tag öä ' \" ", "tag 2"], data.tags)
 
@@ -39,14 +42,14 @@ class TestExifEditor(TestCase):
             md5_pre = hashlib.md5(f.read()).hexdigest()
 
             self.assertEqual("197c10f162136a0fa984477eb911058d", md5_pre)
-            ee.set_meta_data(write_file_md, md.MetaData("42", ["My other Dummy Tag öä ' \" ", "tag 2"]))
+            self.ee.set_meta_data(write_file_md, md.MetaData("42", ["My other Dummy Tag öä ' \" ", "tag 2"]))
             md5_post = hashlib.md5(f.read()).hexdigest()
             self.assertEqual("eebc838d12ba676fc6adab2d4d434889", md5_post)
 
     def test_read_from_non_img(self):
-        data = ee.get_meta_data("../res/foobar.txt")
+        data = self.ee.get_meta_data("../res/foobar.txt")
         self.assertEqual(md.current_version, data.ver)
         self.assertEqual([], data.tags)
 
     def test_read_non_existant_file(self):
-        self.assertRaises(CalledProcessError, lambda: ee.get_meta_data("../res/fooba.txt"))
+        self.assertRaises(CalledProcessError, lambda: self.ee.get_meta_data("../res/fooba.txt"))

@@ -1,8 +1,11 @@
 import os
 
+from pytag import cli
+
 
 def ln(destination: str, source: str):
-    os.symlink(source, destination)
+    # "os.symlink(source, destination)" does not provide a way to force the symlink creation
+    cli.run_cmd(["ln", "-sf", source, destination])
 
 
 def readlink(link: str) -> str:

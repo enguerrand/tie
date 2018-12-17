@@ -6,6 +6,8 @@ from pytag import cli
 import pytag.exif_editor as ee
 import pytag.meta_data as md
 
+from tests.test_tags import *
+
 read_file = "../res/read.jpg"
 write_file = "../res/write.jpg"
 read_file_md = "../res/read_md.jpg"
@@ -34,7 +36,7 @@ class TestExifEditor(TestCase):
     def test_read_md(self):
         data = self.ee.get_meta_data(read_file_md)
         self.assertEqual("42", data.ver)
-        self.assertEqual(["My Dummy Tag öä ' \" ", "tag 2"], data.tags)
+        self.assertEqual([TEST_READ_TAG_1, TEST_READ_TAG_2], data.tags)
 
     def test_write_md(self):
         cli.run_cmd(["cp", read_file_md, write_file_md])
@@ -42,7 +44,7 @@ class TestExifEditor(TestCase):
             md5_pre = hashlib.md5(f.read()).hexdigest()
 
             self.assertEqual("197c10f162136a0fa984477eb911058d", md5_pre)
-            self.ee.set_meta_data(write_file_md, md.MetaData("42", ["My other Dummy Tag öä ' \" ", "tag 2"]))
+            self.ee.set_meta_data(write_file_md, md.MetaData("42", [TEST_WRITE_TAG_1, TEST_WRITE_TAG_2]))
             md5_post = hashlib.md5(f.read()).hexdigest()
             self.assertEqual("eebc838d12ba676fc6adab2d4d434889", md5_post)
 

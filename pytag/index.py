@@ -16,6 +16,17 @@ class Index:
         _create_dir_if_absent(self._tags_dir)
 
     def update(self, path: str):
+        if os.path.isdir(path):
+            self._update_dir_recursively(path)
+        else:
+            self._update_file(path)
+
+    def _update_dir_recursively(self, path):
+        for root, dirs, files in os.walk(path, followlinks=True):
+            for file in files:
+                self._update_file(os.path.join(root, file))
+
+    def _update_file(self, path: str):
         meta_data = self._exif.get_meta_data(path)
         for tag in meta_data.tags:
             absolute_tag_dir_path = os.path.abspath(self._create_tag_if_absent(tag))

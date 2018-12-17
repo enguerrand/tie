@@ -3,9 +3,9 @@ import os
 from pytag import cli
 
 
-def ln(destination: str, source: str):
+def ln(destination: str, link_name: str):
     # "os.symlink(source, destination)" does not provide a way to force the symlink creation
-    cli.run_cmd(["ln", "-sf", source, destination])
+    cli.run_cmd(["ln", "-sf", destination, link_name])
 
 
 def readlink(link: str) -> str:

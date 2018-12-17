@@ -20,7 +20,7 @@ class TestSymlinks(TestCase):
 
     def test_ln(self):
         self._remove_test_link()
-        symlinks.ln(LINK_FOOBAR, FOOBAR_TXT)
+        symlinks.ln(FOOBAR_TXT, LINK_FOOBAR)
         dst = symlinks.readlink(LINK_FOOBAR)
         self.assertEqual(dst, FOOBAR_TXT)
         self._remove_test_link()

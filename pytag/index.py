@@ -28,18 +28,45 @@ class Index:
 
     def _update_file(self, path: str):
         meta_data = self._exif.get_meta_data(path)
+        self._index_present_tags(meta_data, path)
+        self._clear_absent_tags(meta_data, path)
+
+    def _index_present_tags(self, meta_data, path):
         for tag in meta_data.tags:
             absolute_tag_dir_path = os.path.abspath(self._create_tag_if_absent(tag))
             absolute_file_path = os.path.abspath(path)
-            sl.ln(absolute_file_path, self._build_link_abs_path(absolute_tag_dir_path, absolute_file_path))
+            _create_tag(absolute_file_path, absolute_tag_dir_path)
+
+    def _clear_absent_tags(self, meta_data, path):
+        link_name = _build_link_name(os.path.abspath(path))
+        for tag in os.listdir(self._tags_dir):
+            self._clear_tag_if_absent(tag, link_name, meta_data)
 
     def _create_tag_if_absent(self, tag: str) -> str:
         path = os.path.join(self._tags_dir, tag)
         _create_dir_if_absent(path)
         return path
 
-    def _build_link_abs_path(self, abs_tagdir_path: str, abs_file_path: str):
-        return os.path.join(abs_tagdir_path, _build_link_name(abs_file_path))
+    def _clear_tag_if_absent(self, tag_dir, link_name, meta_data):
+        tag_name = os.path.basename(tag_dir)
+        tag_path = os.path.abspath(os.path.join(self._tags_dir, tag_name))
+        if tag_name not in meta_data.tags:
+            _clear_tag(tag_path, link_name)
+
+
+def _create_tag(absolute_file_path, absolute_tag_dir_path):
+    sl.ln(absolute_file_path, _build_link_abs_path(absolute_tag_dir_path, absolute_file_path))
+
+
+def _clear_tag(tag_path, link_name):
+    try:
+        os.remove(os.path.join(tag_path, link_name))
+    except FileNotFoundError:
+        pass
+
+
+def _build_link_abs_path(abs_tagdir_path: str, abs_file_path: str):
+    return os.path.join(abs_tagdir_path, _build_link_name(abs_file_path))
 
 
 def _build_link_name(abs_file_path: str):

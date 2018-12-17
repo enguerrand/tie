@@ -14,7 +14,7 @@ class TestIndex(TestCase):
     def setUp(self):
         self._remove_index()
         self.index = Index(TEST_INDEX_LOCATION, ee.ExifEditor())
-        self.files_base_path = os.path.abspath("../res").replace(os.sep, ":")
+        self.files_base_path = self._path_to_linkname(os.path.abspath("../res"))
 
     def tearDown(self):
         self._remove_index()
@@ -41,6 +41,22 @@ class TestIndex(TestCase):
                             "Link "+link_name+" should exist in tagdir 1 but does not")
             self.assertTrue(self._file_exists(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2, link_name)),
                             "Link "+link_name+" should exist in tagdir 2 but does not")
+
+    def test_removed_tag(self):
+        img = os.path.abspath("../res/read_md.jpg")
+        linkname = self._path_to_linkname(img)
+        removed_tag_dir = os.path.join(TEST_INDEX_LOCATION, "tags", "removed tag")
+        link_path = os.path.join(removed_tag_dir, linkname)
+        cli.run_cmd(["mkdir", "-p", removed_tag_dir])
+        cli.run_cmd(["ln", "-sf", img, link_path])
+        self.index.update("../res/read_md.jpg")
+        self.assertFalse(self._file_exists(link_path), "tag was not removed!")
+        # Execute again to test if this (incorrectly) raises a FileNotFoundError
+        self.index.update("../res/read_md.jpg")
+        cli.run_cmd(["rm", "-rf", removed_tag_dir])
+
+    def _path_to_linkname(self, img):
+        return img.replace(os.sep, ":")
 
     def _remove_index(self):
         cli.run_cmd(["rm", "-rf", TEST_INDEX_LOCATION])

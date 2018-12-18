@@ -16,14 +16,14 @@ class Index:
         self._tags_dir = os.path.join(self._root_dir, TAGS_DIR_NAME)
         _create_dir_if_absent(self._tags_dir)
 
+    def list_tags(self):
+        return os.listdir(self._tags_dir)
+
     def update(self, path: str):
         if os.path.isdir(path):
             self._update_dir_recursively(path)
         else:
             self._update_file(path)
-
-    def list_tags(self):
-        return os.listdir(self._tags_dir)
 
     def _update_dir_recursively(self, path):
         for root, dirs, files in os.walk(path, followlinks=True):
@@ -46,7 +46,7 @@ class Index:
             return md.empty()
 
     def _treat_as_missing_file(self, path):
-        self._clear_absent_tags(md.empty(), path)
+        self._clear_all_tags(path)
 
     def _treat_missing_as_dir(self, path):
         self._clear_tags_for_vanished_dir(path)
@@ -56,6 +56,9 @@ class Index:
             absolute_tag_dir_path = os.path.abspath(self._create_tag_if_absent(tag))
             absolute_file_path = os.path.abspath(path)
             _create_tag(absolute_file_path, absolute_tag_dir_path)
+
+    def _clear_all_tags(self, path):
+        self._clear_absent_tags(md.empty(), path)
 
     def _clear_absent_tags(self, meta_data, path):
         link_name = _build_link_name(os.path.abspath(path))

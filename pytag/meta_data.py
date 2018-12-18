@@ -22,7 +22,10 @@ def deserialize(serialized: str):
         decoded = json.loads(serialized)
     except JSONDecodeError as json_decode_error:
         raise InvalidMetaData(json_decode_error)
-    md = MetaData(decoded["tags"], decoded["ver"])
+    try:
+        md = MetaData(decoded["tags"], decoded["ver"])
+    except KeyError as key_error:
+        raise InvalidMetaData(key_error)
     return md
 
 

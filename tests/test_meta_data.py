@@ -11,3 +11,11 @@ class TestMetaData(TestCase):
         self.assertEqual('{"tags": ["foo", "bar", "foo bar", "\\u00e4\\u00f6\\u00fc", "\'", "\\""], "ver": "42"}', serialized)
         deserialized = md.deserialize(serialized)
         self.assertEqual(data.tags, deserialized.tags)
+
+    def test_deserialize_malformed_json(self):
+        serialized: str = '{foo bar'
+        self.assertRaises(md.InvalidMetaData, lambda: md.deserialize(serialized))
+
+    def test_deserialize_invalid_meta_data(self):
+        serialized: str = '{"blubb": ["foo", "bar"]}'
+        self.assertRaises(md.InvalidMetaData, lambda: md.deserialize(serialized))

@@ -20,16 +20,22 @@ class TestIndex(TestCase):
         self._remove_index()
 
     def test_initialization(self):
-        self.assertTrue(self._file_exists(TEST_INDEX_LOCATION))
-        self.assertTrue(self._file_exists(os.path.join(TEST_INDEX_LOCATION, "tags")))
+        self.assertTrue(os.path.isdir(TEST_INDEX_LOCATION))
+        self.assertTrue(os.path.isdir(os.path.join(TEST_INDEX_LOCATION, "tags")))
 
     def test_update_file(self):
         self.index.update("../res/read_md.jpg")
         link_name = self.files_base_path + ":" + "read_md.jpg"
-        self.assertTrue(self._file_exists(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1, link_name)),
+        self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1, link_name)),
                         "no link in tagdir 1")
-        self.assertTrue(self._file_exists(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2, link_name)),
+        self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2, link_name)),
                         "no link in tagdir 2")
+
+    def test_list_tags(self):
+        cli.run_cmd(["mkdir", "-p", os.path.join(TEST_INDEX_LOCATION, "tags", "foo")])
+        cli.run_cmd(["mkdir", "-p", os.path.join(TEST_INDEX_LOCATION, "tags", "bar")])
+        tags = self.index.list_tags()
+        self.assertEqual(["foo", "bar"], tags, "tags list incorrect")
 
     def test_update_file_invalid_md(self):
         img = os.path.abspath("../res/read.jpg")
@@ -39,19 +45,29 @@ class TestIndex(TestCase):
         cli.run_cmd(["mkdir", "-p", removed_tag_dir])
         cli.run_cmd(["ln", "-sf", img, link_path])
         self.index.update("../res/read.jpg")
-        self.assertFalse(self._file_exists(link_path), "tag was not removed!")
-        cli.run_cmd(["rm", "-rf", removed_tag_dir])
+        self.assertFalse(os.path.islink(link_path), "tag was not removed!")
 
     def test_update_vanished_file(self):
-        img = os.path.abspath("../res/vanished_file.jpg")
+        vanished_file = "../res/vanished_file.jpg"
+        link_path = self._prepare_vanished_file(vanished_file, TEST_READ_TAG_2)
+        self.index.update(vanished_file)
+        self.assertFalse(os.path.islink(link_path), "tag of vanished file was not removed!")
+
+    def test_update_vanished_directory(self):
+        vanished_directory = "../res/vanished_directory"
+        vanished_file = os.path.join(vanished_directory, "some_subdir/vanished_file.jpg")
+        link_path = self._prepare_vanished_file(vanished_file, TEST_READ_TAG_2)
+        self.index.update(vanished_directory)
+        self.assertFalse(os.path.islink(link_path), "tag of file in vanished directory was not removed!")
+
+    def _prepare_vanished_file(self, path: str, tag_name: str) -> str:
+        img = os.path.abspath(path)
         linkname = self._path_to_linkname(img)
-        tag_dir = os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2)
+        tag_dir = os.path.join(TEST_INDEX_LOCATION, "tags", tag_name)
         link_path = os.path.join(tag_dir, linkname)
         cli.run_cmd(["mkdir", "-p", tag_dir])
         cli.run_cmd(["ln", "-sf", img, link_path])
-        self.index.update("../res/vanished_file.jpg")
-        self.assertFalse(self._file_exists(link_path), "tag of vanished file was not removed!")
-        cli.run_cmd(["rm", "-rf", tag_dir])
+        return link_path
 
     def test_update_dir(self):
         self.index.update("../res/recursive.d")
@@ -59,9 +75,9 @@ class TestIndex(TestCase):
         link_name_lvl1 = self.files_base_path + ":recursive.d:level1:" + "read_md.jpg"
         link_name_lvl2 = self.files_base_path + ":recursive.d:level1:level2:" + "read_md.jpg"
         for link_name in [link_name_root, link_name_lvl1, link_name_lvl2]:
-            self.assertTrue(self._file_exists(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1, link_name)),
+            self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1, link_name)),
                             "Link "+link_name+" should exist in tagdir 1 but does not")
-            self.assertTrue(self._file_exists(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2, link_name)),
+            self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2, link_name)),
                             "Link "+link_name+" should exist in tagdir 2 but does not")
 
     def test_removed_tag(self):
@@ -72,16 +88,12 @@ class TestIndex(TestCase):
         cli.run_cmd(["mkdir", "-p", removed_tag_dir])
         cli.run_cmd(["ln", "-sf", img, link_path])
         self.index.update("../res/read_md.jpg")
-        self.assertFalse(self._file_exists(link_path), "tag was not removed!")
+        self.assertFalse(os.path.islink(link_path), "tag was not removed!")
         # Execute again to test if this (incorrectly) raises a FileNotFoundError
         self.index.update("../res/read_md.jpg")
-        cli.run_cmd(["rm", "-rf", removed_tag_dir])
 
     def _path_to_linkname(self, img):
         return img.replace(os.sep, ":")
 
     def _remove_index(self):
         cli.run_cmd(["rm", "-rf", TEST_INDEX_LOCATION])
-
-    def _file_exists(self, path: str) -> bool:
-        return os.path.exists(path)

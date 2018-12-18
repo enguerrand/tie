@@ -21,3 +21,7 @@ def deserialize(serialized: str):
 
 def empty():
     return MetaData([])
+
+
+class InvalidMetaData(Exception):
+    pass

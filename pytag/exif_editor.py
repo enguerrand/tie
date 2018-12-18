@@ -1,3 +1,4 @@
+from json import JSONDecodeError
 from subprocess import CalledProcessError
 
 from pytag import cli
@@ -17,8 +18,10 @@ class ExifEditor:
                 raise e
             else:
                 return md.empty()
-
-        return md.deserialize(serialized)
+        try:
+            return md.deserialize(serialized)
+        except JSONDecodeError as json_decode_error:
+            raise md.InvalidMetaData(json_decode_error)
 
     def set_meta_data(self, path: str, data: md.MetaData):
         _write_exif_field(self._field_name, data.serialize(), path)

@@ -1,5 +1,7 @@
 import hashlib
+import os
 from subprocess import CalledProcessError
+from shutil import copyfile
 from unittest import TestCase
 
 from pytag import cli
@@ -37,6 +39,12 @@ class TestExifEditor(TestCase):
         data = self.ee.get_meta_data(read_file_md)
         self.assertEqual("42", data.ver)
         self.assertEqual([TEST_READ_TAG_1, TEST_READ_TAG_2], data.tags)
+
+    def test_read_invalid_md(self):
+        invalid_jpg = "../res/invalid.jpg"
+        copyfile(read_file, invalid_jpg)
+        self.assertRaises(md.InvalidMetaData, lambda: self.ee.get_meta_data(invalid_jpg))
+        os.remove(invalid_jpg)
 
     def test_write_md(self):
         cli.run_cmd(["cp", read_file_md, write_file_md])

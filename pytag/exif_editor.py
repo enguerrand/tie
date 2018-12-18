@@ -12,12 +12,13 @@ class ExifEditor:
     def get_meta_data(self, path: str) -> md.MetaData:
         """
             Raises: InvalidMetaData if the exiv data of the file could not be parsed
+                    FileNotFoundError if the file could not be found
         """
         try:
             serialized = _read_exif_field(self._field_name, path)
         except CalledProcessError as e:
             if _is_file_not_found(e):
-                raise e
+                raise FileNotFoundError(e)
             else:
                 return md.empty()
         return md.deserialize(serialized)

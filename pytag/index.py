@@ -35,7 +35,7 @@ class Index:
     def _get_meta_data_safe(self, path: str):
         try:
             return self._exif.get_meta_data(path)
-        except md.InvalidMetaDataError:
+        except (md.InvalidMetaDataError, FileNotFoundError):
             return md.empty()
 
     def _index_present_tags(self, meta_data, path):

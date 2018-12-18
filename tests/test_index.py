@@ -42,6 +42,17 @@ class TestIndex(TestCase):
         self.assertFalse(self._file_exists(link_path), "tag was not removed!")
         cli.run_cmd(["rm", "-rf", removed_tag_dir])
 
+    def test_update_vanished_file(self):
+        img = os.path.abspath("../res/vanished_file.jpg")
+        linkname = self._path_to_linkname(img)
+        tag_dir = os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2)
+        link_path = os.path.join(tag_dir, linkname)
+        cli.run_cmd(["mkdir", "-p", tag_dir])
+        cli.run_cmd(["ln", "-sf", img, link_path])
+        self.index.update("../res/vanished_file.jpg")
+        self.assertFalse(self._file_exists(link_path), "tag of vanished file was not removed!")
+        cli.run_cmd(["rm", "-rf", tag_dir])
+
     def test_update_dir(self):
         self.index.update("../res/recursive.d")
         link_name_root = self.files_base_path + ":recursive.d:" + "read_md.jpg"

@@ -62,4 +62,4 @@ class TestExifEditor(TestCase):
         self.assertEqual([], data.tags)
 
     def test_read_non_existant_file(self):
-        self.assertRaises(CalledProcessError, lambda: self.ee.get_meta_data("../res/fooba.txt"))
+        self.assertRaises(FileNotFoundError, lambda: self.ee.get_meta_data("../res/fooba.txt"))

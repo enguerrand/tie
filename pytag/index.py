@@ -3,6 +3,7 @@ import os
 from pytag import cli
 import pytag.exif_editor as ee
 import pytag.symlinks as sl
+import pytag.meta_data as md
 
 TAGS_DIR_NAME = "tags"
 SEPARATOR_PLACE_HOLDER = ":"
@@ -27,9 +28,15 @@ class Index:
                 self._update_file(os.path.join(root, file))
 
     def _update_file(self, path: str):
-        meta_data = self._exif.get_meta_data(path)
+        meta_data = self._get_meta_data_safe(path)
         self._index_present_tags(meta_data, path)
         self._clear_absent_tags(meta_data, path)
+
+    def _get_meta_data_safe(self, path: str):
+        try:
+            return self._exif.get_meta_data(path)
+        except md.InvalidMetaDataError:
+            return md.empty()
 
     def _index_present_tags(self, meta_data, path):
         for tag in meta_data.tags:

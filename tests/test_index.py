@@ -31,6 +31,17 @@ class TestIndex(TestCase):
         self.assertTrue(self._file_exists(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2, link_name)),
                         "no link in tagdir 2")
 
+    def test_update_file_invalid_md(self):
+        img = os.path.abspath("../res/read.jpg")
+        linkname = self._path_to_linkname(img)
+        removed_tag_dir = os.path.join(TEST_INDEX_LOCATION, "tags", "removed tag")
+        link_path = os.path.join(removed_tag_dir, linkname)
+        cli.run_cmd(["mkdir", "-p", removed_tag_dir])
+        cli.run_cmd(["ln", "-sf", img, link_path])
+        self.index.update("../res/read.jpg")
+        self.assertFalse(self._file_exists(link_path), "tag was not removed!")
+        cli.run_cmd(["rm", "-rf", removed_tag_dir])
+
     def test_update_dir(self):
         self.index.update("../res/recursive.d")
         link_name_root = self.files_base_path + ":recursive.d:" + "read_md.jpg"

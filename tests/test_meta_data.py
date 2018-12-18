@@ -14,8 +14,8 @@ class TestMetaData(TestCase):
 
     def test_deserialize_malformed_json(self):
         serialized: str = '{foo bar'
-        self.assertRaises(md.InvalidMetaData, lambda: md.deserialize(serialized))
+        self.assertRaises(md.InvalidMetaDataError, lambda: md.deserialize(serialized))
 
     def test_deserialize_invalid_meta_data(self):
         serialized: str = '{"blubb": ["foo", "bar"]}'
-        self.assertRaises(md.InvalidMetaData, lambda: md.deserialize(serialized))
+        self.assertRaises(md.InvalidMetaDataError, lambda: md.deserialize(serialized))

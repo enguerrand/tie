@@ -43,7 +43,7 @@ class TestExifEditor(TestCase):
     def test_read_invalid_md(self):
         invalid_jpg = "../res/invalid.jpg"
         copyfile(read_file, invalid_jpg)
-        self.assertRaises(md.InvalidMetaData, lambda: self.ee.get_meta_data(invalid_jpg))
+        self.assertRaises(md.InvalidMetaDataError, lambda: self.ee.get_meta_data(invalid_jpg))
         os.remove(invalid_jpg)
 
     def test_write_md(self):

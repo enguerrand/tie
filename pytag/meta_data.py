@@ -1,4 +1,5 @@
 import json
+from json import JSONDecodeError
 from typing import List
 
 current_version = 1
@@ -14,7 +15,13 @@ class MetaData:
 
 
 def deserialize(serialized: str):
-    decoded = json.loads(serialized)
+    """
+        Raises: InvalidMetaData if the exiv data of the file could not be parsed
+    """
+    try:
+        decoded = json.loads(serialized)
+    except JSONDecodeError as json_decode_error:
+        raise InvalidMetaData(json_decode_error)
     md = MetaData(decoded["tags"], decoded["ver"])
     return md
 

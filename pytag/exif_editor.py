@@ -19,8 +19,10 @@ class ExifEditor:
         except CalledProcessError as e:
             if _is_file_not_found(e):
                 raise FileNotFoundError(e)
-            else:
+            elif _is_unknown_image_type(e):
                 return md.empty()
+            else:
+                raise e
         return md.deserialize(serialized)
 
     def set_meta_data(self, path: str, data: md.MetaData):
@@ -29,6 +31,10 @@ class ExifEditor:
 
 def _is_file_not_found(error: CalledProcessError):
     return error.returncode == 255
+
+
+def _is_unknown_image_type(error: CalledProcessError):
+    return error.returncode == 1
 
 
 def _read_exif_field(field_name: str, path: str) -> str:

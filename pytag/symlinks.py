@@ -4,7 +4,7 @@ from pytag import cli
 
 
 def ln(destination: str, link_name: str):
-    # "os.symlink(source, destination)" does not provide a way to force the symlink creation
+    # "os.symlink(source, destination)" does not provide a race-free way to force the symlink creation
     cli.run_cmd(["ln", "-sf", destination, link_name])
 
 

@@ -4,6 +4,8 @@ from pytag import symlinks
 from pytag import cli
 import os
 
+from pytag.symlinks import NotASymlinkError
+
 FOOBAR_TXT = "../res/foobar.txt"
 LINK_FOOBAR = "../res/link_foobar.txt"
 FOOBAR_DIR = "../res/foobar.d"
@@ -31,7 +33,7 @@ class TestSymlinks(TestCase):
         self.assertFalse(self._file_exists(LINK_FOOBAR))
 
     def test_rmfile(self):
-        self.assertRaises(TypeError, lambda: symlinks.rm(FOOBAR_TXT))
+        self.assertRaises(NotASymlinkError, lambda: symlinks.rm(FOOBAR_TXT))
         self.assertTrue(self._file_exists(FOOBAR_TXT))
 
     def test_rmdir(self):

@@ -11,6 +11,9 @@ class ExifEditor:
         self._field_name = field_name
 
     def get_meta_data(self, path: str) -> md.MetaData:
+        """
+            Raises: InvalidMetaData if the exiv data of the file could not be parsed
+        """
         try:
             serialized = _read_exif_field(self._field_name, path)
         except CalledProcessError as e:

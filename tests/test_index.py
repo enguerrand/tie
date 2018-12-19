@@ -26,9 +26,9 @@ class TestIndex(TestCase):
     def test_update_file(self):
         self.index.update("../res/read_md.jpg")
         link_name = self.files_base_path + ":" + "read_md.jpg"
-        self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1, link_name)),
+        self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1.lower(), link_name)),
                         "no link in tagdir 1")
-        self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2, link_name)),
+        self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2.lower(), link_name)),
                         "no link in tagdir 2")
 
     def test_list_tags(self):
@@ -75,9 +75,9 @@ class TestIndex(TestCase):
         link_name_lvl1 = self.files_base_path + ":recursive.d:level1:" + "read_md.jpg"
         link_name_lvl2 = self.files_base_path + ":recursive.d:level1:level2:" + "read_md.jpg"
         for link_name in [link_name_root, link_name_lvl1, link_name_lvl2]:
-            self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1, link_name)),
+            self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1.lower(), link_name)),
                             "Link "+link_name+" should exist in tagdir 1 but does not")
-            self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2, link_name)),
+            self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2.lower(), link_name)),
                             "Link "+link_name+" should exist in tagdir 2 but does not")
 
     def test_removed_tag(self):

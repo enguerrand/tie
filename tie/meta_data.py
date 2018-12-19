@@ -7,7 +7,7 @@ current_version = 1
 
 class MetaData:
     def __init__(self, tags: List[str], ver=current_version):
-        self.tags = tags
+        self.tags = [t.lower() for t in tags]
         self.ver = ver
 
     def serialize(self) -> str:

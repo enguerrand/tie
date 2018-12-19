@@ -34,11 +34,12 @@ class TestExifEditor(TestCase):
             ee._write_exif_field("Exif.Photo.UserComment", "My Dummy Value öä ' \" ", write_file)
             md5_post = hashlib.md5(f.read()).hexdigest()
             self.assertEqual("d41d8cd98f00b204e9800998ecf8427e", md5_post)
+        os.remove(write_file)
 
     def test_read_md(self):
         data = self.ee.get_meta_data(read_file_md)
         self.assertEqual("42", data.ver)
-        self.assertEqual([TEST_READ_TAG_1, TEST_READ_TAG_2], data.tags)
+        self.assertEqual([TEST_READ_TAG_1.lower(), TEST_READ_TAG_2.lower()], data.tags)
 
     def test_read_invalid_md(self):
         invalid_jpg = "../res/invalid.jpg"
@@ -52,9 +53,10 @@ class TestExifEditor(TestCase):
             md5_pre = hashlib.md5(f.read()).hexdigest()
 
             self.assertEqual("197c10f162136a0fa984477eb911058d", md5_pre)
-            self.ee.set_meta_data(write_file_md, md.MetaData("42", [TEST_WRITE_TAG_1, TEST_WRITE_TAG_2]))
+            self.ee.set_meta_data(write_file_md, md.MetaData([TEST_WRITE_TAG_1, TEST_WRITE_TAG_2], "42"))
             md5_post = hashlib.md5(f.read()).hexdigest()
             self.assertEqual("eebc838d12ba676fc6adab2d4d434889", md5_post)
+        os.remove(write_file_md)
 
     def test_read_from_non_img(self):
         data = self.ee.get_meta_data("../res/foobar.txt")

@@ -12,6 +12,11 @@ class TestMetaData(TestCase):
         deserialized = md.deserialize(serialized)
         self.assertEqual(data.tags, deserialized.tags)
 
+    def test_deserialize_empty_json(self):
+        result = md.deserialize("")
+        self.assertEqual(md.current_version, result.ver, "version does not match")
+        self.assertEqual([], result.tags, "tags do not match")
+
     def test_deserialize_malformed_json(self):
         serialized: str = '{foo bar'
         self.assertRaises(md.InvalidMetaDataError, lambda: md.deserialize(serialized))

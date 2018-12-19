@@ -18,6 +18,8 @@ def deserialize(serialized: str):
     """
         :raises InvalidMetaDataError if the exiv data of the file could not be parsed
     """
+    if serialized.strip() == "":
+        return empty()
     try:
         decoded = json.loads(serialized)
     except JSONDecodeError as json_decode_error:

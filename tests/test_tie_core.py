@@ -25,6 +25,20 @@ class TestTieCore(TestCase):
         tags = self.tie_core.list(READ_FILE_MD)
         self.assertEqual([TEST_READ_TAG_1.lower(), TEST_READ_TAG_2.lower()], tags, "listed tags do not match")
 
+    def test_list_empty_raw(self):
+        cli.run_cmd(["cp", READ_FILE, WRITE_FILE])
+        ee._write_exif_field("Exif.Photo.UserComment", "", WRITE_FILE)
+        tags = self.tie_core.list(WRITE_FILE)
+        self.assertEqual([], tags, "listed tags do not match empty list")
+        os.remove(WRITE_FILE)
+
+    def test_list_empty_md(self):
+        cli.run_cmd(["cp", READ_FILE_MD, WRITE_FILE_MD])
+        self.tie_core.clear(WRITE_FILE_MD)
+        tags = self.tie_core.list(WRITE_FILE_MD)
+        self.assertEqual([], tags, "listed tags do not match empty list")
+        os.remove(WRITE_FILE_MD)
+
     def test_list_invalid(self):
         self.assertRaises(InvalidMetaDataError, lambda: self.tie_core.list(READ_FILE))
 

@@ -26,7 +26,15 @@ class ExifEditor:
         return md.deserialize(serialized)
 
     def set_meta_data(self, path: str, data: md.MetaData):
-        _write_exif_field(self._field_name, data.serialize(), path)
+        try:
+            _write_exif_field(self._field_name, data.serialize(), path)
+        except CalledProcessError as e:
+            if _is_file_not_found(e):
+                raise FileNotFoundError(e)
+            elif _is_unknown_image_type(e):
+                return md.empty()
+            else:
+                raise e
 
 
 def _is_file_not_found(error: CalledProcessError):

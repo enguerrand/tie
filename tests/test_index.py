@@ -4,7 +4,7 @@ from unittest import TestCase
 import tie.exif_editor as ee
 from tie import cli
 from tie.index import Index
-from tests.test_tags import *
+from tests.test_defines import *
 
 TEST_INDEX_LOCATION = "../res/index"
 

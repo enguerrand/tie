@@ -1,7 +1,7 @@
 from subprocess import CalledProcessError
 from unittest import TestCase
 
-from pytag import cli
+from tie import cli
 
 
 class TestCli(TestCase):

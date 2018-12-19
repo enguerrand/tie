@@ -1,9 +1,9 @@
 import os
 
-from pytag import cli
-import pytag.exif_editor as ee
-import pytag.symlinks as sl
-import pytag.meta_data as md
+from tie import cli
+import tie.exif_editor as ee
+import tie.symlinks as sl
+import tie.meta_data as md
 
 TAGS_DIR_NAME = "tags"
 SEPARATOR_PLACE_HOLDER = ":"

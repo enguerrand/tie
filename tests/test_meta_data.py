@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-import pytag.meta_data as md
+import tie.meta_data as md
 
 
 class TestMetaData(TestCase):

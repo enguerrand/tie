@@ -1,9 +1,9 @@
 import os
 from unittest import TestCase
 
-import pytag.exif_editor as ee
-from pytag import cli
-from pytag.index import Index
+import tie.exif_editor as ee
+from tie import cli
+from tie.index import Index
 from tests.test_tags import *
 
 TEST_INDEX_LOCATION = "../res/index"

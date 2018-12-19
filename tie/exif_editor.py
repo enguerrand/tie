@@ -1,7 +1,7 @@
 from subprocess import CalledProcessError
 
-from pytag import cli
-import pytag.meta_data as md
+from tie import cli
+import tie.meta_data as md
 
 
 class ExifEditor:

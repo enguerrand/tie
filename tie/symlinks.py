@@ -1,6 +1,6 @@
 import os
 
-from pytag import cli
+from tie import cli
 
 
 def ln(destination: str, link_name: str):

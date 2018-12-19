@@ -1,10 +1,10 @@
 from unittest import TestCase
 
-from pytag import symlinks
-from pytag import cli
+from tie import symlinks
+from tie import cli
 import os
 
-from pytag.symlinks import NotASymlinkError
+from tie.symlinks import NotASymlinkError
 
 FOOBAR_TXT = "../res/foobar.txt"
 LINK_FOOBAR = "../res/link_foobar.txt"

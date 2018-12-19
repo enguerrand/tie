@@ -4,9 +4,9 @@ from subprocess import CalledProcessError
 from shutil import copyfile
 from unittest import TestCase
 
-from pytag import cli
-import pytag.exif_editor as ee
-import pytag.meta_data as md
+from tie import cli
+import tie.exif_editor as ee
+import tie.meta_data as md
 
 from tests.test_tags import *
 

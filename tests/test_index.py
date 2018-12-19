@@ -37,6 +37,11 @@ class TestIndex(TestCase):
         tags = self.index.list_tags()
         self.assertEqual(["foo", "bar"], tags, "tags list incorrect")
 
+    def test_list_files(self):
+        self.index.update(READ_FILE_MD)
+        files = self.index.list_files(TEST_READ_TAG_1)
+        self.assertEqual([os.path.abspath(READ_FILE_MD)], files, "files list incorrect")
+
     def test_update_file_invalid_md(self):
         img = os.path.abspath("../res/read.jpg")
         linkname = _path_to_linkname(img)

@@ -19,6 +19,18 @@ class Index:
     def list_tags(self):
         return os.listdir(self._tags_dir)
 
+    def list_files(self, tag: str):
+        files = []
+        try:
+            tag_dir = os.path.join(self._tags_dir, tag.lower())
+            for link in os.listdir(tag_dir):
+                link_path = os.path.join(tag_dir, link)
+                if os.path.islink(link_path):
+                    files.append(sl.readlink(link_path))
+        except FileNotFoundError:
+            pass
+        return files
+
     def update(self, path: str):
         if os.path.isdir(path):
             self._update_dir_recursively(path)

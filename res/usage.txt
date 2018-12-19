@@ -1,6 +1,10 @@
 ## Query:
 tie 'tag 1' tag2
 
+## List tags
+tie l file
+tie list file
+
 ## Tag
 tie t 'tag 1' tag2 -f file1 [file2..]
 tie tag 'tag 1' tag2 --files file1 [file2..]

@@ -3,6 +3,7 @@ from typing import List
 import tie.exif_editor as ee
 import tie.meta_data as md
 from tie.index import Index
+from tie.query import Query, QueryType
 
 
 class TieCore:
@@ -10,16 +11,26 @@ class TieCore:
         self.exif = exif
         self.index = index
 
-    def query(self, query: str):
-        # TODO: Implement
-        pass
+    def query(self, query: Query) -> List[str]:
+        if query.query_type == QueryType.match_all:
+            return self._query_match_all(query.tags)
+        else:
+            return self._query_match_any(query.tags)
+
+    def _query_match_all(self, tags: List[str]):
+        # TODO implement
+        return []
+
+    def _query_match_any(self, tags: List[str]):
+        # TODO implement
+        return []
 
     def list(self, file: str) -> List[str]:
         """
             :raises InvalidMetaDataError if the file to be read contains invalid meta data
                     FileNotFoundError if the file to be read could not be found
         """
-        return self.exif.get_meta_data(file).tags
+        return sorted(self.exif.get_meta_data(file).tags)
 
     def tag(self, file: str, tags: List[str]):
         """
@@ -27,12 +38,9 @@ class TieCore:
                     UnsupportedFileTypeError if the file type to be edited does not support exif data
                     FileNotFoundError if the file to be edited could not be found
         """
-        buffer = self.exif.get_meta_data(file).tags
-        for tag in tags:
-            lcase_tag = tag.lower()
-            if lcase_tag not in buffer:
-                buffer.append(lcase_tag)
-        self.exif.set_meta_data(file, md.MetaData(buffer))
+        lcase_tags = set(t.lower() for t in tags)
+        buffer = set(self.exif.get_meta_data(file).tags).union(lcase_tags)
+        self.exif.set_meta_data(file, md.MetaData(list(buffer)))
 
     def untag(self, file: str, tags: List[str]):
         """
@@ -40,12 +48,10 @@ class TieCore:
                     UnsupportedFileTypeError if the file type to be edited does not support exif data
                     FileNotFoundError if the file to be edited could not be found
         """
-        buffer = self.exif.get_meta_data(file).tags
+        buffer = set(self.exif.get_meta_data(file).tags)
         for tag in tags:
-            lcase_tag = tag.lower()
-            while lcase_tag in buffer:
-                buffer.remove(lcase_tag)
-        self.exif.set_meta_data(file, md.MetaData(buffer))
+            buffer.discard(tag.lower())
+        self.exif.set_meta_data(file, md.MetaData(list(buffer)))
 
     def clear(self, file: str):
         """

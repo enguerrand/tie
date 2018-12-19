@@ -12,12 +12,12 @@ TEST_INDEX_LOCATION = "../res/index"
 class TestIndex(TestCase):
 
     def setUp(self):
-        self._remove_index()
+        _remove_index()
         self.index = Index(TEST_INDEX_LOCATION, ee.ExifEditor())
-        self.files_base_path = self._path_to_linkname(os.path.abspath("../res"))
+        self.files_base_path = _path_to_linkname(os.path.abspath("../res"))
 
     def tearDown(self):
-        self._remove_index()
+        _remove_index()
 
     def test_initialization(self):
         self.assertTrue(os.path.isdir(TEST_INDEX_LOCATION))
@@ -39,7 +39,7 @@ class TestIndex(TestCase):
 
     def test_update_file_invalid_md(self):
         img = os.path.abspath("../res/read.jpg")
-        linkname = self._path_to_linkname(img)
+        linkname = _path_to_linkname(img)
         removed_tag_dir = os.path.join(TEST_INDEX_LOCATION, "tags", "removed tag")
         link_path = os.path.join(removed_tag_dir, linkname)
         cli.run_cmd(["mkdir", "-p", removed_tag_dir])
@@ -62,7 +62,7 @@ class TestIndex(TestCase):
 
     def _prepare_vanished_file(self, path: str, tag_name: str) -> str:
         img = os.path.abspath(path)
-        linkname = self._path_to_linkname(img)
+        linkname = _path_to_linkname(img)
         tag_dir = os.path.join(TEST_INDEX_LOCATION, "tags", tag_name)
         link_path = os.path.join(tag_dir, linkname)
         cli.run_cmd(["mkdir", "-p", tag_dir])
@@ -82,7 +82,7 @@ class TestIndex(TestCase):
 
     def test_removed_tag(self):
         img = os.path.abspath("../res/read_md.jpg")
-        linkname = self._path_to_linkname(img)
+        linkname = _path_to_linkname(img)
         removed_tag_dir = os.path.join(TEST_INDEX_LOCATION, "tags", "removed tag")
         link_path = os.path.join(removed_tag_dir, linkname)
         cli.run_cmd(["mkdir", "-p", removed_tag_dir])
@@ -92,8 +92,10 @@ class TestIndex(TestCase):
         # Execute again to test if this (incorrectly) raises a FileNotFoundError
         self.index.update("../res/read_md.jpg")
 
-    def _path_to_linkname(self, img):
-        return img.replace(os.sep, ":")
 
-    def _remove_index(self):
-        cli.run_cmd(["rm", "-rf", TEST_INDEX_LOCATION])
+def _path_to_linkname(img):
+    return img.replace(os.sep, ":")
+
+
+def _remove_index():
+    cli.run_cmd(["rm", "-rf", TEST_INDEX_LOCATION])

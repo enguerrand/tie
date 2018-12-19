@@ -11,7 +11,7 @@ class ExifEditor:
 
     def get_meta_data(self, path: str) -> md.MetaData:
         """
-            Raises: InvalidMetaData if the exiv data of the file could not be parsed
+            :raises InvalidMetaDataError if the exiv data of the file could not be parsed
                     FileNotFoundError if the file could not be found
         """
         try:

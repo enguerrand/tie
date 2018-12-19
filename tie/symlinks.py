@@ -14,7 +14,7 @@ def readlink(link: str) -> str:
 
 def rm(link: str) -> str:
     """
-        Raises: NotASymlinkError when trying to remove a file that is not a symlink
+    :raises NotASymlinkError when trying to remove a file that is not a symlink
     """
     path = _remove_trailing_slashes(link)
     if not os.path.islink(path):

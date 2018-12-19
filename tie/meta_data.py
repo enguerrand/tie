@@ -16,7 +16,7 @@ class MetaData:
 
 def deserialize(serialized: str):
     """
-        Raises: InvalidMetaData if the exiv data of the file could not be parsed
+        :raises InvalidMetaDataError if the exiv data of the file could not be parsed
     """
     try:
         decoded = json.loads(serialized)

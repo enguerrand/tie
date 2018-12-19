@@ -63,3 +63,6 @@ class TestExifEditor(TestCase):
 
     def test_write_non_existant_file(self):
         self.assertRaises(FileNotFoundError, lambda: self.ee.set_meta_data("../res/fooba.txt", md.empty()))
+
+    def test_write_unknown_image_type(self):
+        self.assertRaises(ee.UnsupportedFileTypeError, lambda: self.ee.set_meta_data("../res/foobar.txt", md.empty()))

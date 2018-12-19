@@ -24,6 +24,7 @@ class TieCore:
     def tag(self, file: str, tags: List[str]):
         """
             :raises InvalidMetaDataError if the file to be edited contains invalid meta data
+                    UnsupportedFileTypeError if the file type to be edited does not support exif data
                     FileNotFoundError if the file to be edited could not be found
         """
         buffer = self.exif.get_meta_data(file).tags
@@ -36,6 +37,7 @@ class TieCore:
     def untag(self, file: str, tags: List[str]):
         """
             :raises InvalidMetaDataError if the file to be edited contains invalid meta data
+                    UnsupportedFileTypeError if the file type to be edited does not support exif data
                     FileNotFoundError if the file to be edited could not be found
         """
         buffer = self.exif.get_meta_data(file).tags

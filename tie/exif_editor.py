@@ -26,13 +26,17 @@ class ExifEditor:
         return md.deserialize(serialized)
 
     def set_meta_data(self, path: str, data: md.MetaData):
+        """
+            :raises UnsupportedFileTypeError if the file type does not support exiv data
+                    FileNotFoundError if the file could not be found
+        """
         try:
             _write_exif_field(self._field_name, data.serialize(), path)
         except CalledProcessError as e:
             if _is_file_not_found(e):
                 raise FileNotFoundError(e)
             elif _is_unknown_image_type(e):
-                return md.empty()
+                raise UnsupportedFileTypeError(e)
             else:
                 raise e
 
@@ -52,3 +56,7 @@ def _read_exif_field(field_name: str, path: str) -> str:
 
 def _write_exif_field(field_name: str, value: str, path: str):
     cli.run_cmd(['exiv2', '-M', 'set ' + field_name + ' ' + value, path])
+
+
+class UnsupportedFileTypeError(Exception):
+    pass

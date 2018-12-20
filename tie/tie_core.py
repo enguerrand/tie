@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Set
 
 import tie.exif_editor as ee
 import tie.meta_data as md
@@ -18,12 +18,23 @@ class TieCore:
             return self._query_match_any(query.tags)
 
     def _query_match_all(self, tags: List[str]):
-        # TODO implement
-        return []
+        if len(tags) == 0:
+            return []
+        files: Set[str] = set()
+        for tag in tags:
+            if len(files) == 0:
+                files = set(self.index.list_files(tag))
+            else:
+                files.intersection_update(set(self.index.list_files(tag)))
+            if len(files) == 0:
+                return []
+        return sorted(files)
 
     def _query_match_any(self, tags: List[str]):
-        # TODO implement
-        return []
+        files: Set[str] = set()
+        for tag in tags:
+            files = files.union(set(self.index.list_files(tag)))
+        return sorted(files)
 
     def list(self, file: str) -> List[str]:
         """

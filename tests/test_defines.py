@@ -8,3 +8,12 @@ TEST_READ_TAG_2 = "tag 2"
 
 TEST_WRITE_TAG_1 = "My other Dummy Tag öä ' \" "
 TEST_WRITE_TAG_2 = "tag 2"
+
+QUERY_FILE_1 = "../res/query_1.jpg"
+QUERY_FILE_2 = "../res/query_2.jpg"
+QUERY_FILE_3 = "../res/query_3.jpg"
+QUERY_FILE_4 = "../res/query_4.jpg"
+QUERY_TAG_1 = "Tag 1"
+QUERY_TAG_2 = "Tag 2"
+QUERY_TAG_3 = "Tag 3"
+QUERY_TAG_4 = "Tag 4"

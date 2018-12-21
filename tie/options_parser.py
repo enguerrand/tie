@@ -52,8 +52,8 @@ class RunOptions:
         self._parse(args)
         if self.action is None:
             raise ParseError("Action type must be specified!")
-        if self._needs_files():
-            raise ParseError("Need files spec for action type "+self.action.name)
+        if not self._is_file_count_correct():
+            raise ParseError("Unexpected files count in arguments for action type "+self.action.name)
         if self.frontend is None:
             self.frontend = FrontendType.cli
 
@@ -87,10 +87,14 @@ class RunOptions:
             return False
         return self.action in [Action.query, Action.tag, Action.untag]
 
-    def _needs_files(self) -> bool:
-        if len(self.files) > 0:
-            return False
-        return self.action in [Action.list, Action.tag, Action.untag, Action.clear, Action.index]
+    def _is_file_count_correct(self) -> bool:
+        if self.action in [Action.tag, Action.untag, Action.clear, Action.index]:
+            return len(self.files) > 0
+        elif self.action == Action.list:
+            return len(self.files) == 1
+        else:
+            return len(self.files) == 0
+
 
 
 def is_option(arg: str):

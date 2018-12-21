@@ -2,12 +2,12 @@ from typing import List
 from enum import Enum
 
 
-class QueryType(Enum):
-    match_all = 1
-    match_any = 2
+class MatchType(Enum):
+    all = 1
+    any = 2
 
 
 class Query:
-    def __init__(self, tags: List[str], query_type: QueryType):
+    def __init__(self, tags: List[str], match_type: MatchType):
         self.tags = tags
-        self.query_type = query_type
+        self.match_type = match_type

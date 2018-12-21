@@ -1,18 +1,46 @@
 from typing import List, Set
+from abc import ABC, abstractmethod
 
 import tie.exif_editor as ee
 import tie.meta_data as md
 from tie.index import Index
-from tie.query import Query, QueryType
+from tie.query import Query, MatchType
 
 
-class TieCore:
+class TieCore(ABC):
+
+    @abstractmethod
+    def query(self, query: Query) -> List[str]:
+        pass
+
+    @abstractmethod
+    def list(self, file: str) -> List[str]:
+        pass
+
+    @abstractmethod
+    def tag(self, file: str, tags: List[str]):
+        pass
+
+    @abstractmethod
+    def untag(self, file: str, tags: List[str]):
+        pass
+
+    @abstractmethod
+    def clear(self, file: str):
+        pass
+
+    @abstractmethod
+    def update_index(self, file: str):
+        pass
+
+
+class TieCoreImpl(TieCore):
     def __init__(self, exif: ee.ExifEditor, index: Index):
         self.exif = exif
         self.index = index
 
     def query(self, query: Query) -> List[str]:
-        if query.query_type == QueryType.match_all:
+        if query.match_type == MatchType.all:
             return self._query_match_all(query.tags)
         else:
             return self._query_match_any(query.tags)

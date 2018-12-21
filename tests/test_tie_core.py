@@ -7,8 +7,8 @@ from tie import cli
 from tie import meta_data as md
 from tie.index import Index
 from tie.meta_data import InvalidMetaDataError
-from tie.query import Query, QueryType
-from tie.tie_core import TieCore
+from tie.query import Query, MatchType
+from tie.tie_core import TieCore, TieCoreImpl
 from tests.test_defines import *
 
 
@@ -18,22 +18,22 @@ class TestTieCore(TestCase):
         self.exif = ee.ExifEditor()
         self.files_base_path = _path_to_linkname(os.path.abspath("../res"))
         self.index = Index(TEST_INDEX_LOCATION, self.exif)
-        self.tie_core = TieCore(self.exif, self.index)
+        self.tie_core = TieCoreImpl(self.exif, self.index)
 
     def tearDown(self):
         _remove_index()
 
     def test_query_all(self):
         self._prepare_query_test()
-        files_2_3 = self.tie_core.query(Query([QUERY_TAG_2, QUERY_TAG_3], QueryType.match_all))
+        files_2_3 = self.tie_core.query(Query([QUERY_TAG_2, QUERY_TAG_3], MatchType.all))
         self.assertEqual([os.path.abspath(QUERY_FILE_2)], files_2_3, "Query all with 2 tags did not find the expected files")
-        files_3 = self.tie_core.query(Query([QUERY_TAG_3], QueryType.match_all))
+        files_3 = self.tie_core.query(Query([QUERY_TAG_3], MatchType.all))
         self.assertEqual([os.path.abspath(QUERY_FILE_2), os.path.abspath(QUERY_FILE_3)], files_3, "Query all with 1 tag did not find the expected files")
         self._clean_after_query_test()
 
     def test_query_any(self):
         self._prepare_query_test()
-        files = self.tie_core.query(Query([QUERY_TAG_2, QUERY_TAG_3], QueryType.match_any))
+        files = self.tie_core.query(Query([QUERY_TAG_2, QUERY_TAG_3], MatchType.any))
         self.assertEqual([os.path.abspath(QUERY_FILE_1), os.path.abspath(QUERY_FILE_2), os.path.abspath(QUERY_FILE_3)], files, "Query any did not find the expected files")
         self._clean_after_query_test()
 

@@ -31,7 +31,7 @@ def main(*args):
         index_root_dir = config.get_or_create_default_config_dir()  # TODO: Support customizing config dir
         exif = ExifEditor()  # TODO: Support specifying custom exif field name
         index = Index(index_root_dir, exif)
-        core = TieCoreImpl(exif, index)
+        core = TieCoreImpl(exif, index)  # TODO: inject frontend for user interaction
 
         tie_main.run(core, run_options, front_end)
 

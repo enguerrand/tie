@@ -3,6 +3,10 @@ import sys
 from typing import List
 
 
+def printstd(msg: str):
+    print(msg)
+
+
 def printerr(msg: str):
     print(msg, file=sys.stderr)
 

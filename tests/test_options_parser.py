@@ -12,6 +12,10 @@ class TestOptionsParser(TestCase):
         self.assertEqual(FrontendType.cli, opts.frontend)
         self.assertEqual(MatchType.all, opts.match_type)
 
+    def test_query_short_no_tags(self):
+        opts = RunOptions(["q"])
+        self.assertEqual(Action.query, opts.action)
+
     def test_query_no_tags_frontend_gtk(self):
         opts = RunOptions(["query", "--frontend", "gtk"])
         self.assertEqual(Action.query, opts.action)
@@ -50,6 +54,10 @@ class TestOptionsParser(TestCase):
         self.assertEqual(["foo"], opts.files, "needs files")
         self.assertEqual(FrontendType.gtk, opts.frontend)
 
+    def test_list_short(self):
+        opts = RunOptions(["l", "--files", "foo"])
+        self.assertEqual(Action.list, opts.action)
+
     def test_list_frontend_gtk_files_short(self):
         opts = RunOptions(["list", "-F", "gtk", "-f", "bar"])
         self.assertEqual(Action.list, opts.action)
@@ -67,6 +75,10 @@ class TestOptionsParser(TestCase):
         self.assertEqual(["foo", "bar"], opts.files, "needs files")
         self.assertEqual(FrontendType.cli, opts.frontend)
 
+    def test_tag_short(self):
+        opts = RunOptions(["t", "--files", "foo"])
+        self.assertEqual(Action.tag, opts.action)
+
     def test_tag_frontend_cli_files_short(self):
         opts = RunOptions(["tag", "-f", "foo", "bar", "-F", "cli"])
         self.assertEqual(Action.tag, opts.action)
@@ -82,6 +94,10 @@ class TestOptionsParser(TestCase):
         self.assertEqual(["foo", "bar"], opts.files, "needs files")
         self.assertEqual(FrontendType.cli, opts.frontend)
 
+    def test_untag_short(self):
+        opts = RunOptions(["u", "--files", "foo"])
+        self.assertEqual(Action.untag, opts.action)
+
     def test_clear(self):
         opts = RunOptions(["clear", "--files", "foo", "bar"])
         self.assertEqual(Action.clear, opts.action)
@@ -89,12 +105,20 @@ class TestOptionsParser(TestCase):
         self.assertEqual(["foo", "bar"], opts.files, "needs files")
         self.assertEqual(FrontendType.cli, opts.frontend)
 
+    def test_clear_short(self):
+        opts = RunOptions(["c", "--files", "foo"])
+        self.assertEqual(Action.clear, opts.action)
+
     def test_index(self):
         opts = RunOptions(["index", "--files", "foo", "bar"])
         self.assertEqual(Action.index, opts.action)
         self.assertEqual(False, opts.needs_tags(), "needs tags")
         self.assertEqual(["foo", "bar"], opts.files, "needs files")
         self.assertEqual(FrontendType.cli, opts.frontend)
+
+    def test_index_short(self):
+        opts = RunOptions(["i", "--files", "foo"])
+        self.assertEqual(Action.index, opts.action)
 
     def test_index_no_files(self):
         self.assertRaises(ParseError, lambda: RunOptions(["index"]))

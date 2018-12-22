@@ -10,6 +10,7 @@ class ParsingStage(Enum):
     files = 3
 
 
+
 class Action(Enum):
     query = 1
     list = 2
@@ -17,6 +18,16 @@ class Action(Enum):
     untag = 4
     clear = 5
     index = 6
+
+
+_short_actions = {
+    'q': Action.query,
+    'l': Action.list,
+    't': Action.tag,
+    'u': Action.untag,
+    'c': Action.clear,
+    'i': Action.index,
+}
 
 
 class FrontendType(Enum):
@@ -70,10 +81,13 @@ class RunOptions:
                 else:
                     raise ParseError("Unknown option "+arg)
             elif parsing_stage == ParsingStage.action:
-                try:
-                    self.action = Action[arg]
-                except KeyError:
-                    raise ParseError("Inbalid action type: "+arg)
+                if arg in _short_actions:
+                    self.action = _short_actions[arg]
+                else:
+                    try:
+                        self.action = Action[arg]
+                    except KeyError:
+                        raise ParseError("Invalid action type: "+arg)
                 parsing_stage = ParsingStage.tags
             elif parsing_stage == ParsingStage.tags:
                 self.tags.append(arg)

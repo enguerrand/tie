@@ -28,8 +28,7 @@ class TieCoreTestImpl(TieCore):
         if self.action_type != Action.tag:
             raise Exception("Wrong method called: tag")
         for t in tags:
-            if t in self.tags:
-                self.tags.remove(t)
+            self.tags.remove(t)
         self.files.remove(file)
         return []
 
@@ -37,8 +36,7 @@ class TieCoreTestImpl(TieCore):
         if self.action_type != Action.untag:
             raise Exception("Wrong method called: untag")
         for t in tags:
-            if t in self.tags:
-                self.tags.remove(t)
+            self.tags.remove(t)
         self.files.remove(file)
 
     def clear(self, file: str):
@@ -49,8 +47,7 @@ class TieCoreTestImpl(TieCore):
     def update_index(self, file: str):
         if self.action_type not in [Action.index, Action.tag, Action.untag, Action.clear]:
             raise Exception("Wrong method called: index")
-        if file in self.files:
-            self.files.remove(file)
+        self.files.remove(file)
 
     def was_called_correctly(self):
         return len(self.tags) == 0 and len(self.files) == 0

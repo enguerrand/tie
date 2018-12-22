@@ -21,17 +21,17 @@ class TestTieMain(TestCase):
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
 
     def test_tag(self):
-        core = TieCoreTestImpl(Action.tag, ["foo", "bar"], ["testfile"])
+        core = TieCoreTestImpl(Action.tag, ["foo", "bar"], ["testfile", "testfile"])
         tie_main.run(core, RunOptions(["tag", "foo", "bar", "-f", "testfile"]), self.frontend)
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
 
     def test_untag(self):
-        core = TieCoreTestImpl(Action.untag, ["foo", "bar"], ["testfile"])
+        core = TieCoreTestImpl(Action.untag, ["foo", "bar"], ["testfile", "testfile"])
         tie_main.run(core, RunOptions(["untag", "foo", "bar", "-f", "testfile"]), self.frontend)
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
 
     def test_clear(self):
-        core = TieCoreTestImpl(Action.clear, [], ["testfile"])
+        core = TieCoreTestImpl(Action.clear, [], ["testfile", "testfile"])
         tie_main.run(core, RunOptions(["clear", "-f", "testfile"]), self.frontend)
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
 

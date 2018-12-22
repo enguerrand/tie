@@ -44,8 +44,17 @@ class TestOptionsParser(TestCase):
         opts = RunOptions(["query", "tag 1", "tag 2", "--match-type", "any"])
         self.assertEqual(MatchType.any, opts.match_type)
 
+    def test_query_match_type_arg_missing(self):
+        self.assertRaises(ParseError, lambda: RunOptions(["query", "tag 1", "tag 2", "--match-type"]))
+
+    def test_query_frontend_arg_missing(self):
+        self.assertRaises(ParseError, lambda: RunOptions(["query", "tag 1", "tag 2", "--frontend"]))
+
     def test_list_no_files(self):
         self.assertRaises(ParseError, lambda: RunOptions(["list"]))
+
+    def test_list_files_arg_missing(self):
+        self.assertRaises(ParseError, lambda: RunOptions(["list", "--files"]))
 
     def test_list_frontend_gtk_files_long(self):
         opts = RunOptions(["list", "--frontend", "gtk", "--files", "foo"])

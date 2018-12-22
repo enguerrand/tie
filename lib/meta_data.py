@@ -23,11 +23,11 @@ def deserialize(serialized: str):
     try:
         decoded = json.loads(serialized)
     except JSONDecodeError as json_decode_error:
-        raise InvalidMetaDataError(json_decode_error)
+        raise InvalidMetaDataError(serialized)
     try:
         md = MetaData(decoded["tags"], decoded["ver"])
     except KeyError as key_error:
-        raise InvalidMetaDataError(key_error)
+        raise InvalidMetaDataError(serialized)
     return md
 
 
@@ -36,4 +36,5 @@ def empty():
 
 
 class InvalidMetaDataError(Exception):
-    pass
+    def __init__(self, data: str):
+        self.msg = "Invalid meta data: " + data

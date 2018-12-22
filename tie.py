@@ -37,10 +37,15 @@ def main(*args):
 
     except ParseError as parse_error:
         printerr("Error: " + parse_error.msg)
+        sys.exit(1)
     except InvalidMetaDataError as meta_data_error:
         # TODO: Use frontend to ask for confirmation to clear file
-        printerr("Error: Cannot edit file - Invalid meta data present. Run \"tie --clear\" on it to clean it")
-    # TODO: Pretty print other errors. (FileNotFound etc...)
+        printerr("Error: Cannot edit file - " + meta_data_error.msg)
+        printerr("Run \"tie --clear\" on it to clean it")
+        sys.exit(2)
+    except FileNotFoundError:
+        # No need to print it. this is already done by subprocess
+        sys.exit(3)
 
 
 main(*sys.argv)

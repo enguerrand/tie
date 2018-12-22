@@ -36,7 +36,7 @@ class ExifEditor:
             if _is_file_not_found(e):
                 raise FileNotFoundError(e)
             elif _is_unknown_image_type(e):
-                raise UnsupportedFileTypeError(e)
+                raise UnsupportedFileTypeError(path)
             else:
                 raise e
 
@@ -59,4 +59,5 @@ def _write_exif_field(field_name: str, value: str, path: str):
 
 
 class UnsupportedFileTypeError(Exception):
-    pass
+    def __init__(self, path: str):
+        self.msg = "Unsupported filetype: " + path

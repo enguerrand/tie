@@ -9,3 +9,7 @@ class FrontendCli(Frontend):
         printerr("Please choose tags: ")
         # TODO: Implement interactive user input
         return ["foobar"]
+
+    def get_user_confirmation(self, prompt: str) -> bool:
+        user_input = input(prompt).lower()
+        return user_input in ['y', 'j']

@@ -21,21 +21,23 @@ class TestTieMain(TestCase):
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
 
     def test_tag(self):
-        core = TieCoreTestImpl(Action.tag, ["foo", "bar"], ["testfile", "testfile"])
-        tie_main.run(core, RunOptions(["tag", "foo", "bar", "-f", "testfile"]), self.frontend)
+        # Duplicates in constructor calls account for repeated calls to method
+        core = TieCoreTestImpl(Action.tag, ["foo", "bar", "foo", "bar"], ["testfile1", "testfile1", "testfile2", "testfile2"])
+        tie_main.run(core, RunOptions(["tag", "foo", "bar", "-f", "testfile1", "testfile2"]), self.frontend)
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
 
     def test_untag(self):
-        core = TieCoreTestImpl(Action.untag, ["foo", "bar"], ["testfile", "testfile"])
-        tie_main.run(core, RunOptions(["untag", "foo", "bar", "-f", "testfile"]), self.frontend)
+        # Duplicates in constructor calls account for repeated calls to method
+        core = TieCoreTestImpl(Action.untag, ["foo", "bar", "foo", "bar"], ["testfile1", "testfile1", "testfile2", "testfile2"])
+        tie_main.run(core, RunOptions(["untag", "foo", "bar", "-f", "testfile1", "testfile2"]), self.frontend)
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
 
     def test_clear(self):
-        core = TieCoreTestImpl(Action.clear, [], ["testfile", "testfile"])
-        tie_main.run(core, RunOptions(["clear", "-f", "testfile"]), self.frontend)
+        core = TieCoreTestImpl(Action.clear, [], ["testfile1", "testfile1", "testfile2", "testfile2"])
+        tie_main.run(core, RunOptions(["clear", "-f", "testfile1", "testfile2"]), self.frontend)
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
 
     def test_index(self):
-        core = TieCoreTestImpl(Action.index, [], ["testfile"])
-        tie_main.run(core, RunOptions(["index", "-f", "testfile"]), self.frontend)
+        core = TieCoreTestImpl(Action.index, [], ["testfile1", "testfile2"])
+        tie_main.run(core, RunOptions(["index", "-f", "testfile1", "testfile2"]), self.frontend)
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")

@@ -1,10 +1,10 @@
 from unittest import TestCase
 
-from tie import symlinks
-from tie import cli
+from lib import symlinks
+from lib import cli
 import os
 
-from tie.symlinks import NotASymlinkError
+from lib.symlinks import NotASymlinkError
 
 FOOBAR_TXT = "../res/foobar.txt"
 LINK_FOOBAR = "../res/link_foobar.txt"

@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List
 
-from tie.query import MatchType
+from lib.query import MatchType
 
 
 class ParsingStage(Enum):
@@ -50,10 +50,8 @@ class RunOptions:
         self.match_type: MatchType = MatchType.all
         self.frontend: FrontendType = None
         self._parse(args)
-        if self.action is None:
-            raise ParseError("Action type must be specified!")
-        if not self._is_file_count_correct():
-            raise ParseError("Unexpected files count in arguments for action type "+self.action.name)
+        self._check_action_type()
+        self._check_files_count()
         if self.frontend is None:
             self.frontend = FrontendType.cli
 
@@ -87,14 +85,22 @@ class RunOptions:
             return False
         return self.action in [Action.query, Action.tag, Action.untag]
 
-    def _is_file_count_correct(self) -> bool:
-        if self.action in [Action.tag, Action.untag, Action.clear, Action.index]:
-            return len(self.files) > 0
-        elif self.action == Action.list:
-            return len(self.files) == 1
-        else:
-            return len(self.files) == 0
+    def _check_action_type(self):
+        if self.action is None:
+            raise ParseError("Action type must be specified!")
 
+    def _check_files_count(self):
+        actual_file_count = len(self.files)
+
+        if self.action in [Action.tag, Action.untag, Action.clear, Action.index] and actual_file_count < 1:
+            raise ParseError("Unexpected files count " + str(actual_file_count) +
+                             " (expected 1 or more) for action type \"" + self.action.name + "\"")
+        elif self.action == Action.list and actual_file_count != 1:
+            raise ParseError("Unexpected files count " + str(actual_file_count) +
+                             " (expected 1) for action type \"" + self.action.name + "\"")
+        elif self.action == Action.query and actual_file_count > 0:
+            raise ParseError("Unexpected files count " + str(actual_file_count) +
+                             " (expected 0) for action type \"" + self.action.name + "\"")
 
 
 def is_option(arg: str):

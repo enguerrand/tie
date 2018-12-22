@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import csv
 import os
 import sys
-from typing import List
 
-from tie import frontend_factory as ff
-from tie import config
-from tie.exif_editor import ExifEditor
-from tie.index import Index
-from tie.options_parser import RunOptions, Action
-from tie.query import Query
-from tie.tie_core import TieCoreImpl, TieCore
+from lib import frontend_factory as ff
+from lib import config
+from lib.exif_editor import ExifEditor
+from lib.index import Index
+from lib.meta_data import InvalidMetaDataError
+from lib.options_parser import RunOptions, Action, ParseError
+from lib.printing import printerr, print_out_list
+from lib.query import Query
+from lib.tie_core import TieCoreImpl, TieCore
 
 
 def _fetch_tags(run_options: RunOptions):
@@ -37,31 +37,37 @@ def run(core: TieCore, run_options: RunOptions):
             elif action == Action.clear:
                 core.clear(file)
             elif action == Action.index:
-                core.update_index(file)
+                # This happens below
+                pass
             else:
                 raise Exception("Unexpected action type "+action.name)
+            core.update_index(file)
 
 
-def print_out_list(out: List[str]):
-    writer = csv.writer(sys.stdout, delimiter=" ", quotechar="'")
-    writer.writerow(out)
-    # print(*out)
-
-
-def main(*args):
+def setup_sys_path():
     own_path = sys.argv[0]
     basedir = os.path.dirname(own_path)
     sys.path.append(basedir)
 
-    run_options = RunOptions(list(args[1:]))
-    if run_options.needs_tags():
-        _fetch_tags(run_options)
 
-    index_root_dir = config.get_or_create_default_config_dir() # TODO: Support customizing config dir
-    exif = ExifEditor() # TODO: Support specifying custom exif field name
-    index = Index(index_root_dir, exif)
-    core = TieCoreImpl(exif, index)
-    run(core, run_options)
+def main(*args):
+    try:
+        setup_sys_path()
+
+        run_options = RunOptions(list(args[1:]))
+        if run_options.needs_tags():
+            _fetch_tags(run_options)
+
+        index_root_dir = config.get_or_create_default_config_dir() # TODO: Support customizing config dir
+        exif = ExifEditor() # TODO: Support specifying custom exif field name
+        index = Index(index_root_dir, exif)
+        core = TieCoreImpl(exif, index)
+        run(core, run_options)
+
+    except ParseError as parse_error:
+        printerr("Error: " + parse_error.msg)
+    except InvalidMetaDataError as meta_data_error:
+        printerr("Error: Cannot edit file - Invalid meta data present. Run \"tie --clear\" on it to clean it")
 
 
 main(*sys.argv)

@@ -4,9 +4,9 @@ from subprocess import CalledProcessError
 from shutil import copyfile
 from unittest import TestCase
 
-from tie import cli
-import tie.exif_editor as ee
-import tie.meta_data as md
+from lib import cli
+import lib.exif_editor as ee
+import lib.meta_data as md
 
 from tests.test_defines import *
 

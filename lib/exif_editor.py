@@ -1,7 +1,7 @@
 from subprocess import CalledProcessError
 
-from tie import cli
-import tie.meta_data as md
+from lib import cli
+import lib.meta_data as md
 
 
 class ExifEditor:

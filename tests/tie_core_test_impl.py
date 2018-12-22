@@ -1,7 +1,7 @@
 from typing import List
 
-from tie.query import Query
-from tie.tie_core import TieCore
+from lib.query import Query
+from lib.tie_core import TieCore
 
 
 class TieCoreTestImpl(TieCore):

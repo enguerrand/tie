@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from tie.options_parser import RunOptions, Action, FrontendType, ParseError
-from tie.query import MatchType
+from lib.options_parser import RunOptions, Action, FrontendType, ParseError
+from lib.query import MatchType
 
 
 class TestOptionsParser(TestCase):

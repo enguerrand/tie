@@ -1,6 +1,6 @@
 import os
 
-from tie import cli
+from lib import cli
 
 
 def ln(destination: str, link_name: str):

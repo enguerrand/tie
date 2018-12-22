@@ -1,6 +1,6 @@
-from tie.abstract_frontend import Frontend
-from tie.frontend_cli import FrontendCli
-from tie.options_parser import FrontendType
+from lib.abstract_frontend import Frontend
+from lib.frontend_cli import FrontendCli
+from lib.options_parser import FrontendType
 
 
 def from_type(frontend_type: FrontendType) -> Frontend:

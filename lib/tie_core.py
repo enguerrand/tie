@@ -1,10 +1,10 @@
 from typing import List, Set
 from abc import ABC, abstractmethod
 
-import tie.exif_editor as ee
-import tie.meta_data as md
-from tie.index import Index
-from tie.query import Query, MatchType
+import lib.exif_editor as ee
+import lib.meta_data as md
+from lib.index import Index
+from lib.query import Query, MatchType
 
 
 class TieCore(ABC):

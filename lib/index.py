@@ -1,9 +1,9 @@
 import os
 
-from tie import cli
-import tie.exif_editor as ee
-import tie.symlinks as sl
-import tie.meta_data as md
+from lib import cli
+import lib.exif_editor as ee
+import lib.symlinks as sl
+import lib.meta_data as md
 
 TAGS_DIR_NAME = "tags"
 SEPARATOR_PLACE_HOLDER = ":"

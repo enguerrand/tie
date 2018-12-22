@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-import tie.meta_data as md
+import lib.meta_data as md
 
 
 class TestMetaData(TestCase):

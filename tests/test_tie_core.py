@@ -2,13 +2,13 @@ import os
 from unittest import TestCase
 
 from tests.test_index import TEST_INDEX_LOCATION
-import tie.exif_editor as ee
-from tie import cli
-from tie import meta_data as md
-from tie.index import Index
-from tie.meta_data import InvalidMetaDataError
-from tie.query import Query, MatchType
-from tie.tie_core import TieCore, TieCoreImpl
+import lib.exif_editor as ee
+from lib import cli
+from lib import meta_data as md
+from lib.index import Index
+from lib.meta_data import InvalidMetaDataError
+from lib.query import Query, MatchType
+from lib.tie_core import TieCore, TieCoreImpl
 from tests.test_defines import *
 
 

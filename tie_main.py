@@ -67,7 +67,9 @@ def main(*args):
     except ParseError as parse_error:
         printerr("Error: " + parse_error.msg)
     except InvalidMetaDataError as meta_data_error:
+        # TODO: Use frontend to ask for confirmation to clear file
         printerr("Error: Cannot edit file - Invalid meta data present. Run \"tie --clear\" on it to clean it")
+    # TODO: Pretty print other errors. (FileNotFound etc...)
 
 
 main(*sys.argv)

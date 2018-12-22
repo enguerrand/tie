@@ -10,7 +10,6 @@ class ParsingStage(Enum):
     files = 3
 
 
-
 class Action(Enum):
     query = 1
     list = 2

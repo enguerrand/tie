@@ -70,7 +70,11 @@ class RunOptions:
 
         while len(args) > 0:
             arg = args.pop(0)
-            if is_option(arg):
+
+            if parsing_stage == ParsingStage.tags and _requires_files(self.action) and len(args) == 0:
+                parsing_stage = ParsingStage.files
+
+            if _is_option(arg):
                 if Option("-f", "--files").matches(arg):
                     parsing_stage = ParsingStage.files
                 elif Option("-F", "--frontend").matches(arg):
@@ -120,7 +124,11 @@ class RunOptions:
                              " (expected 0) for action type \"" + self.action.name + "\"")
 
 
-def is_option(arg: str):
+def _is_option(arg: str):
     return arg.startswith("-")
+
+
+def _requires_files(action):
+    return action in [Action.list, Action.tag, Action.untag, Action.clear, Action.index]
 
 

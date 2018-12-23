@@ -66,6 +66,12 @@ class TestOptionsParser(TestCase):
     def test_list_short(self):
         opts = RunOptions(["l", "--files", "foo"])
         self.assertEqual(Action.list, opts.action)
+        self.assertEqual(["foo"], opts.files)
+
+    def test_list_no_files_option(self):
+        opts = RunOptions(["l", "foo"])
+        self.assertEqual(Action.list, opts.action)
+        self.assertEqual(["foo"], opts.files)
 
     def test_list_frontend_gtk_files_short(self):
         opts = RunOptions(["list", "-F", "gtk", "-f", "bar"])
@@ -83,6 +89,13 @@ class TestOptionsParser(TestCase):
         self.assertEqual(True, opts.needs_tags(), "needs tags")
         self.assertEqual(["foo", "bar"], opts.files, "needs files")
         self.assertEqual(FrontendType.cli, opts.frontend)
+
+    def test_tag_file_no_files_option(self):
+        opts = RunOptions(["tag", "foo", "bar", "file.jpg"])
+        self.assertEqual(Action.tag, opts.action)
+        self.assertEqual(False, opts.needs_tags(), "needs tags")
+        self.assertEqual(["foo", "bar"], opts.tags, "wrong tags")
+        self.assertEqual(["file.jpg"], opts.files, "wrong file")
 
     def test_tag_short(self):
         opts = RunOptions(["t", "--files", "foo"])
@@ -106,6 +119,12 @@ class TestOptionsParser(TestCase):
     def test_untag_short(self):
         opts = RunOptions(["u", "--files", "foo"])
         self.assertEqual(Action.untag, opts.action)
+        self.assertEqual(["foo"], opts.files)
+
+    def test_untag_short_no_files_option(self):
+        opts = RunOptions(["u", "foo"])
+        self.assertEqual(Action.untag, opts.action)
+        self.assertEqual(["foo"], opts.files)
 
     def test_clear(self):
         opts = RunOptions(["clear", "--files", "foo", "bar"])
@@ -117,6 +136,12 @@ class TestOptionsParser(TestCase):
     def test_clear_short(self):
         opts = RunOptions(["c", "--files", "foo"])
         self.assertEqual(Action.clear, opts.action)
+        self.assertEqual(["foo"], opts.files)
+
+    def test_clear_short_no_files_option(self):
+        opts = RunOptions(["c", "foo"])
+        self.assertEqual(Action.clear, opts.action)
+        self.assertEqual(["foo"], opts.files)
 
     def test_index(self):
         opts = RunOptions(["index", "--files", "foo", "bar"])
@@ -128,12 +153,15 @@ class TestOptionsParser(TestCase):
     def test_index_short(self):
         opts = RunOptions(["i", "--files", "foo"])
         self.assertEqual(Action.index, opts.action)
+        self.assertEqual(["foo"], opts.files)
+
+    def test_index_short_no_files_option(self):
+        opts = RunOptions(["i", "foo"])
+        self.assertEqual(Action.index, opts.action)
+        self.assertEqual(["foo"], opts.files)
 
     def test_index_no_files(self):
         self.assertRaises(ParseError, lambda: RunOptions(["index"]))
-
-    def test_index_no_files_more_args(self):
-        self.assertRaises(ParseError, lambda: RunOptions(["index", "foo", "bar"]))
 
     def test_invalid_action(self):
         self.assertRaises(ParseError, lambda: RunOptions(["blubb"]))

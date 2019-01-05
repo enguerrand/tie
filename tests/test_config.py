@@ -3,7 +3,6 @@ from pathlib import Path
 from unittest import TestCase
 
 from lib import config
-from lib.config import Configuration
 
 
 class TestConfig(TestCase):
@@ -14,7 +13,7 @@ class TestConfig(TestCase):
         self.assertEqual(os.path.join(str(Path.home()), ".tie.ini"), path, "Default config file path")
 
     def test_config_defaults(self):
-        c = Configuration()
+        c = config.get_default_config()
         self.assertEqual("Exif.Photo.UserComment", c.exif_field_name, "Default exif field name")
         self.assertEqual(os.path.join(str(Path.home()), ".tie"), c.index_path, "Index path does not match")
 
@@ -28,8 +27,7 @@ class TestConfig(TestCase):
         cfp = "../res/testconfig.ini"
         os.environ["TIE_CONFIG_PATH"] = cfp
         self.assertEqual(cfp, config._get_config_file_path(), "Config file path from environment variable")
-        c = Configuration()
-        c.update_from_file()
+        c = config.load_user_config()
         self.assertEqual("Vendor.What.Ever", c.exif_field_name, "Wrong exif field name read from file")
         self.assertEqual("/home/foo/.tie/", c.index_path, "Wrong index path read from file")
         del os.environ["TIE_CONFIG_PATH"]

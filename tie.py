@@ -20,17 +20,11 @@ def setup_sys_path():
     sys.path.append(basedir)
 
 
-def get_config() -> Configuration:
-    configuration = Configuration()
-    configuration.update_from_file()
-    return configuration
-
-
 def main(*args):
     try:
         setup_sys_path()
 
-        configuration = get_config()
+        configuration = config.load_user_config()
 
         run_options = RunOptions(list(args[1:]))  # TODO: help action / option and print_usage
 

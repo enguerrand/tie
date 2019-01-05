@@ -12,7 +12,7 @@ class Configuration:
         self.exif_field_name = "Exif.Photo.UserComment"
         self.index_path = os.path.join(str(Path.home()), ".tie")
 
-    def update_from_file(self):
+    def _update_from_file(self):
         path = _get_config_file_path()
         ini = _read_section_less_config_file(path)
         try:
@@ -44,3 +44,11 @@ def _read_file_and_prepend_section_header(path) -> str:
     return content
 
 
+def get_default_config() -> Configuration:
+    return Configuration()
+
+
+def load_user_config() -> Configuration:
+    c = get_default_config()
+    c._update_from_file()
+    return c

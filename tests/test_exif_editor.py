@@ -14,7 +14,7 @@ from tests.test_defines import *
 class TestExifEditor(TestCase):
 
     def setUp(self):
-        self.ee = ee.ExifEditor()
+        self.ee = ee.ExifEditor("Exif.Photo.UserComment")
 
     def test_read_raw(self):
         value = ee._read_exif_field("Exif.Photo.UserComment", READ_FILE)

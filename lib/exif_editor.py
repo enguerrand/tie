@@ -6,7 +6,7 @@ import lib.meta_data as md
 
 class ExifEditor:
 
-    def __init__(self, field_name="Exif.Photo.UserComment"):
+    def __init__(self, field_name):
         self._field_name = field_name
 
     def get_meta_data(self, path: str) -> md.MetaData:

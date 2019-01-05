@@ -5,6 +5,7 @@ import sys
 
 from lib import config, tie_main
 from lib import frontend_factory as ff
+from lib.config import Configuration
 from lib.exif_editor import ExifEditor
 from lib.exit_codes import EXIT_CODE_PARSE_ERROR, EXIT_CODE_FILE_NOT_FOUND
 from lib.index import Index
@@ -19,18 +20,27 @@ def setup_sys_path():
     sys.path.append(basedir)
 
 
+def get_config() -> Configuration:
+    configuration = Configuration()
+    configuration.update_from_file()
+    return configuration
+
+
 def main(*args):
     try:
         setup_sys_path()
+
+        configuration = get_config()
 
         run_options = RunOptions(list(args[1:]))  # TODO: help action / option and print_usage
 
         frontend_type = run_options.frontend
         front_end = ff.from_type(frontend_type)
 
-        index_root_dir = config.get_or_create_default_config_dir()  # TODO: Support customizing config dir
-        exif = ExifEditor()  # TODO: Support specifying custom exif field name
+        index_root_dir = configuration.index_path
+        exif = ExifEditor(configuration.exif_field_name)
         index = Index(index_root_dir, exif)
+
         core = TieCoreImpl(exif, index)  # TODO: inject frontend for user interaction
 
         tie_main.run(core, run_options, front_end)

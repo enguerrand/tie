@@ -1,6 +1,5 @@
 import hashlib
 import os
-from subprocess import CalledProcessError
 from shutil import copyfile
 from unittest import TestCase
 

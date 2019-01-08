@@ -147,6 +147,13 @@ class TestTieCore(TestCase):
         self.assertTrue(os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2.lower(), link_name)),
                         "no link in tagdir 2")
 
+    def test_list_all_tags(self):
+        cli.run_cmd(["cp", READ_FILE_MD, WRITE_FILE_MD])
+        self.tie_core.update_index(WRITE_FILE_MD)
+        tags = self.tie_core.list_all_tags()
+        self.assertEqual(sorted([TEST_READ_TAG_1.lower(), TEST_READ_TAG_2.lower()]), sorted(tags))
+        os.remove(WRITE_FILE_MD)
+
 
 def _path_to_linkname(img):
     return img.replace(os.sep, ":")

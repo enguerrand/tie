@@ -49,5 +49,9 @@ class TieCoreTestImpl(TieCore):
             raise Exception("Wrong method called: index")
         self.files.remove(file)
 
+    def list_all_tags(self):
+        pass
+
     def was_called_correctly(self):
         return len(self.tags) == 0 and len(self.files) == 0
+

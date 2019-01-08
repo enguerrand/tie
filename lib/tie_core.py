@@ -33,6 +33,10 @@ class TieCore(ABC):
     def update_index(self, file: str):
         pass
 
+    @abstractmethod
+    def list_all_tags(self):
+        pass
+
 
 class TieCoreImpl(TieCore):
     def __init__(self, exif: ee.ExifEditor, index: Index):
@@ -100,3 +104,6 @@ class TieCoreImpl(TieCore):
 
     def update_index(self, file: str):
         self.index.update(file)
+
+    def list_all_tags(self) -> List[str]:
+        return self.index.list_tags()

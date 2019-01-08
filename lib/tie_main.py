@@ -12,7 +12,7 @@ from lib.tie_core import TieCore
 
 def run(core: TieCore, run_options: RunOptions, front_end: Frontend):
     if run_options.needs_tags():
-        run_options.tags = front_end.get_tags()
+        run_options.tags = front_end.get_tags(core.list_all_tags())
     try:
         run_action(core, run_options)
     except InvalidMetaDataError as meta_data_error:

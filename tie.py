@@ -38,7 +38,7 @@ def main(*args):
         exif = ExifEditor(configuration.exif_field_name)
         index = Index(index_root_dir, exif)
 
-        core = TieCoreImpl(exif, index)  # TODO: inject frontend for user interaction
+        core = TieCoreImpl(exif, index)
 
         if run_options.action == Action.help:
             print_usage()

@@ -89,7 +89,8 @@ def _print_multiple_choice(mc: MultipleChoice, prompt: str, stdscr):
     stdscr.addstr(0, 0, prompt + "\n\n")
     for o in mc.options:
         _print_option(mc, o, stdscr)
-    stdscr.addstr("\nUse cursor key to move up and down, space to toggle selection, q to quit and return to finish")
+    stdscr.addstr("\nUse cursor keys to move up and down, space to toggle selection, "
+                  "q to cancel and return to confirm selection")
 
 
 def _print_option(mc: MultipleChoice, option: str, stdscr):
@@ -98,12 +99,11 @@ def _print_option(mc: MultipleChoice, option: str, stdscr):
 
 
 def _get_option_marker(mc, option) -> str:
-    if mc.is_selected(option):
-        marker = "X"
+    if mc.is_selected(option) and mc.is_focused(option):
+        return "-> (X)"
+    elif mc.is_selected(option):
+        return "   (X)"
     elif mc.is_focused(option):
-        marker = "O"
+        return "-> ( )"
     else:
-        marker = "-"
-    return marker
-
-
+        return "   ( )"

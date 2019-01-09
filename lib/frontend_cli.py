@@ -43,15 +43,16 @@ def _multi_select(prompt: str, options: List[str]):
 
 def _process_multiple_choice(mc, prompt):
     stdscr = _setup_curses_dialog()
-    key = ''
-    while True:
-        bail = _handle_multiple_choice_input(key, mc)
-        if bail:
-            break
-        _print_multiple_choice(mc, prompt, stdscr)
-        key = stdscr.getch()
-
-    _tear_down_curses_dialog(stdscr)
+    try:
+        key = ''
+        while True:
+            bail = _handle_multiple_choice_input(key, mc)
+            if bail:
+                break
+            _print_multiple_choice(mc, prompt, stdscr)
+            key = stdscr.getch()
+    finally:
+        _tear_down_curses_dialog(stdscr)
     return mc.selection  # TODO sorting?
 
 

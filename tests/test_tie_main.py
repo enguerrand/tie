@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from lib import tie_main
-from lib.options_parser import Action, RunOptions
+from lib.options_parser import Action, RunOptions, ParseError
 from tests.frontend_test import FrontendTest
 from tests.tie_core_test_impl import TieCoreTestImpl
 
@@ -15,10 +15,14 @@ class TestTieMain(TestCase):
         tie_main.run(core, RunOptions(["query", "foo", "bar"]), self.frontend)
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
 
-    def test_query_no_tags(self):
+    def test_query_interactive_tags(self):
         core = TieCoreTestImpl(Action.query, ["foo", "bar"], [])
         tie_main.run(core, RunOptions(["query"]), self.frontend)
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
+
+    def test_query_no_tags(self):
+        core = TieCoreTestImpl(Action.query, [], [])
+        self.assertRaises(ParseError, lambda: tie_main.run(core, RunOptions(["query"]), FrontendTest(True, [])))
 
     def test_list(self):
         core = TieCoreTestImpl(Action.list, [], ["testfile"])

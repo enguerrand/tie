@@ -1,9 +1,9 @@
 import sys
 
 from lib.abstract_frontend import Frontend
-from lib.exit_codes import EXIT_CODE_INVALID_META_DATA
+from lib.exit_codes import EXIT_CODE_INVALID_META_DATA, EXIT_CODE_PARSE_ERROR
 from lib.meta_data import InvalidMetaDataError
-from lib.options_parser import RunOptions, Action
+from lib.options_parser import RunOptions, Action, ParseError
 
 from lib.printing import print_out_list, printerr
 from lib.query import Query
@@ -11,10 +11,9 @@ from lib.tie_core import TieCore
 
 
 def run(core: TieCore, run_options: RunOptions, front_end: Frontend):
-    if run_options.needs_tags():
-        run_options.tags = front_end.get_tags(core.list_all_tags())
+    _check_tags(core, front_end, run_options)
     try:
-        run_action(core, run_options)
+        _run_action(core, run_options)
     except InvalidMetaDataError as meta_data_error:
         # TODO: Use frontend to ask for confirmation to clear file
         printerr("Error: Cannot edit file - " + meta_data_error.msg)
@@ -22,7 +21,14 @@ def run(core: TieCore, run_options: RunOptions, front_end: Frontend):
         sys.exit(EXIT_CODE_INVALID_META_DATA)
 
 
-def run_action(core, run_options):
+def _check_tags(core, front_end, run_options):
+    if run_options.needs_tags():
+        run_options.tags = front_end.get_tags(core.list_all_tags())
+        if len(run_options.tags) == 0:
+            raise ParseError("Cannot execute command \"" + run_options.action.name + "\" with empty tags list")
+
+
+def _run_action(core, run_options):
     action = run_options.action
     if action == Action.query:
         out = core.query(Query(run_options.tags, run_options.match_type))

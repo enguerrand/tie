@@ -52,3 +52,6 @@ class TestMultipleChoice(TestCase):
         self.assertTrue(mc.is_selected("foo"))
         self.assertFalse(mc.is_selected("foo bar"))
         self.assertFalse(mc.is_selected("äöü"))
+
+    def test_empty_options(self):
+        self.assertRaises(ValueError, lambda: MultipleChoice([], False))

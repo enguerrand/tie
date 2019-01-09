@@ -3,6 +3,8 @@ from typing import List
 
 class MultipleChoice:
     def __init__(self, options: List[str], multi_select: bool):
+        if len(options) == 0:
+            raise ValueError("options list cannot be empty")
         self.options = options
         self.multi_select = multi_select
         self.current_focus = 0

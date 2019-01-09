@@ -2,6 +2,7 @@ import curses
 import sys
 from typing import List
 
+from lib import printing
 from lib.abstract_frontend import Frontend
 from lib.multiple_choice import MultipleChoice
 from lib.printing import printerr, printstd
@@ -9,12 +10,10 @@ from lib.printing import printerr, printstd
 
 class FrontendCli(Frontend):
     def get_tags(self, available_tags: List[str]) -> List[str]:
-        old_stdout = sys.stdout
-        try:
-            sys.stdout = sys.stderr
-            return _multi_select("Please choose tags: ", available_tags)
-        finally:
-            sys.stdout = old_stdout
+        backup_fd = printing.redirect_stdout()
+        selected_tags = _multi_select("Please choose tags: ", available_tags)
+        printing.revert_stdout(backup_fd)
+        return selected_tags
 
     def get_user_confirmation(self, prompt: str) -> bool:
         old_stdout = sys.stdout

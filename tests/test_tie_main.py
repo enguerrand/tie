@@ -1,18 +1,23 @@
 from unittest import TestCase
 
 from lib import tie_main
-from lib.frontend_batch import FrontendBatch
 from lib.options_parser import Action, RunOptions
+from tests.frontend_test import FrontendTest
 from tests.tie_core_test_impl import TieCoreTestImpl
 
 
 class TestTieMain(TestCase):
     def setUp(self):
-        self.frontend = FrontendBatch()
+        self.frontend = FrontendTest(True, ["foo", "bar"])
 
     def test_query(self):
         core = TieCoreTestImpl(Action.query, ["foo", "bar"], [])
         tie_main.run(core, RunOptions(["query", "foo", "bar"]), self.frontend)
+        self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
+
+    def test_query_no_tags(self):
+        core = TieCoreTestImpl(Action.query, ["foo", "bar"], [])
+        tie_main.run(core, RunOptions(["query"]), self.frontend)
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
 
     def test_list(self):

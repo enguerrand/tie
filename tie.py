@@ -47,7 +47,6 @@ def main(*args):
 
     except ParseError as parse_error:
         printerr("Error: " + parse_error.msg)
-        print_usage()
         sys.exit(EXIT_CODE_PARSE_ERROR)
     except FileNotFoundError:
         # No need to print it. this is already done by subprocess

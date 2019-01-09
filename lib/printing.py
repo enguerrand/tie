@@ -1,4 +1,5 @@
 import csv
+import os
 import sys
 from typing import List
 
@@ -14,3 +15,14 @@ def printerr(msg: str):
 def print_out_list(out: List[str]):
     writer = csv.writer(sys.stdout, delimiter=" ", quotechar="'", lineterminator="")
     writer.writerow(out)
+
+
+def redirect_stdout() -> int:
+    backup_fd = os.dup(1)
+    os.dup2(2, 1)
+    return backup_fd
+
+def revert_stdout(backup_fd: int):
+    os.dup2(backup_fd, 1)
+    os.close(backup_fd)
+

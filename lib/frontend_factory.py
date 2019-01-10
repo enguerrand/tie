@@ -9,4 +9,6 @@ def from_type(frontend_type: FrontendType) -> Frontend:
         return FrontendCli()
     elif frontend_type == FrontendType.batch:
         return FrontendBatch()
+    elif frontend_type == FrontendType.yes:
+        return FrontendBatch(confirm=True)
     raise NotImplementedError("Frontend Type "+frontend_type.name+" is not implemented yet!")

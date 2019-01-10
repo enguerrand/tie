@@ -29,9 +29,10 @@ USAGE_STRING = """
             If this option is omitted and the specified action requires a file specification, the
             last non-option argument will be treated as the file specification.
                         
-        -F, --frontend batch|cli|gtk
+        -F, --frontend batch|yes|cli|gtk
             Chooses the frontend. The default is cli (command line interface).
-            The batch frontend is non-interactive mode suitable for scripts.
+            The batch frontend is non-interactive mode suitable for scripts. The answer to yes/no questions is aways no.
+            The yes frontend behaves as the batch frontend but always answers yes/no questions with yes..
             The gtk interface requires a running X session and gtk.
             
         -m, --match-type all|any
@@ -104,8 +105,9 @@ _short_actions = {
 
 class FrontendType(Enum):
     batch = 1
-    cli = 2
-    gtk = 3
+    yes = 2
+    cli = 3
+    gtk = 4
 
 
 class Option:

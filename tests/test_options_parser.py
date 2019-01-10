@@ -56,6 +56,9 @@ class TestOptionsParser(TestCase):
     def test_list_files_arg_missing(self):
         self.assertRaises(ParseError, lambda: RunOptions(["list", "--files"]))
 
+    def test_list_files_two_args(self):
+        self.assertRaises(ParseError, lambda: RunOptions(["list", "foo", "bar"]))
+
     def test_list_frontend_gtk_files_long(self):
         opts = RunOptions(["list", "--frontend", "gtk", "--files", "foo"])
         self.assertEqual(Action.list, opts.action)

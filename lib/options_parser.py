@@ -175,7 +175,10 @@ class RunOptions:
                         self.action = Action[arg]
                     except KeyError:
                         raise ParseError("Invalid action type: "+arg)
-                parsing_stage = ParsingStage.tags
+                if self.needs_tags():
+                    parsing_stage = ParsingStage.tags
+                else:
+                    parsing_stage = ParsingStage.files
             elif parsing_stage == ParsingStage.tags:
                 self.tags.append(arg)
             elif parsing_stage == ParsingStage.files:

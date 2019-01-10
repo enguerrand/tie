@@ -1,8 +1,13 @@
+import os
 from unittest import TestCase
 
-from lib import tie_main
+from lib import tie_main, cli, exif_editor
+from lib.exif_editor import ExifEditor
+from lib.index import Index
 from lib.options_parser import Action, RunOptions, ParseError
+from lib.tie_core import TieCoreImpl
 from tests.frontend_test import FrontendTest
+from tests.test_index import TEST_INDEX_LOCATION, READ_FILE, WRITE_FILE, TEST_READ_VALUE_FIELD
 from tests.tie_core_test_impl import TieCoreTestImpl
 
 
@@ -50,3 +55,34 @@ class TestTieMain(TestCase):
         core = TieCoreTestImpl(Action.index, [], ["testfile1", "testfile2"])
         tie_main.run(core, RunOptions(["index", "-f", "testfile1", "testfile2"]), self.frontend)
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
+
+    def test_tag_invalid_meta_data_file_confirmed(self):
+        try:
+            _remove_index()
+            _setup_tag_invalid_meta_data_file(True)
+            self.assertEqual('{"tags": ["foo"], "ver": 1}', exif_editor._read_exif_field("Exif.Photo.UserComment", WRITE_FILE))
+        finally:
+            _remove_index()
+            os.remove(WRITE_FILE)
+
+    def test_tag_invalid_meta_data_file_cancelled(self):
+        try:
+            _remove_index()
+            _setup_tag_invalid_meta_data_file(False)
+            self.assertEqual(TEST_READ_VALUE_FIELD, exif_editor._read_exif_field("Exif.Photo.UserComment", WRITE_FILE))
+        finally:
+            _remove_index()
+            os.remove(WRITE_FILE)
+
+
+def _setup_tag_invalid_meta_data_file(confirm_nuke):
+    exif = ExifEditor("Exif.Photo.UserComment")
+    index = Index(TEST_INDEX_LOCATION, exif)
+    core = TieCoreImpl(exif, index)
+    cli.run_cmd(["cp", READ_FILE, WRITE_FILE])
+    frontend = FrontendTest(confirm_nuke, [])
+    tie_main.run(core, RunOptions(["tag", "foo", WRITE_FILE]), frontend)
+
+
+def _remove_index():
+    cli.run_cmd(["rm", "-rf", TEST_INDEX_LOCATION])

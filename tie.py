@@ -6,8 +6,9 @@ import sys
 from lib import config, tie_main
 from lib import frontend_factory as ff
 from lib.exif_editor import ExifEditor
-from lib.exit_codes import EXIT_CODE_PARSE_ERROR, EXIT_CODE_FILE_NOT_FOUND
+from lib.exit_codes import EXIT_CODE_PARSE_ERROR, EXIT_CODE_FILE_NOT_FOUND, EXIT_CODE_INVALID_META_DATA
 from lib.index import Index
+from lib.meta_data import InvalidMetaDataError
 from lib.options_parser import RunOptions, ParseError, USAGE_STRING, Action
 from lib.printing import printerr
 from lib.tie_core import TieCoreImpl
@@ -48,6 +49,9 @@ def main(*args):
     except ParseError as parse_error:
         printerr("Error: " + parse_error.msg)
         sys.exit(EXIT_CODE_PARSE_ERROR)
+    except InvalidMetaDataError as meta_data_error:
+        printerr("Error: " + meta_data_error.msg)
+        sys.exit(EXIT_CODE_INVALID_META_DATA)
     except FileNotFoundError:
         # No need to print it. this is already done by subprocess
         sys.exit(EXIT_CODE_FILE_NOT_FOUND)

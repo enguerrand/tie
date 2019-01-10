@@ -3,76 +3,81 @@ from typing import List
 
 from lib.query import MatchType
 
-USAGE_STRING = """
-    usage: tie.py action [options] [tags] [files]
-    
-    
-    ACTIONS:
-        help:   print this help
-        query:  query for files with specified tags
-        list:   list tags of specified file(s)
-        tag:    add specified tag to specified file(s)
-        untag:  remove specified tag from specified file(s)
-        clear:  clear all tags from specified file(s)
-        index:  update the index for the specied file(s)
-    
-    All actions may be called with their full name or just their initial character.
-    In other words, the following to commands are equivalent:
-    
-        tie.py help
-        tie.py h
-    
-    
-    OPTIONS:
-        -f, --files
-            All subsequent non-option-arguments will be interpreted as file specifications.
-            If this option is omitted and the specified action requires a file specification, the
-            last non-option argument will be treated as the file specification.
-                        
-        -F, --frontend batch|yes|cli|gtk
-            Chooses the frontend. The default is cli (command line interface).
-            The batch frontend is non-interactive mode suitable for scripts. The answer to yes/no questions is aways no.
-            The yes frontend behaves as the batch frontend but always answers yes/no questions with yes..
-            The gtk interface requires a running X session and gtk.
-            
-        -m, --match-type all|any
-            Only applicable for the query action. Specifies whether to query for file that contain all or any of the
-            specified tags, respectively.
-    
-    
-    Depending on the chosen action, tags must be specified. All non-option-arguments that are provided after the
-    action argument and before the files specification are interpreted as tags.
-    
-    
-    EXAMPLES:
-        Querying:
-            tie query 'tag 1' tag2
+USAGE_STRING = """Usage: tie.py action [tags] [options]
 
-        Querying with short form for action:
-            tie q 'tag 1' tag2
+Tie is an acronym for "tags in exif-data". 
+It "ties" tags to image files using exif data fields while also maintaining a symlink-based index of tagged files for 
+querying purposes.
+
+
+ACTIONS:
+    help:   print this help
+    query:  query for files with specified tags
+    list:   list tags of specified file. Only accepts a single file argument.
+    tag:    add specified tag to specified file(s)
+    untag:  remove specified tag from specified file(s)
+    clear:  clear all tags from specified file(s)
+    index:  update the index for the specied file(s)
+
+All actions may be called with their full name or just their initial character.
+In other words, the following to commands are equivalent:
+
+    tie.py help
+    tie.py h
+
+
+OPTIONS:
+    -f, --files file_1 [file_2 ... ] 
+        If this option is omitted and the specified action requires a specification of target files, the last 
+        argument will be treated as a file argument. 
+        In this case no other options may follow the file specification.
+
+    -F, --frontend batch|yes|cli|gtk
+        Chooses the frontend. The default is cli. Possible choices:
+        batch: Non-interactive mode suitable for scripts. The answer to yes/no questions is aways no.
+        yes:   Behaves as the batch frontend but always answers yes/no questions with yes.
+        cli:   Interactive command line interface.
+        gtk:   Graphical user interface. Requires a running X session and gtk.
         
-        Interactive querying:
-            tie query --frontend gtk
-        
-        Listing tags
-            tie list /path/to/file
-        
-        Tagging one file
-            tie tag 'tag 1' tag2/path/to/file1
-            
-        Tagging multiple files with the same tags
-            tie tag 'tag 1' tag2 --files /path/to/file1 [/path/to/file2..]
-        
-        Untagging
-            tie untag 'tag 1' tag2 --files /path/to/file1 [/path/to/file2..]
-        
-        Clearing all tags
-            tie clear --files /path/to/file1 [/path/to/file2..]
-        
-        Updating the index
-            tie index -f|--files /path/to/file1 [/path/to/file2..]
-        
+    -m, --match-type all|any
+        Only applicable for the query action. Specifies whether to query for file that contain all or any of the
+        specified tags, respectively.
+
+
+Depending on the chosen action, tags must be specified. All non-option-arguments that are provided after the action 
+argument and before the files specification are interpreted as tags.
+
+
+EXAMPLES:
+    Querying:
+        tie query 'tag 1' tag2
+
+    Querying with short form for action:
+        tie q 'tag 1' tag2
     
+    Interactive querying in default (cli) frontend:
+        tie query
+
+    Interactive querying in gtk frontend:
+        tie query --frontend gtk
+    
+    Listing tags
+        tie list /path/to/file
+    
+    Tagging one file
+        tie tag 'tag 1' tag2/path/to/file1
+        
+    Tagging multiple files with the same tags
+        tie tag 'tag 1' tag2 --files /path/to/file1 [/path/to/file2..]
+    
+    Untagging
+        tie untag 'tag 1' tag2 --files /path/to/file1 [/path/to/file2..]
+    
+    Clearing all tags
+        tie clear --files /path/to/file1 [/path/to/file2..]
+    
+    Updating the index
+        tie index -f|--files /path/to/file1 [/path/to/file2..]
 """
 
 

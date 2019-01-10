@@ -53,7 +53,7 @@ def _process_multiple_choice(mc, prompt):
             key = stdscr.getch()
     finally:
         _tear_down_curses_dialog(stdscr)
-    return mc.selection  # TODO sorting?
+    return mc.selection
 
 
 def _handle_multiple_choice_input(key, mc):

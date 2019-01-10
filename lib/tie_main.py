@@ -27,17 +27,26 @@ def _check_tags(core: TieCore, front_end: Frontend, run_options: RunOptions):
 def _run_action(core: TieCore, run_options: RunOptions, frontend: Frontend):
     action = run_options.action
     if action == Action.query:
-        out = core.query(Query(run_options.tags, run_options.match_type))
-        print_out_list(out)
+        _query(core, run_options.tags, run_options.match_type)
     elif action == Action.list:
-        out = core.list(run_options.files[0])
-        print_out_list(out)
+        _list(core, run_options.files[0])
     else:
         for file in run_options.files:
             try:
                 _process_file(core, file, run_options)
             except InvalidMetaDataError as meta_data_error:
                 _handle_invalid_meta_data(core, file, frontend, meta_data_error, run_options)
+
+
+def _query(core, tags, match_type):
+    query = Query(tags, match_type)
+    out = core.query(query)
+    print_out_list(out)
+
+
+def _list(core, file):
+    out = core.list(file)
+    print_out_list(out)
 
 
 def _process_file(core, file, run_options):

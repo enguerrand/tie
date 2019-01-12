@@ -11,14 +11,15 @@ from lib.printing import printerr, printstd
 class FrontendCli(Frontend):
     def get_tags(self, available_tags: List[str]) -> List[str]:
         backup_fd = printing.redirect_stdout()
-        selected_tags = _multi_select("Please choose tags: ", available_tags)
-        printing.revert_stdout(backup_fd)
-        return selected_tags
+        try:
+            selected_tags = _multi_select("Please choose tags: ", available_tags)
+            return selected_tags
+        finally:
+            printing.revert_stdout(backup_fd)
 
     def get_user_confirmation(self, prompt: str) -> bool:
-        old_stdout = sys.stdout
+        backup_fd = printing.redirect_stdout()
         try:
-            sys.stdout = sys.stderr
             user_input = input(prompt + " ").lower()
             while True:
                 if user_input in ['y', 'j']:
@@ -26,10 +27,10 @@ class FrontendCli(Frontend):
                 elif user_input == 'n':
                     return False
                 else:
-                    printstd("\nInvalid input " + user_input + ". Please enter 'y' or 'n'.")
+                    printstd("\nInvalid input \'" + user_input + "\'. Please enter 'y' or 'n'.")
                     user_input = input(prompt + " ").lower()
         finally:
-            sys.stdout = old_stdout
+            printing.revert_stdout(backup_fd)
 
 
 def _multi_select(prompt: str, options: List[str]):

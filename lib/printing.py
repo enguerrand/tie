@@ -22,6 +22,7 @@ def redirect_stdout() -> int:
     os.dup2(2, 1)
     return backup_fd
 
+
 def revert_stdout(backup_fd: int):
     os.dup2(backup_fd, 1)
     os.close(backup_fd)

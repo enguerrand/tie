@@ -21,7 +21,7 @@ def setup_sys_path():
 
 
 def print_usage():
-    print(USAGE_STRING)
+    printerr(USAGE_STRING)
 
 
 def main(*args):

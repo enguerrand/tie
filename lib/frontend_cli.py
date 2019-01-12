@@ -1,11 +1,10 @@
 import curses
-import sys
 from typing import List
 
 from lib import printing
 from lib.abstract_frontend import Frontend
 from lib.multiple_choice import MultipleChoice
-from lib.printing import printerr, printstd
+from lib.printing import printerr
 
 
 class FrontendCli(Frontend):
@@ -27,7 +26,7 @@ class FrontendCli(Frontend):
                 elif user_input == 'n':
                     return False
                 else:
-                    printstd("\nInvalid input \'" + user_input + "\'. Please enter 'y' or 'n'.")
+                    printerr("\nInvalid input \'" + user_input + "\'. Please enter 'y' or 'n'.")
                     user_input = input(prompt + " ").lower()
         finally:
             printing.revert_stdout(backup_fd)

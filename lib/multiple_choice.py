@@ -23,7 +23,7 @@ class MultipleChoice:
 
     def toggle_focused(self):
         current_focused = self.options[self.current_focus]
-        self._toggle(current_focused)
+        self.toggle_option(current_focused)
 
     def is_focused(self, option: str):
         return self.options[self.current_focus] == option
@@ -31,17 +31,17 @@ class MultipleChoice:
     def is_selected(self, option: str):
         return option in self.selection
 
-    def _toggle(self, option: str):
+    def toggle_option(self, option: str):
         if self.is_selected(option):
-            self._unselect(option)
+            self.unselect(option)
         else:
-            self._select(option)
+            self.select(option)
 
-    def _select(self, option: str):
+    def select(self, option: str):
         if not self.multi_select:
             self.clear_selection()
         self.selection.add(option)
 
-    def _unselect(self, option: str):
+    def unselect(self, option: str):
         if self.multi_select:
             self.selection.remove(option)

@@ -11,7 +11,8 @@ class ExifEditor:
 
     def get_meta_data(self, path: str) -> md.MetaData:
         """
-            :raises InvalidMetaDataError if the exiv data of the file could not be parsed
+            :raises CalledProcessError if the exiv2 command terminated abnormally
+                    InvalidMetaDataError if the exiv data of the file could not be parsed
                     FileNotFoundError if the file could not be found
         """
         try:
@@ -19,15 +20,13 @@ class ExifEditor:
         except CalledProcessError as e:
             if _is_file_not_found(e):
                 raise FileNotFoundError(e)
-            elif _is_unknown_image_type(e):
-                return md.empty()
             else:
                 raise e
         return md.deserialize(serialized)
 
     def set_meta_data(self, path: str, data: md.MetaData):
         """
-            :raises UnsupportedFileTypeError if the file type does not support exiv data
+            :raises CalledProcessError if the exiv2 command terminated abnormally
                     FileNotFoundError if the file could not be found
         """
         try:
@@ -35,18 +34,12 @@ class ExifEditor:
         except CalledProcessError as e:
             if _is_file_not_found(e):
                 raise FileNotFoundError(e)
-            elif _is_unknown_image_type(e):
-                raise UnsupportedFileTypeError(path)
             else:
                 raise e
 
 
 def _is_file_not_found(error: CalledProcessError):
     return error.returncode == 255
-
-
-def _is_unknown_image_type(error: CalledProcessError):
-    return error.returncode == 1
 
 
 def _read_exif_field(field_name: str, path: str) -> str:
@@ -56,8 +49,3 @@ def _read_exif_field(field_name: str, path: str) -> str:
 
 def _write_exif_field(field_name: str, value: str, path: str):
     cli.run_cmd(['exiv2', '-M', 'set ' + field_name + ' ' + value, path])
-
-
-class UnsupportedFileTypeError(Exception):
-    def __init__(self, path: str):
-        self.msg = "Unsupported filetype: " + path

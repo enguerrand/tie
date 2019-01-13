@@ -1,6 +1,7 @@
 import hashlib
 import os
 from shutil import copyfile
+from subprocess import CalledProcessError
 from unittest import TestCase
 
 from lib import cli
@@ -53,9 +54,7 @@ class TestExifEditor(TestCase):
         os.remove(WRITE_FILE_MD)
 
     def test_read_from_non_img(self):
-        data = self.ee.get_meta_data("../res/foobar.txt")
-        self.assertEqual(md.current_version, data.ver)
-        self.assertEqual([], data.tags)
+        self.assertRaises(CalledProcessError, lambda: self.ee.get_meta_data("../res/foobar.txt"))
 
     def test_read_non_existant_file(self):
         self.assertRaises(FileNotFoundError, lambda: self.ee.get_meta_data("../res/fooba.txt"))
@@ -64,4 +63,4 @@ class TestExifEditor(TestCase):
         self.assertRaises(FileNotFoundError, lambda: self.ee.set_meta_data("../res/fooba.txt", md.empty()))
 
     def test_write_unknown_image_type(self):
-        self.assertRaises(ee.UnsupportedFileTypeError, lambda: self.ee.set_meta_data("../res/foobar.txt", md.empty()))
+        self.assertRaises(ee.CalledProcessError, lambda: self.ee.set_meta_data("../res/foobar.txt", md.empty()))

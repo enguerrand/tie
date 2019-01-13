@@ -12,6 +12,7 @@ from lib.tie_core import TieCore
 def run(core: TieCore, run_options: RunOptions, front_end: Frontend):
     """
     :raises: InvalidMetaDataError if a file still has invalid metadata after an attempt to clear invalid data
+             CalledProcessError if the exiv2 command terminated abnormally
     """
     _check_tags(core, front_end, run_options)
     _run_action(core, run_options, front_end)

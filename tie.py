@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+from subprocess import CalledProcessError
+from time import sleep
 
 from lib import config, tie_main
 from lib import frontend_factory as ff
 from lib.exif_editor import ExifEditor
-from lib.exit_codes import EXIT_CODE_PARSE_ERROR, EXIT_CODE_FILE_NOT_FOUND, EXIT_CODE_INVALID_META_DATA
+from lib.exit_codes import EXIT_CODE_PARSE_ERROR, EXIT_CODE_FILE_NOT_FOUND, EXIT_CODE_INVALID_META_DATA, \
+    EXIT_CODE_UNKNOWN_SUBPROCESS_ERROR
 from lib.index import Index
 from lib.meta_data import InvalidMetaDataError
 from lib.options_parser import RunOptions, ParseError, USAGE_STRING, Action
@@ -55,6 +58,10 @@ def main(*args):
     except FileNotFoundError:
         # No need to print it. this is already done by subprocess
         sys.exit(EXIT_CODE_FILE_NOT_FOUND)
+    except CalledProcessError:
+        # No need to print it. this is already done by subprocess
+        sys.exit(EXIT_CODE_UNKNOWN_SUBPROCESS_ERROR)
 
 
 main(*sys.argv)
+sleep(100)

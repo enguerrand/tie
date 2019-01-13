@@ -18,6 +18,14 @@ class FrontendGtk(Frontend):
         dialog.destroy()
         return response == Gtk.ResponseType.YES
 
+    def list_tags(self, file, tags):
+        dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Tags on file "+file)
+        dialog.format_secondary_text(
+            "\n".join(tags)
+        )
+        dialog.run()
+        dialog.destroy()
+
 
 class TagChoiceDialog(Gtk.Dialog):
 

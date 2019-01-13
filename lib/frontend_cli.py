@@ -4,7 +4,7 @@ from typing import List
 from lib import printing
 from lib.abstract_frontend import Frontend
 from lib.multiple_choice import MultipleChoice
-from lib.printing import printerr
+from lib.printing import printerr, print_out_list
 
 
 class FrontendCli(Frontend):
@@ -30,6 +30,9 @@ class FrontendCli(Frontend):
                     user_input = input(prompt + " ").lower()
         finally:
             printing.revert_stdout(backup_fd)
+
+    def list_tags(self, file, tags):
+        print_out_list(tags)
 
 
 def _multi_select(prompt: str, options: List[str]):

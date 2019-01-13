@@ -1,5 +1,3 @@
-import sys
-
 from lib.abstract_frontend import Frontend
 from lib.meta_data import InvalidMetaDataError
 from lib.options_parser import RunOptions, Action, ParseError
@@ -30,7 +28,7 @@ def _run_action(core: TieCore, run_options: RunOptions, frontend: Frontend):
     if action == Action.query:
         _query(core, run_options.tags, run_options.match_type)
     elif action == Action.list:
-        _list(core, run_options.files[0])
+        _list(core, run_options.files[0], frontend)
     else:
         for file in run_options.files:
             try:
@@ -45,9 +43,9 @@ def _query(core, tags, match_type):
     print_out_list(out)
 
 
-def _list(core, file):
+def _list(core, file, frontend: Frontend):
     out = core.list(file)
-    print_out_list(out)
+    frontend.list_tags(file, out)
 
 
 def _process_file(core, file, run_options):

@@ -64,4 +64,3 @@ def main(*args):
 
 
 main(*sys.argv)
-sleep(100)

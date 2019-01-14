@@ -12,6 +12,12 @@ def readlink(link: str) -> str:
     return os.readlink(link)
 
 
+def is_broken(path: str):
+    if not os.path.islink(path):
+        return True
+    return not os.path.exists(readlink(path))
+
+
 def rm(link: str) -> str:
     """
     :raises NotASymlinkError when trying to remove a file that is not a symlink

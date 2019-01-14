@@ -29,13 +29,13 @@ class TestTieCore(TestCase):
         self.assertEqual([os.path.abspath(QUERY_FILE_2)], files_2_3, "Query all with 2 tags did not find the expected files")
         files_3 = self.tie_core.query(Query([QUERY_TAG_3], MatchType.all))
         self.assertEqual([os.path.abspath(QUERY_FILE_2), os.path.abspath(QUERY_FILE_3)], files_3, "Query all with 1 tag did not find the expected files")
-        self._clean_after_query_test()
+        _clean_after_query_test()
 
     def test_query_any(self):
         self._prepare_query_test()
         files = self.tie_core.query(Query([QUERY_TAG_2, QUERY_TAG_3], MatchType.any))
         self.assertEqual([os.path.abspath(QUERY_FILE_1), os.path.abspath(QUERY_FILE_2), os.path.abspath(QUERY_FILE_3)], files, "Query any did not find the expected files")
-        self._clean_after_query_test()
+        _clean_after_query_test()
 
     def _prepare_query_test(self):
         cli.run_cmd(["cp", READ_FILE_MD, QUERY_FILE_1])
@@ -50,12 +50,6 @@ class TestTieCore(TestCase):
         self.index.update(QUERY_FILE_2)
         self.index.update(QUERY_FILE_3)
         self.index.update(QUERY_FILE_4)
-
-    def _clean_after_query_test(self):
-        os.remove(QUERY_FILE_1)
-        os.remove(QUERY_FILE_2)
-        os.remove(QUERY_FILE_3)
-        os.remove(QUERY_FILE_4)
 
     def test_list(self):
         tags = self.tie_core.list(READ_FILE_MD)
@@ -161,3 +155,10 @@ def _path_to_linkname(img):
 
 def _remove_index():
     cli.run_cmd(["rm", "-rf", TEST_INDEX_LOCATION])
+
+
+def _clean_after_query_test():
+    os.remove(QUERY_FILE_1)
+    os.remove(QUERY_FILE_2)
+    os.remove(QUERY_FILE_3)
+    os.remove(QUERY_FILE_4)

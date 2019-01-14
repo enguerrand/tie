@@ -26,7 +26,10 @@ class Index:
             for link in os.listdir(tag_dir):
                 link_path = os.path.join(tag_dir, link)
                 if os.path.islink(link_path):
-                    files.append(sl.readlink(link_path))
+                    if sl.is_broken(link_path):
+                        sl.rm(link_path)
+                    else:
+                        files.append(sl.readlink(link_path))
         except FileNotFoundError:
             pass
         return files

@@ -58,11 +58,24 @@ class TestIndex(TestCase):
         self.index.update(vanished_file)
         self.assertFalse(os.path.islink(link_path), "tag of vanished file was not removed!")
 
+    def test_list_vanished_file(self):
+        vanished_file = "../res/vanished_file.jpg"
+        link_path = self._prepare_vanished_file(vanished_file, TEST_READ_TAG_2)
+        self.index.list_files(TEST_READ_TAG_2)
+        self.assertFalse(os.path.islink(link_path), "tag of vanished file was not removed!")
+
     def test_update_vanished_directory(self):
         vanished_directory = "../res/vanished_directory"
         vanished_file = os.path.join(vanished_directory, "some_subdir/vanished_file.jpg")
         link_path = self._prepare_vanished_file(vanished_file, TEST_READ_TAG_2)
         self.index.update(vanished_directory)
+        self.assertFalse(os.path.islink(link_path), "tag of file in vanished directory was not removed!")
+
+    def test_list_vanished_directory(self):
+        vanished_directory = "../res/vanished_directory"
+        vanished_file = os.path.join(vanished_directory, "some_subdir/vanished_file.jpg")
+        link_path = self._prepare_vanished_file(vanished_file, TEST_READ_TAG_2)
+        self.index.list_files(TEST_READ_TAG_2)
         self.assertFalse(os.path.islink(link_path), "tag of file in vanished directory was not removed!")
 
     def _prepare_vanished_file(self, path: str, tag_name: str) -> str:

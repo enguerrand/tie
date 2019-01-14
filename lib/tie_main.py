@@ -18,9 +18,21 @@ def run(core: TieCore, run_options: RunOptions, front_end: Frontend):
 
 def _check_tags(core: TieCore, front_end: Frontend, run_options: RunOptions):
     if run_options.needs_tags():
-        run_options.tags = front_end.get_tags(core.list_all_tags())
+        # TODO: Support multiple files (list sum of present tags from individual files)
+        if run_options.action == Action.untag and len(run_options.files) == 1:
+            _check_tags_untag_single_file(core, front_end, run_options)
+        else:
+            run_options.tags = front_end.get_tags(core.list_all_tags())
         if len(run_options.tags) == 0:
             raise ParseError("Cannot execute command \"" + run_options.action.name + "\" with empty tags list")
+
+
+def _check_tags_untag_single_file(core, front_end: Frontend, run_options: RunOptions):
+    f = run_options.files[0]
+    present_tags = core.list(f)
+    if len(present_tags) == 0:
+        raise ParseError("Cannot execute command \"" + run_options.action.name + "\": No tags present on file " + f)
+    run_options.tags = front_end.get_tags(present_tags)
 
 
 def _run_action(core: TieCore, run_options: RunOptions, frontend: Frontend):

@@ -34,7 +34,7 @@ class TieCore(ABC):
         pass
 
     @abstractmethod
-    def list_all_tags(self):
+    def list_all_tags(self) -> List[str]:
         pass
 
 

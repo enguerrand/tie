@@ -12,7 +12,7 @@ from lib.query import Query
 from lib.tie_core import TieCoreImpl, TieCore
 from tests.frontend_test import FrontendTest
 from tests.test_index import TEST_INDEX_LOCATION, READ_FILE, WRITE_FILE, TEST_READ_VALUE_FIELD, WHITE_SPACE_FILE_MD
-from tests.tie_core_test_impl import TieCoreTestImpl
+from tests.tie_core_test_impl import TieCoreTestImpl, TieCoreAdapter
 
 
 class TestTieMain(TestCase):
@@ -74,32 +74,17 @@ class TestTieMain(TestCase):
             def list_tags(self, file, tags):
                 print_out_list(tags)
 
-        class TieCoreTestInteractiveUntag(TieCore):
+        class TieCoreTestInteractiveUntag(TieCoreAdapter):
             def __init__(self):
                 self.untagged_file = ""
                 self.removed_tags = ""
 
-            def query(self, query: Query) -> List[str]:
-                pass
-
             def list(self, file: str) -> List[str]:
                 return present_tags
-
-            def tag(self, file: str, tags: List[str]):
-                pass
 
             def untag(self, file: str, tags: List[str]):
                 self.untagged_file = file
                 self.removed_tags = tags
-
-            def clear(self, file: str):
-                pass
-
-            def update_index(self, file: str):
-                pass
-
-            def list_all_tags(self):
-                pass
 
         frontend = FrontendAnon()
         core = TieCoreTestInteractiveUntag()

@@ -55,3 +55,26 @@ class TieCoreTestImpl(TieCore):
     def was_called_correctly(self):
         return len(self.tags) == 0 and len(self.files) == 0
 
+
+class TieCoreAdapter(TieCore):
+
+    def query(self, query: Query) -> List[str]:
+        return list()
+
+    def list(self, file: str) -> List[str]:
+        return list()
+
+    def tag(self, file: str, tags: List[str]):
+        pass
+
+    def untag(self, file: str, tags: List[str]):
+        pass
+
+    def clear(self, file: str):
+        pass
+
+    def update_index(self, file: str):
+        pass
+
+    def list_all_tags(self) -> List[str]:
+        return list()

@@ -3,13 +3,10 @@ from typing import List
 from unittest import TestCase
 
 from lib import tie_main, cli, exif_editor
-from lib.abstract_frontend import Frontend
 from lib.exif_editor import ExifEditor
 from lib.index import Index
 from lib.options_parser import Action, RunOptions, ParseError
-from lib.printing import print_out_list
-from lib.query import Query
-from lib.tie_core import TieCoreImpl, TieCore
+from lib.tie_core import TieCoreImpl
 from tests.frontend_test import FrontendTest, FrontendAdapter
 from tests.test_index import TEST_INDEX_LOCATION, READ_FILE, WRITE_FILE, TEST_READ_VALUE_FIELD, WHITE_SPACE_FILE_MD
 from tests.tie_core_test_impl import TieCoreTestImpl, TieCoreAdapter
@@ -83,8 +80,46 @@ class TestTieMain(TestCase):
         frontend = FrontendAnon()
         core = TieCoreTestInteractiveUntag()
         tie_main.run(core, RunOptions(["untag", "-f", "testfile1"]), frontend)
-        self.assertEqual(present_tags, frontend.provided_options, "wrong options were provided")
+        self.assertEqual(sorted(present_tags), frontend.provided_options, "wrong options were provided")
         self.assertEqual(user_choice, core.removed_tags, "wrong tags were removed")
+
+    def test_untag_interactive_multiple_files(self):
+        user_choice = ["foo", "bas"]
+        file_1 = "file1"
+        file_2 = "file2"
+        present_tags_1 = ["foo", "bar", "bas"]
+        present_tags_2 = ["bar", "bas", "bam"]
+
+        class FrontendAnon(FrontendAdapter):
+            def __init__(self):
+                self.provided_options = []
+
+            def get_tags(self, available_tags: List[str]) -> List[str]:
+                self.provided_options = available_tags
+                return user_choice
+
+        class TieCoreTestInteractiveUntag(TieCoreAdapter):
+            def __init__(self):
+                self.untagged_files = list()
+                self.removed_tags = list()
+
+            def list(self, file: str) -> List[str]:
+                if file == file_1:
+                    return present_tags_1
+                else:
+                    return present_tags_2
+
+            def untag(self, file: str, tags: List[str]):
+                self.untagged_files.append(file)
+                for t in tags:
+                    self.removed_tags.append(t)
+
+        frontend = FrontendAnon()
+        core = TieCoreTestInteractiveUntag()
+        tie_main.run(core, RunOptions(["untag", "-f", file_1, file_2]), frontend)
+        self.assertEqual(sorted(["foo", "bar", "bas", "bam"]), frontend.provided_options, "wrong options were provided")
+        self.assertEqual([file_1, file_2], core.untagged_files, "wrong files untagged")
+        self.assertEqual(["foo", "bas", "foo", "bas"], core.removed_tags, "wrong tags were removed")
 
     def test_clear(self):
         core = TieCoreTestImpl(Action.clear, [], ["testfile1", "testfile1", "testfile2", "testfile2"])

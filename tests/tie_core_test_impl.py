@@ -18,10 +18,11 @@ class TieCoreTestImpl(TieCore):
             self.tags.remove(t)
         return []
 
-    def list(self, file: str) -> List[str]:
+    def list(self, files: List[str]) -> List[str]:
         if self.action_type != Action.list:
             raise Exception("Wrong method called: list")
-        self.files.remove(file)
+        for f in files:
+            self.files.remove(f)
         return []
 
     def tag(self, file: str, tags: List[str]):
@@ -61,7 +62,7 @@ class TieCoreAdapter(TieCore):
     def query(self, query: Query) -> List[str]:
         return list()
 
-    def list(self, file: str) -> List[str]:
+    def list(self, files: List[str]) -> List[str]:
         return list()
 
     def tag(self, file: str, tags: List[str]):

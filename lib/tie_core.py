@@ -14,7 +14,7 @@ class TieCore(ABC):
         pass
 
     @abstractmethod
-    def list(self, file: str) -> List[str]:
+    def list(self, files: List[str]) -> List[str]:
         pass
 
     @abstractmethod
@@ -68,12 +68,18 @@ class TieCoreImpl(TieCore):
             files = files.union(set(self.index.list_files(tag)))
         return sorted(files)
 
-    def list(self, file: str) -> List[str]:
+    def list(self, files: List[str]) -> List[str]:
         """
-            :raises InvalidMetaDataError if the file to be read contains invalid meta data
-                    FileNotFoundError if the file to be read could not be found
+            :raises InvalidMetaDataError if any file to be read contains invalid meta data
+                    FileNotFoundError if any file to be read could not be found
         """
-        return sorted(self.exif.get_meta_data(file).tags)
+        tags = set()
+        for f in files:
+            tags = tags.union(self._list(f))
+        return sorted(tags)
+
+    def _list(self, file: str) -> List[str]:
+        return self.exif.get_meta_data(file).tags
 
     def tag(self, file: str, tags: List[str]):
         """

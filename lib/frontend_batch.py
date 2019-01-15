@@ -15,5 +15,5 @@ class FrontendBatch(Frontend):
     def get_tags(self, available_tags: List[str]) -> List[str]:
         return []
 
-    def list_tags(self, file, tags):
+    def list_tags(self, files: List[str], tags: List[str]):
         print_out_list(tags)

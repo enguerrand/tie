@@ -70,7 +70,7 @@ class TestTieMain(TestCase):
                 self.untagged_file = ""
                 self.removed_tags = ""
 
-            def list(self, file: str) -> List[str]:
+            def list(self, files: List[str]) -> List[str]:
                 return present_tags
 
             def untag(self, file: str, tags: List[str]):
@@ -87,8 +87,6 @@ class TestTieMain(TestCase):
         user_choice = ["foo", "bas"]
         file_1 = "file1"
         file_2 = "file2"
-        present_tags_1 = ["foo", "bar", "bas"]
-        present_tags_2 = ["bar", "bas", "bam"]
 
         class FrontendAnon(FrontendAdapter):
             def __init__(self):
@@ -103,11 +101,8 @@ class TestTieMain(TestCase):
                 self.untagged_files = list()
                 self.removed_tags = list()
 
-            def list(self, file: str) -> List[str]:
-                if file == file_1:
-                    return present_tags_1
-                else:
-                    return present_tags_2
+            def list(self, files: List[str]) -> List[str]:
+                return ["foo", "bar", "bas", "bam"]
 
             def untag(self, file: str, tags: List[str]):
                 self.untagged_files.append(file)

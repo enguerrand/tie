@@ -1,3 +1,5 @@
+from typing import List
+
 from lib.abstract_frontend import Frontend
 from lib.meta_data import InvalidMetaDataError
 from lib.options_parser import RunOptions, Action, ParseError
@@ -27,10 +29,7 @@ def _check_tags(core: TieCore, front_end: Frontend, run_options: RunOptions):
 
 
 def _check_tags_untag(core, front_end: Frontend, run_options: RunOptions):
-    files = run_options.files
-    present_tags = set()
-    for f in files:
-        present_tags = present_tags.union(core.list(f))
+    present_tags = core.list(run_options.files)
     if len(present_tags) == 0:
         raise ParseError("Cannot execute command \"" + run_options.action.name + "\": No tags present on file " + f)
     run_options.tags = front_end.get_tags(sorted(list(present_tags)))
@@ -41,7 +40,7 @@ def _run_action(core: TieCore, run_options: RunOptions, frontend: Frontend):
     if action == Action.query:
         _query(core, run_options.tags, run_options.match_type)
     elif action == Action.list:
-        _list(core, run_options.files[0], frontend)
+        _list(core, run_options.files, frontend)
     else:
         for file in run_options.files:
             try:
@@ -56,9 +55,9 @@ def _query(core, tags, match_type):
     print_out_list(out)
 
 
-def _list(core, file, frontend: Frontend):
-    out = core.list(file)
-    frontend.list_tags(file, out)
+def _list(core, files: List[str], frontend: Frontend):
+    out = core.list(files)
+    frontend.list_tags(files, out)
 
 
 def _process_file(core, file, run_options):

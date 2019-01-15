@@ -16,7 +16,7 @@ class FrontendTest(Frontend):
     def get_tags(self, available_tags: List[str]) -> List[str]:
         return self.interactive_tags
 
-    def list_tags(self, file, tags):
+    def list_tags(self, files: List[str], tags: List[str]):
         print_out_list(tags)
 
 
@@ -28,5 +28,5 @@ class FrontendAdapter(Frontend):
     def get_tags(self, available_tags: List[str]) -> List[str]:
         return list()
 
-    def list_tags(self, file, tags):
+    def list_tags(self, files: List[str], tags: List[str]):
         pass

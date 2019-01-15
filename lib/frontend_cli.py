@@ -31,7 +31,7 @@ class FrontendCli(Frontend):
         finally:
             printing.revert_stdout(backup_fd)
 
-    def list_tags(self, file, tags):
+    def list_tags(self, files: List[str], tags: List[str]):
         print_out_list(tags)
 
 

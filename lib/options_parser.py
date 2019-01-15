@@ -13,7 +13,7 @@ querying purposes.
 ACTIONS:
     help:   print this help
     query:  query for files with specified tags
-    list:   list tags of specified file. Only accepts a single file argument.
+    list:   list all tags present on the specified files
     tag:    add specified tag to specified file(s)
     untag:  remove specified tag from specified file(s)
     clear:  clear all tags from specified file(s)
@@ -62,7 +62,7 @@ EXAMPLES:
         tie query --frontend gtk
     
     Listing tags
-        tie list /path/to/file
+        tie list -f /path/to/file1 [/path/to/file2..]
     
     Tagging one file
         tie tag 'tag 1' tag2/path/to/file1
@@ -196,12 +196,9 @@ class RunOptions:
     def _check_files_count(self):
         actual_file_count = len(self.files)
 
-        if self.action in [Action.tag, Action.untag, Action.clear, Action.index] and actual_file_count < 1:
+        if self.action in [Action.list, Action.tag, Action.untag, Action.clear, Action.index] and actual_file_count < 1:
             raise ParseError("Unexpected files count " + str(actual_file_count) +
                              " (expected 1 or more) for action type \"" + self.action.name + "\"")
-        elif self.action == Action.list and actual_file_count != 1:
-            raise ParseError("Unexpected files count " + str(actual_file_count) +
-                             " (expected 1) for action type \"" + self.action.name + "\"")
         elif self.action == Action.query and actual_file_count > 0:
             raise ParseError("Unexpected files count " + str(actual_file_count) +
                              " (expected 0) for action type \"" + self.action.name + "\"")

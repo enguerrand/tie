@@ -12,5 +12,5 @@ class Frontend(ABC):
         pass
 
     @abstractmethod
-    def list_tags(self, file, tags):
+    def list_tags(self, files: List[str], tags: List[str]):
         pass

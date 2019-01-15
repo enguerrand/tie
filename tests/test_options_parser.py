@@ -57,7 +57,11 @@ class TestOptionsParser(TestCase):
         self.assertRaises(ParseError, lambda: RunOptions(["list", "--files"]))
 
     def test_list_files_two_args(self):
-        self.assertRaises(ParseError, lambda: RunOptions(["list", "foo", "bar"]))
+        opts = RunOptions(["list", "foo", "bar"])
+        self.assertEqual(Action.list, opts.action)
+        self.assertEqual(False, opts.needs_tags(), "needs tags")
+        self.assertEqual(["foo", "bar"], opts.files, "needs files")
+        self.assertEqual(FrontendType.cli, opts.frontend)
 
     def test_list_frontend_gtk_files_long(self):
         opts = RunOptions(["list", "--frontend", "gtk", "--files", "foo"])
@@ -84,7 +88,11 @@ class TestOptionsParser(TestCase):
         self.assertEqual(FrontendType.gtk, opts.frontend)
 
     def test_list_frontend_gtk_multiple_files(self):
-        self.assertRaises(ParseError, lambda: RunOptions(["list", "-F", "gtk", "-f", "foo", "bar"]))
+        opts = RunOptions(["list", "-F", "gtk", "-f", "foo", "bar"])
+        self.assertEqual(Action.list, opts.action)
+        self.assertEqual(False, opts.needs_tags(), "needs tags")
+        self.assertEqual(["foo", "bar"], opts.files, "needs files")
+        self.assertEqual(FrontendType.gtk, opts.frontend)
 
     def test_tag_frontend_cli_files_long(self):
         opts = RunOptions(["tag", "--files", "foo", "--frontend", "cli", "bar"])

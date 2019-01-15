@@ -10,7 +10,7 @@ from lib.options_parser import Action, RunOptions, ParseError
 from lib.printing import print_out_list
 from lib.query import Query
 from lib.tie_core import TieCoreImpl, TieCore
-from tests.frontend_test import FrontendTest
+from tests.frontend_test import FrontendTest, FrontendAdapter
 from tests.test_index import TEST_INDEX_LOCATION, READ_FILE, WRITE_FILE, TEST_READ_VALUE_FIELD, WHITE_SPACE_FILE_MD
 from tests.tie_core_test_impl import TieCoreTestImpl, TieCoreAdapter
 
@@ -60,19 +60,13 @@ class TestTieMain(TestCase):
         user_choice = ["foo", "bar"]
         present_tags = ["foo", "bar", "bas"]
 
-        class FrontendAnon(Frontend):
+        class FrontendAnon(FrontendAdapter):
             def __init__(self):
                 self.provided_options = []
-
-            def get_user_confirmation(self, prompt: str) -> bool:
-                return True
 
             def get_tags(self, available_tags: List[str]) -> List[str]:
                 self.provided_options = available_tags
                 return user_choice
-
-            def list_tags(self, file, tags):
-                print_out_list(tags)
 
         class TieCoreTestInteractiveUntag(TieCoreAdapter):
             def __init__(self):

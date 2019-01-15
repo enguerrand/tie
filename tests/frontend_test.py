@@ -18,3 +18,15 @@ class FrontendTest(Frontend):
 
     def list_tags(self, file, tags):
         print_out_list(tags)
+
+
+class FrontendAdapter(Frontend):
+
+    def get_user_confirmation(self, prompt: str) -> bool:
+        return True
+
+    def get_tags(self, available_tags: List[str]) -> List[str]:
+        return list()
+
+    def list_tags(self, file, tags):
+        pass

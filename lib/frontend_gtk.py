@@ -86,13 +86,13 @@ class TagChoiceDialog(Gtk.Dialog):
             self.mc.unselect(name)
 
     def _on_key_release(self, widget, ev, data=None):
+        current_search_string = widget.get_text().strip()
         if ev.keyval == Gdk.KEY_Return:  # If Enterkey pressed, reset text
-            if self.allow_custom_tags:
-                self.mc.toggle_option(widget.get_text())
+            if self.allow_custom_tags and len(current_search_string) > 0:
+                self.mc.toggle_option(current_search_string)
                 widget.set_text("")
                 self._update_options_visibility("")
         else:
-            current_search_string = self.search_input_field.get_text()
             self._update_options_visibility(current_search_string)
 
 

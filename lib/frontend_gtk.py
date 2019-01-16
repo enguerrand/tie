@@ -36,7 +36,8 @@ class TagChoiceDialog(Gtk.Dialog):
         self.mc = mc
         self.allow_custom_tags = allow_custom_tags
         self.set_default_size(150, 100)
-        self.main_container = Gtk.Box()
+        self.search_input_field = Gtk.Entry()
+        self.main_container = None
         self._update_main_container()
         self._format_action_area()
         self.show_all()
@@ -51,21 +52,27 @@ class TagChoiceDialog(Gtk.Dialog):
     def _build_main_container(self):
         main_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         _set_widget_margins(main_container, 5, 5, 0, 5)
-        search_input_field = Gtk.Entry()
-        search_input_field.connect("key-release-event", self._on_key_release)
-        main_container.add(search_input_field)
-        main_container.add(self._build_tag_buttons_box())
+        self.search_input_field.connect("key-release-event", self._on_key_release)
+        main_container.add(self.search_input_field)
+        self._build_options_box("")
+        main_container.add(self.options_box)
         return main_container
 
-    def _build_tag_buttons_box(self):
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+    def _build_options_box(self, current_search_string: str):
+        self.options_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         for option in self.mc.options:
-            button = Gtk.CheckButton(option)
-            button.set_active(self.mc.is_selected(option))
+            if current_search_string in option:
+                button = Gtk.CheckButton(option)
+                button.set_active(self.mc.is_selected(option))
+                button.connect("toggled", self.on_button_toggled, option)
+                self.options_box.add(button)
 
-            button.connect("toggled", self.on_button_toggled, option)
-            box.add(button)
-        return box
+    def _update_options_visibility(self, current_search_string: str):
+        if self.options_box is not None:
+            self.options_box.destroy()
+        self._build_options_box(current_search_string)
+        self.main_container.add(self.options_box)
+        self.show_all()
 
     def _format_action_area(self):
         action_area = self.get_action_area()
@@ -82,7 +89,11 @@ class TagChoiceDialog(Gtk.Dialog):
         if ev.keyval == Gdk.KEY_Return:  # If Enterkey pressed, reset text
             if self.allow_custom_tags:
                 self.mc.select(widget.get_text())
-                self._update_main_container()
+                widget.set_text("")
+                self._update_options_visibility("")
+        else:
+            current_search_string = self.search_input_field.get_text()
+            self._update_options_visibility(current_search_string)
 
 
 def _set_widget_margins(widget: Gtk.Widget, top: int, right: int, bottom: int, left: int):

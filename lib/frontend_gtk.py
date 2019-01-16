@@ -1,5 +1,5 @@
 import gi
-from gi.overrides.keysyms import Gdk
+from gi.overrides.Gdk import Gdk
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk

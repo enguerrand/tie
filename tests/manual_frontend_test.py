@@ -1,3 +1,4 @@
+import string
 from typing import List
 
 from lib.abstract_frontend import Frontend
@@ -28,6 +29,7 @@ def test_frontend_get_tags(frontend: Frontend, tags_choice: List[str]):
 #test_frontend_user_confirm(FrontendCli())
 
 printerr("Testing GTK frontend")
-test_frontend_get_tags(FrontendGtk(), ["foo", "bar", "foo bar", "äöl"])
+
+test_frontend_get_tags(FrontendGtk(), list(string.ascii_lowercase))
 #test_frontend_user_confirm(FrontendGtk())
 

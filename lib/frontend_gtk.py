@@ -38,11 +38,19 @@ class TagChoiceDialog(Gtk.Dialog):
         self.set_default_size(150, 100)
         self.search_input_field = self._build_search_input_field()
         self.main_container = self._build_main_container(self.search_input_field)
+        self.scroll = self._build_scroll_window()
+        self.main_container.add(self.scroll)
         self.options_box = None
         self._update_options_box("")
         self.get_content_area().add(self.main_container)
         self._format_action_area()
         self.show_all()
+
+    def _build_scroll_window(self) -> Gtk.ScrolledWindow:
+        scroll = Gtk.ScrolledWindow()
+        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scroll.set_min_content_height(300)
+        return scroll
 
     def _build_search_input_field(self) -> Gtk.Entry:
         input_field = Gtk.Entry()
@@ -67,9 +75,10 @@ class TagChoiceDialog(Gtk.Dialog):
 
     def _update_options_box(self, current_search_string: str):
         if self.options_box is not None:
+            self.scroll.remove(self.options_box)
             self.options_box.destroy()
         self.options_box = self._build_options_box(current_search_string)
-        self.main_container.add(self.options_box)
+        self.scroll.add(self.options_box)
         self.show_all()
 
     def _format_action_area(self):

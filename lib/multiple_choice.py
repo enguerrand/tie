@@ -60,3 +60,6 @@ class MultipleChoice:
         self.options.sort()
         self._set_focused_option(currently_focused)
 
+    def has_option(self, option):
+        return option in self.options
+

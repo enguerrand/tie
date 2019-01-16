@@ -9,6 +9,11 @@ class TestMultipleChoice(TestCase):
         mc = MultipleChoice(["def", "abc", "ghi"], True)
         self.assertEquals(["abc", "def", "ghi"], mc.options, "options not sorted")
 
+    def test_has_option(self):
+        mc = MultipleChoice(["def", "abc", "ghi"], True)
+        self.assertTrue(mc.has_option("abc"))
+        self.assertFalse(mc.has_option("jkm"))
+
     def test_focus_next(self):
         mc = MultipleChoice(["foo", "foo bar", "äöü"], True)
         self.assertEqual(0, mc.current_focus, "initial focus")

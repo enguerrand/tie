@@ -31,7 +31,7 @@ def _check_tags(core: TieCore, front_end: Frontend, run_options: RunOptions):
 def _check_tags_untag(core, front_end: Frontend, run_options: RunOptions):
     present_tags = core.list(run_options.files)
     if len(present_tags) == 0:
-        raise ParseError("Cannot execute command \"" + run_options.action.name + "\": No tags present on file " + f)
+        raise ParseError("Cannot execute command \"" + run_options.action.name + "\": No tags present on selected files")
     run_options.tags = front_end.get_tags(sorted(list(present_tags)), False)
 
 

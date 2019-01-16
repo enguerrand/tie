@@ -8,7 +8,8 @@ from lib.index import Index
 from lib.options_parser import Action, RunOptions, ParseError
 from lib.tie_core import TieCoreImpl
 from tests.frontend_test import FrontendTest, FrontendAdapter
-from tests.test_index import TEST_INDEX_LOCATION, READ_FILE, WRITE_FILE, TEST_READ_VALUE_FIELD, WHITE_SPACE_FILE_MD
+from tests.test_index import TEST_INDEX_LOCATION, READ_FILE, WRITE_FILE, TEST_READ_VALUE_FIELD, WHITE_SPACE_FILE_MD, \
+    READ_FILE_MD_NO_TAGS
 from tests.tie_core_test_impl import TieCoreTestImpl, TieCoreAdapter
 
 
@@ -46,6 +47,10 @@ class TestTieMain(TestCase):
         core = TieCoreTestImpl(Action.tag, ["foo"], [WHITE_SPACE_FILE_MD, WHITE_SPACE_FILE_MD])
         tie_main.run(core, RunOptions(["tag", "foo", "-f", WHITE_SPACE_FILE_MD]), self.frontend)
         self.assertTrue(core.was_called_correctly(), "core was called incorrectly")
+
+    def test_untag_file_without_tags(self):
+        core = TieCoreAdapter()
+        self.assertRaises(ParseError, lambda: tie_main.run(core, RunOptions(["untag", "-f", READ_FILE_MD_NO_TAGS]), self.frontend))
 
     def test_untag(self):
         # Duplicates in constructor calls account for repeated calls to method

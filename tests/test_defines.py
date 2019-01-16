@@ -2,6 +2,7 @@ READ_FILE = "../res/read.jpg"
 WRITE_FILE = "../res/write.jpg"
 READ_FILE_MD = "../res/read_md.jpg"
 READ_FILE_MD_2 = "../res/read_md_2.jpg"
+READ_FILE_MD_NO_TAGS = "../res/read_md_no_tags.jpg"
 WRITE_FILE_MD = "../res/write_md.jpg"
 WHITE_SPACE_FILE_MD = "../res/write md.jpg"
 

@@ -189,6 +189,9 @@ class RunOptions:
             return False
         return self.action in [Action.query, Action.tag, Action.untag]
 
+    def allows_tag_creation(self) -> bool:
+        return self.action == Action.tag
+
     def _check_action_type(self):
         if self.action is None:
             raise ParseError("Action type must be specified!")

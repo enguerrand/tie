@@ -96,13 +96,18 @@ class TagChoiceDialog(Gtk.Dialog):
 
     def _on_key_release(self, widget, ev, data=None):
         current_search_string = widget.get_text().strip()
-        if ev.keyval == Gdk.KEY_Return:  # If Enterkey pressed, reset text
-            if self.allow_custom_tags and len(current_search_string) > 0:
-                self.mc.toggle_option(current_search_string)
-                widget.set_text("")
-                self._update_options_box("")
+        if ev.keyval == Gdk.KEY_Return:
+            self._handle_return_key(current_search_string, widget)
         else:
             self._update_options_box(current_search_string)
+
+    def _handle_return_key(self, current_search_string, widget):
+        if len(current_search_string) == 0:
+            return
+        if self.allow_custom_tags or self.mc.has_option(current_search_string):
+            self.mc.toggle_option(current_search_string)
+            widget.set_text("")
+            self._update_options_box("")
 
 
 def _set_widget_margins(widget: Gtk.Widget, top: int, right: int, bottom: int, left: int):

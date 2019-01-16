@@ -23,7 +23,7 @@ def _check_tags(core: TieCore, front_end: Frontend, run_options: RunOptions):
         if run_options.action == Action.untag:
             _check_tags_untag(core, front_end, run_options)
         else:
-            run_options.tags = front_end.get_tags(core.list_all_tags(), True)
+            run_options.tags = front_end.get_tags(core.list_all_tags(), run_options.allows_tag_creation())
         if len(run_options.tags) == 0:
             raise ParseError("Cannot execute command \"" + run_options.action.name + "\" with empty tags list")
 

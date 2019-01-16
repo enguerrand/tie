@@ -40,8 +40,23 @@ class MultipleChoice:
     def select(self, option: str):
         if not self.multi_select:
             self.clear_selection()
+        if not option in self.options:
+            self._add_option(option)
         self.selection.add(option)
 
     def unselect(self, option: str):
         if self.multi_select:
             self.selection.remove(option)
+
+    def _get_focused_option(self):
+        return self.options[self.current_focus]
+
+    def _set_focused_option(self, option: str):
+        self.current_focus = self.options.index(option)
+
+    def _add_option(self, option):
+        currently_focused = self._get_focused_option()
+        self.options.append(option)
+        self.options.sort()
+        self._set_focused_option(currently_focused)
+

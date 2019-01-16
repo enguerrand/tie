@@ -5,6 +5,10 @@ from lib.multiple_choice import MultipleChoice
 
 class TestMultipleChoice(TestCase):
 
+    def test_sorted_options(self):
+        mc = MultipleChoice(["def", "abc", "ghi"], True)
+        self.assertEquals(["abc", "def", "ghi"], mc.options, "options not sorted")
+
     def test_focus_next(self):
         mc = MultipleChoice(["foo", "foo bar", "äöü"], True)
         self.assertEqual(0, mc.current_focus, "initial focus")
@@ -55,3 +59,19 @@ class TestMultipleChoice(TestCase):
 
     def test_empty_options(self):
         self.assertRaises(ValueError, lambda: MultipleChoice([], False))
+
+    def test_add_custom_option(self):
+        mc = MultipleChoice(["foo", "foo bar", "aöü"], True)
+        mc.select("foo")
+        mc.select("custom")
+        self.assertEqual(["aöü", "custom", "foo",  "foo bar"], mc.options, "wrong options")
+        self.assertEqual({"custom", "foo"}, mc.selection, "wrong selection")
+
+    def test_add_custom_option_focus(self):
+        mc = MultipleChoice(["abc", "fgh"], True)
+        mc.focus_next()
+        mc.select("def")
+        self.assertEqual(["abc", "def", "fgh"], mc.options, "wrong options")
+        self.assertEqual(2, mc.current_focus, "wrong focus")
+
+

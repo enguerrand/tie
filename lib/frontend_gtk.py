@@ -88,7 +88,7 @@ class TagChoiceDialog(Gtk.Dialog):
     def _on_key_release(self, widget, ev, data=None):
         if ev.keyval == Gdk.KEY_Return:  # If Enterkey pressed, reset text
             if self.allow_custom_tags:
-                self.mc.select(widget.get_text())
+                self.mc.toggle_option(widget.get_text())
                 widget.set_text("")
                 self._update_options_visibility("")
         else:

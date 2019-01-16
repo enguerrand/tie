@@ -8,7 +8,7 @@ from lib.printing import printerr, print_out_list
 
 
 class FrontendCli(Frontend):
-    def get_tags(self, available_tags: List[str]) -> List[str]:
+    def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:
         backup_fd = printing.redirect_stdout()
         try:
             selected_tags = _multi_select("Please choose tags: ", available_tags)

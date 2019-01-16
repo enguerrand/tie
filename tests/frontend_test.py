@@ -13,7 +13,7 @@ class FrontendTest(Frontend):
     def get_user_confirmation(self, prompt: str) -> bool:
         return self.user_confirmation
 
-    def get_tags(self, available_tags: List[str]) -> List[str]:
+    def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:
         return self.interactive_tags
 
     def list_tags(self, files: List[str], tags: List[str]):
@@ -25,7 +25,7 @@ class FrontendAdapter(Frontend):
     def get_user_confirmation(self, prompt: str) -> bool:
         return True
 
-    def get_tags(self, available_tags: List[str]) -> List[str]:
+    def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:
         return list()
 
     def list_tags(self, files: List[str], tags: List[str]):

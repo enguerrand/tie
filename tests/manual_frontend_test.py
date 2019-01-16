@@ -13,21 +13,21 @@ def test_frontend_user_confirm(frontend: Frontend):
 
 
 def test_frontend_get_tags(frontend: Frontend, tags_choice: List[str]):
-    choice = frontend.get_tags(tags_choice)
+    choice = frontend.get_tags(tags_choice, True)
     printerr("Your choice:")
     for t in choice:
         printerr(t)
 
 
-printerr("Testing batch frontend")
-test_frontend_get_tags(FrontendBatch(), ["foo", "bar", "foo bar"])
-test_frontend_user_confirm(FrontendBatch())
+#printerr("Testing batch frontend")
+#test_frontend_get_tags(FrontendBatch(), ["foo", "bar", "foo bar"])
+#test_frontend_user_confirm(FrontendBatch())
 
-printerr("Testing CLI frontend")
-test_frontend_get_tags(FrontendCli(), ["foo", "bar", "foo bar", "äöl"])
-test_frontend_user_confirm(FrontendCli())
+#printerr("Testing CLI frontend")
+#test_frontend_get_tags(FrontendCli(), ["foo", "bar", "foo bar", "äöl"])
+#test_frontend_user_confirm(FrontendCli())
 
 printerr("Testing GTK frontend")
 test_frontend_get_tags(FrontendGtk(), ["foo", "bar", "foo bar", "äöl"])
-test_frontend_user_confirm(FrontendGtk())
+#test_frontend_user_confirm(FrontendGtk())
 

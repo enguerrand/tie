@@ -61,7 +61,7 @@ class TestTieMain(TestCase):
             def __init__(self):
                 self.provided_options = []
 
-            def get_tags(self, available_tags: List[str]) -> List[str]:
+            def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:
                 self.provided_options = available_tags
                 return user_choice
 
@@ -92,7 +92,7 @@ class TestTieMain(TestCase):
             def __init__(self):
                 self.provided_options = []
 
-            def get_tags(self, available_tags: List[str]) -> List[str]:
+            def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:
                 self.provided_options = available_tags
                 return user_choice
 

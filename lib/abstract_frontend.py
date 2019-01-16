@@ -8,7 +8,7 @@ class Frontend(ABC):
         pass
 
     @abstractmethod
-    def get_tags(self, available_tags: List[str]) -> List[str]:
+    def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:
         pass
 
     @abstractmethod

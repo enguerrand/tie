@@ -12,7 +12,7 @@ class FrontendBatch(Frontend):
     def get_user_confirmation(self, prompt: str) -> bool:
         return self.confirm
 
-    def get_tags(self, available_tags: List[str]) -> List[str]:
+    def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:
         return []
 
     def list_tags(self, files: List[str], tags: List[str]):

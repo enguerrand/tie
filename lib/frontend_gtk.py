@@ -44,12 +44,14 @@ class TagChoiceDialog(Gtk.Dialog):
         self._update_options_box("")
         self.get_content_area().add(self.main_container)
         self._format_action_area()
+        self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.show_all()
+        self.search_input_field.grab_focus()
 
     def _build_scroll_window(self) -> Gtk.ScrolledWindow:
         scroll = Gtk.ScrolledWindow()
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        scroll.set_min_content_height(300)
+        scroll.set_min_content_height(500)
         return scroll
 
     def _build_search_input_field(self) -> Gtk.Entry:

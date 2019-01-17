@@ -30,6 +30,7 @@ def test_frontend_get_tags(frontend: Frontend, tags_choice: List[str]):
 
 printerr("Testing GTK frontend")
 
-test_frontend_get_tags(FrontendGtk(), list(string.ascii_lowercase))
+test_frontend_get_tags(FrontendGtk(), ["foo", "bar", "foo bar", "äöl"])
+#test_frontend_get_tags(FrontendGtk(), list(string.ascii_lowercase))
 #test_frontend_user_confirm(FrontendGtk())
 

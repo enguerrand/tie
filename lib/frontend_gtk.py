@@ -95,21 +95,21 @@ class TagChoiceDialog(Gtk.Dialog):
             self.mc.unselect(name)
 
     def _on_key_release(self, widget, ev, data=None):
-        current_search_string = widget.get_text().lower().strip()
+        current_search_string = self.search_input_field.get_text().lower().strip()
         control_pressed = (ev.state & Gdk.ModifierType.CONTROL_MASK == Gdk.ModifierType.CONTROL_MASK)
         if ev.keyval == Gdk.KEY_Return:
-            self._handle_return_key(current_search_string, widget, control_pressed)
+            self._handle_return_key(current_search_string, control_pressed)
         else:
             self._update_options_box(current_search_string)
 
-    def _handle_return_key(self, current_search_string: str, widget, control_pressed: bool):
+    def _handle_return_key(self, current_search_string: str, control_pressed: bool):
         if control_pressed:
             self.response(Gtk.ResponseType.OK)
         if len(current_search_string) == 0:
             return
         if self.allow_custom_tags or self.mc.has_option(current_search_string):
             self.mc.toggle_option(current_search_string)
-            widget.set_text("")
+            self.search_input_field.set_text("")
             self._update_options_box("")
 
 

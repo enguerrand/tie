@@ -15,6 +15,10 @@ tie has been written and tested on and for GNU/Linux. I have not tested any othe
 -gtk3
 -ncurses
 
+## Installation
+Once the above-mentioned dependencies are fulfilled, simply clone this git repo to a directory of your choice.
+The file tie.py at the root level is the executable to run.
+
 ## Usage
 ### Command line
 Type

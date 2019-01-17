@@ -95,7 +95,7 @@ class TagChoiceDialog(Gtk.Dialog):
             self.mc.unselect(name)
 
     def _on_key_release(self, widget, ev, data=None):
-        current_search_string = widget.get_text().strip()
+        current_search_string = widget.get_text().lower().strip()
         if ev.keyval == Gdk.KEY_Return:
             self._handle_return_key(current_search_string, widget)
         else:

@@ -32,7 +32,7 @@ class FrontendGtk(Frontend):
 class TagChoiceDialog(Gtk.Dialog):
 
     def __init__(self, parent, prompt: str, mc: MultipleChoice, allow_custom_tags: bool):
-        Gtk.Dialog.__init__(self, prompt, parent, 0, (Gtk.STOCK_OK, Gtk.ResponseType.NONE))
+        Gtk.Dialog.__init__(self, prompt, parent, 0, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK))
         self.mc = mc
         self.allow_custom_tags = allow_custom_tags
         self.set_default_size(150, 100)
@@ -122,6 +122,8 @@ def _multi_select(prompt: str, options: List[str], allow_custom_tags: bool):
         return []
     mc = MultipleChoice(options, True)
     dialog = TagChoiceDialog(None, prompt, mc, allow_custom_tags)
-    dialog.run()
-    selected_options = mc.selection
-    return selected_options
+    response = dialog.run()
+    if response == Gtk.ResponseType.OK:
+        return mc.selection
+    else:
+        return []

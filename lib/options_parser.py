@@ -48,6 +48,20 @@ Depending on the chosen action, tags must be specified. All non-option-arguments
 argument and before the files specification are interpreted as tags.
 
 
+CONFIGURATION:
+The default configuration file path is $HOME/.tie.ini
+This location can be overridden by setting the environment variable TIE_CONFIG_PATH to the desired path.
+The syntax follows the .ini file format except that no section header is needed.
+
+The following settings can be configured:
+    
+    exif_field:
+        The exif field that is used to store and retrieve tag data. Defaults to "Exif.Photo.UserComment"
+        
+    index_path:
+        The path to the directory where the symlink-based index is stored. Defaults to $HOME/.tie/
+
+
 EXAMPLES:
     Querying:
         tie query 'tag 1' tag2
@@ -78,6 +92,10 @@ EXAMPLES:
     
     Updating the index
         tie index -f|--files /path/to/file1 [/path/to/file2..]
+        
+    Example configuration file entries:
+        exif_field = Exif.Photo.UserComment
+        index_path = /home/foo/.tie/
 """
 
 

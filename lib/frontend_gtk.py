@@ -1,6 +1,8 @@
 import gi
 from gi.overrides.Gdk import Gdk
 
+from lib import autocomplete
+
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from typing import List
@@ -83,6 +85,11 @@ class TagChoiceDialog(Gtk.Dialog):
         self.scroll.add(self.options_box)
         self.show_all()
 
+    def _auto_complete(self, current_search: str):
+        auto_completion = autocomplete.auto_complete(current_search, self.mc.options)
+        self.search_input_field.set_text(auto_completion)
+        Gtk.Entry.do_move_cursor(self.search_input_field, 1, len(auto_completion), False)
+
     def _format_action_area(self):
         action_area = self.get_action_area()
         _set_widget_margins(action_area, 10, 5, 5, 5)
@@ -95,10 +102,13 @@ class TagChoiceDialog(Gtk.Dialog):
             self.mc.unselect(name)
 
     def _on_key_release(self, widget, ev, data=None):
-        current_search_string = self.search_input_field.get_text().lower().strip()
+        current_search_string = self.search_input_field.get_text().lower()
+        current_search_string_stripped = current_search_string.strip()
         control_pressed = (ev.state & Gdk.ModifierType.CONTROL_MASK == Gdk.ModifierType.CONTROL_MASK)
         if ev.keyval == Gdk.KEY_Return:
-            self._handle_return_key(current_search_string, control_pressed)
+            self._handle_return_key(current_search_string_stripped, control_pressed)
+        if ev.keyval == Gdk.KEY_space and control_pressed:
+            self._auto_complete(current_search_string)
         else:
             self._update_options_box(current_search_string)
 

@@ -67,21 +67,21 @@ class TagChoiceDialog(Gtk.Dialog):
         main_container.add(search_input_field)
         return main_container
 
-    def _build_options_box(self, current_search_string: str) -> Gtk.Box:
+    def _build_options_box(self, current_search: str) -> Gtk.Box:
         options_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         for option in self.mc.options:
-            if current_search_string in option:
+            if current_search in option:
                 button = Gtk.CheckButton(option)
                 button.set_active(self.mc.is_selected(option))
                 button.connect("toggled", self.on_button_toggled, option)
                 options_box.add(button)
         return options_box
 
-    def _update_options_box(self, current_search_string: str):
+    def _update_options_box(self, current_search: str):
         if self.options_box is not None:
             self.scroll.remove(self.options_box)
             self.options_box.destroy()
-        self.options_box = self._build_options_box(current_search_string)
+        self.options_box = self._build_options_box(current_search)
         self.scroll.add(self.options_box)
         self.show_all()
 
@@ -102,23 +102,23 @@ class TagChoiceDialog(Gtk.Dialog):
             self.mc.unselect(name)
 
     def _on_key_release(self, widget, ev, data=None):
-        current_search_string = self.search_input_field.get_text().lower()
-        current_search_string_stripped = current_search_string.strip()
+        current_search = self.search_input_field.get_text().lower()
+        current_search_stripped = current_search.strip()
         control_pressed = (ev.state & Gdk.ModifierType.CONTROL_MASK == Gdk.ModifierType.CONTROL_MASK)
         if ev.keyval == Gdk.KEY_Return:
-            self._handle_return_key(current_search_string_stripped, control_pressed)
+            self._handle_return_key(current_search_stripped, control_pressed)
         if ev.keyval == Gdk.KEY_space and control_pressed:
-            self._auto_complete(current_search_string)
+            self._auto_complete(current_search)
         else:
-            self._update_options_box(current_search_string)
+            self._update_options_box(current_search)
 
-    def _handle_return_key(self, current_search_string: str, control_pressed: bool):
+    def _handle_return_key(self, current_search: str, control_pressed: bool):
         if control_pressed:
             self.response(Gtk.ResponseType.OK)
-        if len(current_search_string) == 0:
+        if len(current_search) == 0:
             return
-        if self.allow_custom_tags or self.mc.has_option(current_search_string):
-            self.mc.toggle_option(current_search_string)
+        if self.allow_custom_tags or self.mc.has_option(current_search):
+            self.mc.toggle_option(current_search)
             self.search_input_field.set_text("")
             self._update_options_box("")
 

@@ -35,9 +35,9 @@ As described in the help output, tie can be run without specifying tags, in whic
 
 So e.g. the following commands typically make sense as context menu entries for an image file(s) selection:
 ```
-/path/to/tie.py tag -F gtk -f "$@"
-/path/to/tie.py untag -F gtk -f "$@"
-/path/to/tie.py list -F gtk -f "$@"
+/path/to/tie.py tag --frontend gtk --files "$@"
+/path/to/tie.py untag --frontend gtk --files "$@"
+/path/to/tie.py list --frontend gtk --files "$@"
 ```
 The above commands are all useful for tag data manipulation. In order for the querying feature to become useful, the query results must be viewable in a thumbnail overview. 
 To achieve this, tie's querying output can be used to open an image viewer that accepts a file list as command line arguments.

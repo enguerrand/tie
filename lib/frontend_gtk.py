@@ -107,7 +107,7 @@ class TagChoiceDialog(Gtk.Dialog):
         control_pressed = (ev.state & Gdk.ModifierType.CONTROL_MASK == Gdk.ModifierType.CONTROL_MASK)
         if ev.keyval == Gdk.KEY_Return:
             self._handle_return_key(current_search_stripped, control_pressed)
-        if ev.keyval == Gdk.KEY_space and control_pressed:
+        elif ev.keyval == Gdk.KEY_space and control_pressed:
             self._auto_complete(current_search)
         else:
             self._update_options_box(current_search)

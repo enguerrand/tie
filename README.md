@@ -10,10 +10,10 @@ For fast querying purposes an symlinks-based index is maintained automatically.
 tie has been written and tested on and for GNU/Linux. I have not tested any other platform.
 
 ## Dependencies
--python3
--exiv2
--gtk3
--ncurses
+- python3
+- exiv2
+- gtk3
+- ncurses
 
 ## Installation
 Once the above-mentioned dependencies are fulfilled, simply clone this git repo to a directory of your choice.

@@ -35,6 +35,36 @@ class FrontendCli(Frontend):
         print_out_list(tags)
 
 
+class ScrollModel:
+    def __init__(self, available_lines_count: int, displayed_lines_count: int):
+        self.scroll_position = 0
+        self.cursor_position = 0
+        self.available_lines_count = available_lines_count
+        self.displayed_lines_count = displayed_lines_count
+
+    def handle_down(self):
+        self.cursor_position = self.cursor_position + 1
+        if self.cursor_position > self.displayed_lines_count-1:
+            self.cursor_position = 0
+            self.scroll_position = 0
+        elif self.cursor_position - self.scroll_position >= self.available_lines_count - 1:
+            self.scroll_position = self.scroll_position + 1
+
+    def handle_up(self):
+        self.cursor_position = self.cursor_position - 1
+        if self.cursor_position < 0:
+            self.cursor_position = self.displayed_lines_count - 1
+            self.scroll_position = self.displayed_lines_count - self.available_lines_count + 1
+        elif self.cursor_position < self.scroll_position:
+            self.scroll_position = self.cursor_position
+
+    def get_top(self) -> int:
+        return self.scroll_position
+
+    def get_bottom(self) -> int:
+        return self.scroll_position + self.available_lines_count - 1
+
+
 def _multi_select(prompt: str, options: List[str]):
     if len(options) == 0:
         return []
@@ -48,22 +78,25 @@ def _process_multiple_choice(mc, prompt):
     stdscr = _setup_curses_dialog()
     try:
         key = ''
+        scroll = ScrollModel(curses.LINES - 4, len(mc.options))
         while True:
-            bail = _handle_multiple_choice_input(key, mc)
+            bail = _handle_multiple_choice_input(key, mc, scroll)
             if bail:
                 break
-            _print_multiple_choice(mc, prompt, stdscr)
+            _print_multiple_choice(mc, prompt, stdscr, scroll)
             key = stdscr.getch()
     finally:
         _tear_down_curses_dialog(stdscr)
     return mc.selection
 
 
-def _handle_multiple_choice_input(key, mc):
+def _handle_multiple_choice_input(key, mc: MultipleChoice, scroll: ScrollModel):
     if key == curses.KEY_UP:
         mc.focus_previous()
+        scroll.handle_up()
     elif key == curses.KEY_DOWN:
         mc.focus_next()
+        scroll.handle_down()
     elif key in [ord(' '), curses.KEY_RIGHT, curses.KEY_LEFT]:
         mc.toggle_focused()
     elif key == ord('q'):
@@ -87,13 +120,14 @@ def _tear_down_curses_dialog(stdscr):
     curses.endwin()
 
 
-def _print_multiple_choice(mc: MultipleChoice, prompt: str, stdscr):
+def _print_multiple_choice(mc: MultipleChoice, prompt: str, stdscr, scroll: ScrollModel):
     stdscr.clear()
     stdscr.addstr(0, 0, prompt + "\n\n")
-    for o in mc.options:
+    start = scroll.get_top()
+    end = scroll.get_bottom()
+    for o in mc.options[start:end]:
         _print_option(mc, o, stdscr)
-    stdscr.addstr("\nUse cursor keys to move up and down, space to toggle selection, "
-                  "q to cancel and return to confirm selection")
+    stdscr.addstr("\nCursor keys & space to select | q to cancel | enter to confirm")
 
 
 def _print_option(mc: MultipleChoice, option: str, stdscr):

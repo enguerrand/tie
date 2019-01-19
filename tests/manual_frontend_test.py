@@ -5,6 +5,7 @@ from lib.abstract_frontend import Frontend
 from lib.frontend_batch import FrontendBatch
 from lib.frontend_cli import FrontendCli
 from lib.frontend_gtk import FrontendGtk
+from lib.options_parser import FrontendType
 from lib.printing import printerr
 
 
@@ -20,17 +21,17 @@ def test_frontend_get_tags(frontend: Frontend, tags_choice: List[str]):
         printerr(t)
 
 
-#printerr("Testing batch frontend")
-#test_frontend_get_tags(FrontendBatch(), ["foo", "bar", "foo bar"])
-#test_frontend_user_confirm(FrontendBatch())
+type = FrontendType.cli
 
-#printerr("Testing CLI frontend")
-#test_frontend_get_tags(FrontendCli(), ["foo", "bar", "foo bar", "äöl"])
-#test_frontend_user_confirm(FrontendCli())
-
-printerr("Testing GTK frontend")
-
-test_frontend_get_tags(FrontendGtk(), ["foo", "bar", "foo bar", "äöl"])
-#test_frontend_get_tags(FrontendGtk(), list(string.ascii_lowercase))
-#test_frontend_user_confirm(FrontendGtk())
+if type == FrontendType.batch:
+    printerr("Testing batch frontend")
+    test_frontend_get_tags(FrontendBatch(), ["foo", "bar", "foo bar"])
+    test_frontend_user_confirm(FrontendBatch())
+elif type == FrontendType.cli:
+    test_frontend_get_tags(FrontendCli(), list(string.ascii_lowercase))
+    test_frontend_user_confirm(FrontendCli())
+elif type == FrontendType.gtk:
+    #test_frontend_get_tags(FrontendGtk(), ["foo", "bar", "foo bar", "äöl"])
+    test_frontend_get_tags(FrontendGtk(), list(string.ascii_lowercase))
+    test_frontend_user_confirm(FrontendGtk())
 

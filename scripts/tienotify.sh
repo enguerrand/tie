@@ -33,6 +33,5 @@ inotifywait -m -r --format "%e: %w%f" \
     -e MOVED_FROM \
     -e MOVED_TO \
     -e DELETE \
-    -e MODIFY \
     -e CLOSE_WRITE \
      ${watch_dir} | handle_events

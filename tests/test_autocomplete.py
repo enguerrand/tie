@@ -31,6 +31,9 @@ class TestAutoComplete(TestCase):
     def test_autocomplete(self):
         self.assertEqual("foobar", autocomplete.auto_complete("foo", ["foobar1", "foobar2", "foobar3"]))
 
+    def test_autocomplete_containing_midword_matches(self):
+        self.assertEqual("fooba", autocomplete.auto_complete("fo", ["barfoobar", "foobar", "foobas"]))
+
     def test_autocomplete_empty(self):
         self.assertEqual("foo", autocomplete.auto_complete("foo", []))
 

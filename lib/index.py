@@ -39,6 +39,7 @@ class Index:
             self._update_dir_recursively(path)
         else:
             self._update_file(path)
+        self._clean_obsolete_tags()
 
     def _update_dir_recursively(self, path):
         for root, dirs, files in os.walk(path, followlinks=True):
@@ -96,6 +97,15 @@ class Index:
         for tag in self.list_tags():
             tag_path = os.path.abspath(os.path.join(self._tags_dir, tag))
             _clear_tag_for_vanished_dir(link_name_beginning, tag_path)
+
+    def _clean_obsolete_tags(self):
+        for tag in self.list_tags():
+            tag_path = os.path.abspath(os.path.join(self._tags_dir, tag))
+            try:
+                os.rmdir(tag_path)
+            except OSError:
+                # Directory was not empty. No need to handle error, we don't want to do anything in this case anyway
+                pass
 
 
 def _clear_tag_for_vanished_dir(link_name_beginning, tag_path):

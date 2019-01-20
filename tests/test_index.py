@@ -110,6 +110,12 @@ class TestIndex(TestCase):
         # Execute again to test if this (incorrectly) raises a FileNotFoundError
         self.index.update("../res/read_md.jpg")
 
+    def test_auto_remove_empty_tag_dir(self):
+        empty_tag_dir = os.path.join(TEST_INDEX_LOCATION, "tags", "removed tag")
+        cli.run_cmd(["mkdir", "-p", empty_tag_dir])
+        self.index.update("../res/read_md.jpg")
+        self.assertFalse(os.path.isdir(empty_tag_dir), "empty tag dir was not removed!")
+
 
 def _path_to_linkname(img):
     return img.replace(os.sep, ":")

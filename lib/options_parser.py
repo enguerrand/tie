@@ -20,27 +20,28 @@ ACTIONS:
     index:  update the index for the specied file(s)
 
 All actions may be called with their full name or just their initial character.
-In other words, the following to commands are equivalent:
+In other words, the following two commands are equivalent:
 
     tie.py help
     tie.py h
 
 
 OPTIONS:
-    -f, --files file_1 [file_2 ... ] 
+    -f, --files file_1 [file_2 ... ]
+        Specifies the files to apply the chosen action to.
         If this option is omitted and the specified action requires a specification of target files, the last 
         argument will be treated as a file argument. 
         In this case no other options may follow the file specification.
 
     -F, --frontend batch|yes|cli|gtk
         Chooses the frontend. The default is cli. Possible choices:
-        batch: Non-interactive mode suitable for scripts. The answer to yes/no questions is aways no.
-        yes:   Behaves as the batch frontend but always answers yes/no questions with yes.
-        cli:   Interactive command line interface.
-        gtk:   Graphical user interface. Requires a running X session and gtk.
+            batch: Non-interactive mode suitable for scripts. The answer to yes/no questions is aways "no".
+            yes:   Behaves as the batch frontend but always answers yes/no questions with "yes".
+            cli:   Interactive command line interface.
+            gtk:   Graphical user interface. Requires a running X session and gtk.
         
     -m, --match-type all|any
-        Only applicable for the query action. Specifies whether to query for file that contain all or any of the
+        Only applicable for the query action. Specifies whether to query for files that contain all or any of the
         specified tags, respectively.
 
 
@@ -64,10 +65,13 @@ The following settings can be configured:
 
 EXAMPLES:
     Querying:
-        tie query 'tag 1' tag2
+        tie query tag
+        
+    Querying for tags with white spaces:
+        tie query 'tag 1' 'tag 2'
 
     Querying with short form for action:
-        tie q 'tag 1' tag2
+        tie q tag
     
     Interactive querying in default (cli) frontend:
         tie query
@@ -79,19 +83,19 @@ EXAMPLES:
         tie list -f /path/to/file1 [/path/to/file2..]
     
     Tagging one file
-        tie tag 'tag 1' tag2/path/to/file1
+        tie tag tag1 tag2 /path/to/file1
         
     Tagging multiple files with the same tags
-        tie tag 'tag 1' tag2 --files /path/to/file1 [/path/to/file2..]
+        tie tag tag1 tag2 --files /path/to/file1 [/path/to/file2..]
     
     Untagging
-        tie untag 'tag 1' tag2 --files /path/to/file1 [/path/to/file2..]
+        tie untag tag1 tag2 --files /path/to/file1 [/path/to/file2..]
     
     Clearing all tags
         tie clear --files /path/to/file1 [/path/to/file2..]
     
     Updating the index
-        tie index -f|--files /path/to/file1 [/path/to/file2..]
+        tie index --files /path/to/file1 [/path/to/file2..]
         
     Example configuration file entries:
         exif_field = Exif.Photo.UserComment

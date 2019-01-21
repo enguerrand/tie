@@ -31,6 +31,18 @@ class TestTieCore(TestCase):
         self.assertEqual([os.path.abspath(QUERY_FILE_2), os.path.abspath(QUERY_FILE_3)], files_3, "Query all with 1 tag did not find the expected files")
         _clean_after_query_test()
 
+    def test_query_all_empty_tags_list(self):
+        self._prepare_query_test()
+        result = self.tie_core.query(Query([], MatchType.all))
+        self.assertEqual([], result, "Query with no tags")
+        _clean_after_query_test()
+
+    def test_query_all_no_match(self):
+        self._prepare_query_test()
+        result = self.tie_core.query(Query([QUERY_TAG_2, "some random non existant tag"], MatchType.all))
+        self.assertEqual([], result, "Query with no result")
+        _clean_after_query_test()
+
     def test_query_any(self):
         self._prepare_query_test()
         files = self.tie_core.query(Query([QUERY_TAG_2, QUERY_TAG_3], MatchType.any))

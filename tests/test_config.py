@@ -45,3 +45,9 @@ class TestConfig(TestCase):
         c = config.load_user_config()
         self.assertEqual(config.DEFAULT_EXIF_FIELD_NAME, c.exif_field_name, "Failed to fall back to default config")
         del os.environ["TIE_CONFIG_PATH"]
+
+    def test_get_value_or_default(self):
+        d = dict()
+        d['foo'] = "bar"
+        self.assertEqual("bar", config._get_value_or_default(d, 'foo', 'bas'))
+        self.assertEqual("bas", config._get_value_or_default(d, 'faa', 'bas'))

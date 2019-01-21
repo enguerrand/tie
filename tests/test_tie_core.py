@@ -9,7 +9,7 @@ from lib.index import Index
 from lib.meta_data import InvalidMetaDataError
 from lib.query import Query, MatchType
 from lib.tie_core import TieCore, TieCoreImpl
-from tests.test_defines import *
+from tests.defines import *
 
 
 class TestTieCore(TestCase):

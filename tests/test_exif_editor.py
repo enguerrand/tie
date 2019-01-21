@@ -8,7 +8,7 @@ from lib import cli
 import lib.exif_editor as ee
 import lib.meta_data as md
 
-from tests.test_defines import *
+from tests.defines import *
 
 
 class TestExifEditor(TestCase):

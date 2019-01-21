@@ -4,7 +4,7 @@ from unittest import TestCase
 import lib.exif_editor as ee
 from lib import cli
 from lib.index import Index
-from tests.test_defines import *
+from tests.defines import *
 
 TEST_INDEX_LOCATION = "../res/index"
 

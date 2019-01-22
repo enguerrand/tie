@@ -37,6 +37,9 @@ class TestSymlinks(TestCase):
         self.assertEqual(dst, FOOBAR_TXT)
         _remove_test_link()
 
+    def test_ln_broken_on_file(self):
+        self.assertTrue(symlinks.is_broken(FOOBAR_TXT))
+
     def test_rmlink(self):
         _create_test_link()
         symlinks.rm(LINK_FOOBAR)

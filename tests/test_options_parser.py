@@ -36,6 +36,9 @@ class TestOptionsParser(TestCase):
         self.assertEqual(FrontendType.cli, opts.frontend)
         self.assertEqual(MatchType.all, opts.match_type)
 
+    def test_query_with_files_arg(self):
+        self.assertRaises(ParseError, lambda: RunOptions(["query", "tag 1", "tag 2", "-m", "any", "--files", "foo.jpg"]))
+
     def test_query_match_any_short(self):
         opts = RunOptions(["query", "tag 1", "tag 2", "-m", "any"])
         self.assertEqual(MatchType.any, opts.match_type)

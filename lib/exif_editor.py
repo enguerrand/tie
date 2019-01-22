@@ -2,6 +2,7 @@ from subprocess import CalledProcessError
 
 from lib import cli
 import lib.meta_data as md
+from tests.defines import EXIV2_WARN_ERROR_CODE
 
 
 class ExifEditor:
@@ -43,7 +44,7 @@ def _is_file_not_found(error: CalledProcessError):
 
 
 def _read_exif_field(field_name: str, path: str) -> str:
-    std_out_lines = cli.run_cmd(["exiv2", "-K", field_name, path])
+    std_out_lines = cli.run_cmd(["exiv2", "-K", field_name, path], EXIV2_WARN_ERROR_CODE)
     return " ".join(std_out_lines[0].split()[3:])
 
 

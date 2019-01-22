@@ -7,7 +7,7 @@ class TestMultipleChoice(TestCase):
 
     def test_sorted_options(self):
         mc = MultipleChoice(["def", "abc", "ghi"], True)
-        self.assertEquals(["abc", "def", "ghi"], mc.options, "options not sorted")
+        self.assertEqual(["abc", "def", "ghi"], mc.options, "options not sorted")
 
     def test_has_option(self):
         mc = MultipleChoice(["def", "abc", "ghi"], True)

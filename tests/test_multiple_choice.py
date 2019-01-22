@@ -42,6 +42,17 @@ class TestMultipleChoice(TestCase):
         mc.focus_previous()
         self.assertEqual(2, mc.current_focus, "prev focus")
 
+    def test_toggle_unselected(self):
+        mc = MultipleChoice(["foo", "foo bar", "äöü"], True)
+        mc.toggle_focused()
+        self.assertTrue(mc.is_selected("foo"))
+
+    def test_toggle_selected(self):
+        mc = MultipleChoice(["foo", "foo bar", "äöü"], True)
+        mc.select("foo")
+        mc.toggle_focused()
+        self.assertFalse(mc.is_selected("foo"))
+
     def test_multi_select_second_third(self):
         mc = MultipleChoice(["foo", "foo bar", "äöü"], True)
         mc.focus_next()

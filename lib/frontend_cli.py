@@ -36,25 +36,25 @@ class FrontendCli(Frontend):
 
 
 class ScrollModel:
-    def __init__(self, available_lines_count: int, displayed_lines_count: int):
+    def __init__(self, visible_lines_count: int, total_lines_count: int):
         self.scroll_position = 0
         self.cursor_position = 0
-        self.available_lines_count = available_lines_count
-        self.displayed_lines_count = displayed_lines_count
+        self.visible_lines_count = visible_lines_count
+        self.total_lines_count = total_lines_count
 
     def handle_down(self):
         self.cursor_position = self.cursor_position + 1
-        if self.cursor_position > self.displayed_lines_count-1:
+        if self.cursor_position > self.total_lines_count-1:
             self.cursor_position = 0
             self.scroll_position = 0
-        elif self.cursor_position - self.scroll_position >= self.available_lines_count - 1:
+        elif self.cursor_position - self.scroll_position > self.visible_lines_count - 1:
             self.scroll_position = self.scroll_position + 1
 
     def handle_up(self):
         self.cursor_position = self.cursor_position - 1
         if self.cursor_position < 0:
-            self.cursor_position = self.displayed_lines_count - 1
-            self.scroll_position = self.displayed_lines_count - self.available_lines_count + 1
+            self.cursor_position = self.total_lines_count - 1
+            self.scroll_position = self.total_lines_count - self.visible_lines_count
         elif self.cursor_position < self.scroll_position:
             self.scroll_position = self.cursor_position
 
@@ -62,7 +62,7 @@ class ScrollModel:
         return self.scroll_position
 
     def get_bottom(self) -> int:
-        return self.scroll_position + self.available_lines_count - 1
+        return self.scroll_position + self.visible_lines_count - 1
 
 
 def _multi_select(prompt: str, options: List[str]):
@@ -78,7 +78,7 @@ def _process_multiple_choice(mc, prompt):
     stdscr = _setup_curses_dialog()
     try:
         key = ''
-        scroll = ScrollModel(curses.LINES - 4, len(mc.options))
+        scroll = ScrollModel(curses.LINES - 5, len(mc.options))
         while True:
             bail = _handle_multiple_choice_input(key, mc, scroll)
             if bail:
@@ -122,10 +122,10 @@ def _tear_down_curses_dialog(stdscr):
 
 def _print_multiple_choice(mc: MultipleChoice, prompt: str, stdscr, scroll: ScrollModel):
     stdscr.clear()
-    stdscr.addstr(0, 0, prompt + "\n\n")
     start = scroll.get_top()
     end = scroll.get_bottom()
-    for o in mc.options[start:end]:
+    stdscr.addstr(0, 0, prompt + "\n\n")
+    for o in mc.options[start:end+1]:
         _print_option(mc, o, stdscr)
     stdscr.addstr("\nCursor keys & space to select | q to cancel | enter to confirm")
 

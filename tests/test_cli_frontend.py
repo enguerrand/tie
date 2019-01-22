@@ -12,6 +12,13 @@ class TestCli(TestCase):
         self.assertEqual(0, sm.get_top(), "top position")
         self.assertEqual(2, sm.get_bottom(), "bottom position")
 
+    def test_scroll_model_more_visible_lines_than_needed(self):
+        sm = setup_scroll_model(5, 3, 0)
+        self.assertEqual(0, sm.scroll_position, "scroll position")
+        self.assertEqual(0, sm.cursor_position, "cursor position")
+        self.assertEqual(0, sm.get_top(), "top position")
+        self.assertEqual(2, sm.get_bottom(), "bottom position")
+
     def test_scroll_model_scroll_down1(self):
         sm = setup_scroll_model(3, 5, 1)
         self.assertEqual(0, sm.scroll_position, "scroll position")

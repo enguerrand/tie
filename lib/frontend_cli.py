@@ -39,7 +39,7 @@ class ScrollModel:
     def __init__(self, visible_lines_count: int, total_lines_count: int):
         self.scroll_position = 0
         self.cursor_position = 0
-        self.visible_lines_count = visible_lines_count
+        self.visible_lines_count = min(visible_lines_count, total_lines_count)
         self.total_lines_count = total_lines_count
 
     def handle_down(self):

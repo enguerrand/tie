@@ -12,10 +12,12 @@ This can be automated using the shellscript "tienotify.sh" in the scripts folder
 *tie* has been written and tested on and for GNU/Linux. I have not tested any other platform.
 
 ## Dependencies
-- python3
+- python 3.6
 - exiv2
 - gtk3
 - ncurses
+
+Side note: You can also use tie if your are stuck on python 3.5. Just checkout the branch python3.5-compat
 
 ## Installation
 Once the above-mentioned dependencies are fulfilled, simply clone this git repo to a directory of your choice.

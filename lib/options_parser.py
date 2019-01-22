@@ -156,11 +156,11 @@ class RunOptions:
         """
         :raises ParseError if the provided args are invalid
         """
-        self.action: Action = None
-        self.tags: List[str] = []
-        self.files: List[str] = []
-        self.match_type: MatchType = MatchType.all
-        self.frontend: FrontendType = None
+        self.action = None
+        self.tags = []
+        self.files = []
+        self.match_type = MatchType.all
+        self.frontend = None
         self._parse(args)
         self._check_action_type()
         self._check_files_count()

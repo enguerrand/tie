@@ -10,12 +10,12 @@ from lib.options_parser import FrontendType
 class TestCli(TestCase):
 
     def test_batch(self):
-        fe: FrontendBatch = frontend_factory.from_type(FrontendType.batch)
+        fe = frontend_factory.from_type(FrontendType.batch)
         self.assertIs(FrontendBatch, fe.__class__)
         self.assertIs(False, fe.confirm)
 
     def test_yes(self):
-        fe: FrontendBatch = frontend_factory.from_type(FrontendType.yes)
+        fe = frontend_factory.from_type(FrontendType.yes)
         self.assertIs(FrontendBatch, fe.__class__)
         self.assertIs(True, fe.confirm)
 

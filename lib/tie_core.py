@@ -52,7 +52,7 @@ class TieCoreImpl(TieCore):
     def _query_match_all(self, tags: List[str]):
         if len(tags) == 0:
             return []
-        files: Set[str] = set()
+        files = set()
         for tag in tags:
             if len(files) == 0:
                 files = set(self.index.list_files(tag))
@@ -63,7 +63,7 @@ class TieCoreImpl(TieCore):
         return sorted(files)
 
     def _query_match_any(self, tags: List[str]):
-        files: Set[str] = set()
+        files = set()
         for tag in tags:
             files = files.union(set(self.index.list_files(tag)))
         return sorted(files)

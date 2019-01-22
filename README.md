@@ -5,8 +5,6 @@ Tags in exif-data - An image file tagger
 *tie* stands for "tags in exif-data" because it uses the exif data format to "tie" tags to image files.
 The tag information is stored in a user-configurable exif field.
 For fast querying purposes a symlinks-based index is maintained automatically when tags are added or removed from files.
-When files are renamed or moved externally, *tie* must be told to update its index.
-This can be automated using the shellscript "tienotify.sh" in the scripts folder.
 
 ## Supported Platforms
 *tie* has been written and tested on and for GNU/Linux. I have not tested any other platform.
@@ -16,12 +14,23 @@ This can be automated using the shellscript "tienotify.sh" in the scripts folder
 - exiv2
 - gtk3
 - ncurses
+- inotify-tools (optional)
 
-Side note: You can also use tie if your are stuck on python 3.5. Just checkout the branch python3.5-compat
+Side note: You can also use *tie* if your are stuck on python 3.5. Just checkout the branch python3.5-compat
 
 ## Installation
+### tie 
 Once the above-mentioned dependencies are fulfilled, simply clone this git repo to a directory of your choice.
 The file tie.py at the root level is the executable to run.
+
+### tienotify
+When files are renamed or moved externally, *tie* must be told to update its index.
+This can be automated using the shellscript "tienotify.sh" in the scripts folder.
+
+This script is a wrapper for inotify. It needs exactly one command line argument: The path to your images directory.
+
+Whenever an image in that directory is deleted, created, modified or renamed, the script will update *tie*'s symlink index 
+accordingly.
 
 ## Usage
 ### Command line

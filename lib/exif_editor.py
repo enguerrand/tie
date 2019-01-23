@@ -44,9 +44,9 @@ def _is_file_not_found(error: CalledProcessError):
 
 
 def _read_exif_field(field_name: str, path: str) -> str:
-    std_out_lines = cli.run_cmd(["exiv2", "-K", field_name, path], EXIV2_WARN_ERROR_CODE)
+    std_out_lines = cli.run_cmd(['exiv2', '-K', field_name, '-n', 'UTF-8', path], EXIV2_WARN_ERROR_CODE)
     return " ".join(std_out_lines[0].split()[3:])
 
 
 def _write_exif_field(field_name: str, value: str, path: str):
-    cli.run_cmd(['exiv2', '-M', 'set ' + field_name + ' ' + value, path])
+    cli.run_cmd(['exiv2', '-n', 'UTF-8', '-M', 'set ' + field_name + ' ' + value, path])

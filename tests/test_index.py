@@ -35,7 +35,7 @@ class TestIndex(TestCase):
         cli.run_cmd(["mkdir", "-p", os.path.join(TEST_INDEX_LOCATION, "tags", "foo")])
         cli.run_cmd(["mkdir", "-p", os.path.join(TEST_INDEX_LOCATION, "tags", "bar")])
         tags = self.index.list_tags()
-        self.assertEqual(["foo", "bar"], tags, "tags list incorrect")
+        self.assertEqual(["bar", "foo"], tags, "tags list incorrect")
 
     def test_list_files(self):
         self.index.update(READ_FILE_MD)

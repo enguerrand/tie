@@ -17,7 +17,7 @@ class Index:
         _create_dir_if_absent(self._tags_dir)
 
     def list_tags(self):
-        return os.listdir(self._tags_dir)
+        return sorted(os.listdir(self._tags_dir))
 
     def list_files(self, tag: str):
         files = []

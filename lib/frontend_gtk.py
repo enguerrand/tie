@@ -30,6 +30,11 @@ class FrontendGtk(Frontend):
         dialog.run()
         dialog.destroy()
 
+    def show_message(self, message: str):
+        dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, message)
+        dialog.run()
+        dialog.destroy()
+
 
 class TagChoiceDialog(Gtk.Dialog):
 

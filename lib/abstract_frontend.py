@@ -14,3 +14,7 @@ class Frontend(ABC):
     @abstractmethod
     def list_tags(self, files: List[str], tags: List[str]):
         pass
+
+    @abstractmethod
+    def show_message(self, message: str):
+        pass

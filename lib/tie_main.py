@@ -38,7 +38,7 @@ def _check_tags_untag(core, front_end: Frontend, run_options: RunOptions):
 def _run_action(core: TieCore, run_options: RunOptions, frontend: Frontend):
     action = run_options.action
     if action == Action.query:
-        _query(core, run_options.tags, run_options.match_type)
+        _query(core, run_options.tags, run_options.match_type, frontend)
     elif action == Action.list:
         _list(core, run_options.files, frontend)
     else:
@@ -49,10 +49,13 @@ def _run_action(core: TieCore, run_options: RunOptions, frontend: Frontend):
                 _handle_invalid_meta_data(core, file, frontend, meta_data_error, run_options)
 
 
-def _query(core, tags, match_type):
+def _query(core, tags, match_type, frontend: Frontend):
     query = Query(tags, match_type)
-    out = core.query(query)
-    print_out_list(out)
+    result_files = core.query(query)
+    if len(result_files) == 0:
+        frontend.show_message("No files found for your query!")
+    else:
+        print_out_list(result_files)
 
 
 def _list(core, files: List[str], frontend: Frontend):

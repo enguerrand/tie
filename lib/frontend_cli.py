@@ -34,6 +34,9 @@ class FrontendCli(Frontend):
     def list_tags(self, files: List[str], tags: List[str]):
         print_out_list(tags)
 
+    def show_message(self, message: str):
+        printerr(message)
+
 
 class ScrollModel:
     def __init__(self, visible_lines_count: int, total_lines_count: int):

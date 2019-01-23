@@ -1,7 +1,7 @@
 from typing import List
 
 from lib.abstract_frontend import Frontend
-from lib.printing import print_out_list
+from lib.printing import print_out_list, printerr
 
 
 class FrontendTest(Frontend):
@@ -19,6 +19,9 @@ class FrontendTest(Frontend):
     def list_tags(self, files: List[str], tags: List[str]):
         print_out_list(tags)
 
+    def show_message(self, message: str):
+        printerr(message)
+
 
 class FrontendAdapter(Frontend):
 
@@ -29,4 +32,7 @@ class FrontendAdapter(Frontend):
         return list()
 
     def list_tags(self, files: List[str], tags: List[str]):
+        pass
+
+    def show_message(self, message: str):
         pass

@@ -79,7 +79,7 @@ class TieCoreImpl(TieCore):
         return sorted(tags)
 
     def _list(self, file: str) -> List[str]:
-        return self.exif.get_meta_data(file).tags
+        return self.exif.get_meta_data_safe(file).tags
 
     def tag(self, file: str, tags: List[str]):
         """
@@ -88,7 +88,8 @@ class TieCoreImpl(TieCore):
                     FileNotFoundError if the file to be edited could not be found
         """
         lcase_tags = set(t.lower() for t in tags)
-        buffer = set(self.exif.get_meta_data(file).tags).union(lcase_tags)
+        data = self.exif.get_meta_data_safe(file)
+        buffer = set(data.tags).union(lcase_tags)
         self.exif.set_meta_data(file, md.MetaData(list(buffer)))
 
     def untag(self, file: str, tags: List[str]):

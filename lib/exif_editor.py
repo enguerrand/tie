@@ -10,6 +10,16 @@ class ExifEditor:
     def __init__(self, field_name):
         self._field_name = field_name
 
+    def get_meta_data_safe(self, path: str) -> md.MetaData:
+        """
+            :raises InvalidMetaDataError if the exiv data of the file could not be parsed
+                    FileNotFoundError if the file could not be found
+        """
+        try:
+            return self.get_meta_data(path)
+        except CalledProcessError:
+            return md.empty()
+
     def get_meta_data(self, path: str) -> md.MetaData:
         """
             :raises CalledProcessError if the exiv2 command terminated abnormally

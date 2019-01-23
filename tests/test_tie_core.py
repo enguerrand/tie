@@ -8,7 +8,7 @@ from lib import meta_data as md
 from lib.index import Index
 from lib.meta_data import InvalidMetaDataError
 from lib.query import Query, MatchType
-from lib.tie_core import TieCore, TieCoreImpl
+from lib.tie_core import TieCoreImpl
 from tests.defines import *
 
 
@@ -99,8 +99,19 @@ class TestTieCore(TestCase):
         self.assertEqual(sorted([TEST_READ_TAG_1.lower(), TEST_READ_TAG_2.lower(), added_tag1.lower(), added_tag2.lower()]), self.tie_core.list([WRITE_FILE_MD]), "Tags after adding did not match")
         os.remove(WRITE_FILE_MD)
 
+    def test_tag_empty(self):
+        cli.run_cmd(["cp", READ_FILE_NO_EXIF, WRITE_FILE_NO_EXIF])
+        tag = "foo bar"
+        self.tie_core.tag(WRITE_FILE_NO_EXIF, [tag])
+        self.assertEqual([tag], self.tie_core.list([WRITE_FILE_NO_EXIF]), "File without exif data not tagged")
+        os.remove(WRITE_FILE_NO_EXIF)
+
     def test_tag_invalid(self):
         self.assertRaises(InvalidMetaDataError, lambda: self.tie_core.tag(READ_FILE, [TEST_READ_TAG_1]))
+
+    def test_list_no_exif_data(self):
+        res = self.tie_core.list([READ_FILE_NO_EXIF])
+        self.assertEqual([], res, "File without exif data does not show empty tag list")
 
     def test_tag_duplicate(self):
         cli.run_cmd(["cp", READ_FILE_MD, WRITE_FILE_MD])

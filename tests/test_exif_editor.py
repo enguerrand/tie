@@ -36,6 +36,13 @@ class TestExifEditor(TestCase):
         self.assertEqual("42", data.ver)
         self.assertEqual([TEST_READ_TAG_1.lower(), TEST_READ_TAG_2.lower()], data.tags)
 
+    def test_read_md_no_exif_data(self):
+        self.assertRaises(CalledProcessError, lambda: self.ee.get_meta_data(READ_FILE_NO_EXIF))
+
+    def test_read_md_safe_no_exif_data(self):
+        result = self.ee.get_meta_data_safe(READ_FILE_NO_EXIF)
+        self.assertEqual([], result.tags)
+
     def test_read_invalid_md(self):
         invalid_jpg = "../res/invalid.jpg"
         copyfile(READ_FILE, invalid_jpg)

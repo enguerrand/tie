@@ -10,7 +10,7 @@ For fast querying purposes a symlinks-based index is maintained automatically wh
 *tie* has been written and tested on and for GNU/Linux. I have not tested any other platform.
 
 ## Dependencies
-- python 3.6
+- python >=3.6
 - exiv2
 - gtk3
 - ncurses

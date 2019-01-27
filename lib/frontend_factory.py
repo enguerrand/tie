@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from lib.abstract_frontend import Frontend
 from lib.frontend_batch import FrontendBatch
 from lib.frontend_cli import FrontendCli

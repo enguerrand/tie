@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from unittest import TestCase
 
 from lib.options_parser import RunOptions, Action, FrontendType, ParseError

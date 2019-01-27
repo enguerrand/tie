@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 from json import JSONDecodeError
 from typing import List

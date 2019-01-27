@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from subprocess import CalledProcessError
 from unittest import TestCase
 

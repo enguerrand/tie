@@ -3,7 +3,6 @@
 import os
 import sys
 from subprocess import CalledProcessError
-from time import sleep
 
 from lib import config, tie_main
 from lib import frontend_factory as ff

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import subprocess
 from subprocess import CalledProcessError
 from typing import List

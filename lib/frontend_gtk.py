@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import gi
 from gi.overrides.Gdk import Gdk
 

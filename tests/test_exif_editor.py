@@ -5,8 +5,7 @@ from shutil import copyfile
 from subprocess import CalledProcessError
 from unittest import TestCase
 
-from lib import cli
-import lib.exif_editor as ee
+from lib import cli, exif_editor
 import lib.meta_data as md
 from lib.config import Configuration
 
@@ -16,10 +15,10 @@ from tests.defines import *
 class TestExifEditor(TestCase):
 
     def setUp(self):
-        self.ee = ee.ExifEditor(Configuration())
+        self.ee = exif_editor.ExifEditor(Configuration())
 
     def test_read_raw(self):
-        value = ee._read_exif_field("Exif.Photo.UserComment", READ_FILE)
+        value = self.ee._read_exif_field("Exif.Photo.UserComment", READ_FILE)
         self.assertEqual('Some string with \'ä\' and "quotes', value)
 
     def test_write_raw(self):
@@ -28,7 +27,7 @@ class TestExifEditor(TestCase):
             md5_pre = hashlib.md5(f.read()).hexdigest()
 
             self.assertEqual("011da2f7ff8114d10b35150c2e962b26", md5_pre)
-            ee._write_exif_field("Exif.Photo.UserComment", "My Dummy Value öä ' \" ", WRITE_FILE)
+            self.ee._write_exif_field("Exif.Photo.UserComment", "My Dummy Value öä ' \" ", WRITE_FILE)
             md5_post = hashlib.md5(f.read()).hexdigest()
             self.assertEqual("d41d8cd98f00b204e9800998ecf8427e", md5_post)
         os.remove(WRITE_FILE)
@@ -72,4 +71,4 @@ class TestExifEditor(TestCase):
         self.assertRaises(FileNotFoundError, lambda: self.ee.set_meta_data("../res/fooba.txt", md.empty()))
 
     def test_write_unknown_image_type(self):
-        self.assertRaises(ee.CalledProcessError, lambda: self.ee.set_meta_data("../res/foobar.txt", md.empty()))
+        self.assertRaises(exif_editor.CalledProcessError, lambda: self.ee.set_meta_data("../res/foobar.txt", md.empty()))

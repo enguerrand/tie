@@ -75,7 +75,7 @@ class TestTieCore(TestCase):
 
     def test_list_empty_raw(self):
         cli.run_cmd(["cp", READ_FILE, WRITE_FILE])
-        ee._write_exif_field("Exif.Photo.UserComment", "", WRITE_FILE)
+        self.exif._write_exif_field("Exif.Photo.UserComment", "", WRITE_FILE)
         tags = self.tie_core.list([WRITE_FILE])
         self.assertEqual([], tags, "listed tags do not match empty list")
         os.remove(WRITE_FILE)

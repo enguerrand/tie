@@ -18,6 +18,7 @@ from tests.tie_core_test_impl import TieCoreTestImpl, TieCoreAdapter
 class TestTieMain(TestCase):
     def setUp(self):
         self.frontend = FrontendTest(True, ["foo", "bar"])
+        self.ee = ExifEditor(Configuration())
 
     def test_query(self):
         core = TieCoreTestImpl(Action.query, ["foo", "bar"], [])
@@ -137,7 +138,7 @@ class TestTieMain(TestCase):
         try:
             _remove_index()
             _setup_tag_invalid_meta_data_file(True)
-            self.assertEqual('{"tags": ["foo"], "ver": 1}', exif_editor._read_exif_field("Exif.Photo.UserComment", WRITE_FILE))
+            self.assertEqual('{"tags": ["foo"], "ver": 1}', self.ee._read_exif_field("Exif.Photo.UserComment", WRITE_FILE))
         finally:
             _remove_index()
             os.remove(WRITE_FILE)
@@ -146,7 +147,7 @@ class TestTieMain(TestCase):
         try:
             _remove_index()
             _setup_tag_invalid_meta_data_file(False)
-            self.assertEqual(TEST_READ_VALUE_FIELD, exif_editor._read_exif_field("Exif.Photo.UserComment", WRITE_FILE))
+            self.assertEqual(TEST_READ_VALUE_FIELD, self.ee._read_exif_field("Exif.Photo.UserComment", WRITE_FILE))
         finally:
             _remove_index()
             os.remove(WRITE_FILE)

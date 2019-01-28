@@ -29,7 +29,7 @@ class ExifEditor:
                     FileNotFoundError if the file could not be found
         """
         try:
-            serialized = _read_exif_field(self._config.exif_field_name, path)
+            serialized = self._read_exif_field(self._config.exif_field_name, path)
         except CalledProcessError as e:
             if _is_file_not_found(e):
                 raise FileNotFoundError(e)
@@ -43,22 +43,21 @@ class ExifEditor:
                     FileNotFoundError if the file could not be found
         """
         try:
-            _write_exif_field(self._config.exif_field_name, data.serialize(), path)
+            self._write_exif_field(self._config.exif_field_name, data.serialize(), path)
         except CalledProcessError as e:
             if _is_file_not_found(e):
                 raise FileNotFoundError(e)
             else:
                 raise e
 
+    def _read_exif_field(self, field_name: str, path: str) -> str:
+        std_out_lines = cli.run_cmd(['exiv2', '-q', '-n', 'UTF-8', '-K', field_name, path],
+                                    EXIV2_WARN_ERROR_CODE)
+        return " ".join(std_out_lines[0].split()[3:])
+
+    def _write_exif_field(self, field_name: str, value: str, path: str):
+        cli.run_cmd(['exiv2', '-q', '-n', 'UTF-8', '-k', '-M', 'set ' + field_name + ' ' + value, path])
+
 
 def _is_file_not_found(error: CalledProcessError):
     return error.returncode == 255
-
-
-def _read_exif_field(field_name: str, path: str) -> str:
-    std_out_lines = cli.run_cmd(['exiv2', '-q', '-n', 'UTF-8', '-K', field_name, path], EXIV2_WARN_ERROR_CODE)
-    return " ".join(std_out_lines[0].split()[3:])
-
-
-def _write_exif_field(field_name: str, value: str, path: str):
-    cli.run_cmd(['exiv2', '-q', '-n', 'UTF-8', '-k', '-M', 'set ' + field_name + ' ' + value, path])

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import configparser
 import os
 from pathlib import Path
 from unittest import TestCase
@@ -48,7 +49,9 @@ class TestConfig(TestCase):
         del os.environ["TIE_CONFIG_PATH"]
 
     def test_get_value_or_default(self):
-        d = dict()
-        d['foo'] = "bar"
-        self.assertEqual("bar", config._get_value_or_default(d, 'foo', 'bas'))
-        self.assertEqual("bas", config._get_value_or_default(d, 'faa', 'bas'))
+        d = configparser.ConfigParser()
+        d['foo'] = dict()
+        d['foo']['bar'] = 'found'
+
+        self.assertEqual("found", config._get_section_value_or_default(d, 'foo', 'bar', 'not_found'))
+        self.assertEqual("not_found", config._get_section_value_or_default(d, 'faa', 'bas', 'not_found'))

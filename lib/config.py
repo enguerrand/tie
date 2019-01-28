@@ -55,21 +55,8 @@ def _get_config_file_path() -> str:
 
 def _read_config_file(path: str) -> cp.ConfigParser:
     config_parser = cp.ConfigParser()
-    try:
-        config_parser.read(path)
-    except FileNotFoundError:
-        pass
+    config_parser.read(path)
     return config_parser
-
-
-def _read_file_contents(path) -> str:
-    content = ""
-    try:
-        with open(path) as f:
-            content += f.read()
-    except FileNotFoundError:
-        pass
-    return content
 
 
 def get_default_config() -> Configuration:

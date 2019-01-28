@@ -4,6 +4,7 @@ from typing import List
 from unittest import TestCase
 
 from lib import tie_main, cli, exif_editor
+from lib.config import Configuration
 from lib.exif_editor import ExifEditor
 from lib.index import Index
 from lib.options_parser import Action, RunOptions, ParseError
@@ -152,7 +153,7 @@ class TestTieMain(TestCase):
 
 
 def _setup_tag_invalid_meta_data_file(confirm_nuke):
-    exif = ExifEditor("Exif.Photo.UserComment")
+    exif = ExifEditor(Configuration())
     index = Index(TEST_INDEX_LOCATION, exif)
     core = TieCoreImpl(exif, index)
     cli.run_cmd(["cp", READ_FILE, WRITE_FILE])

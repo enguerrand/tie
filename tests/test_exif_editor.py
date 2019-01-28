@@ -8,6 +8,7 @@ from unittest import TestCase
 from lib import cli
 import lib.exif_editor as ee
 import lib.meta_data as md
+from lib.config import Configuration
 
 from tests.defines import *
 
@@ -15,7 +16,7 @@ from tests.defines import *
 class TestExifEditor(TestCase):
 
     def setUp(self):
-        self.ee = ee.ExifEditor("Exif.Photo.UserComment")
+        self.ee = ee.ExifEditor(Configuration())
 
     def test_read_raw(self):
         value = ee._read_exif_field("Exif.Photo.UserComment", READ_FILE)

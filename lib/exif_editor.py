@@ -3,13 +3,14 @@ from subprocess import CalledProcessError
 
 from lib import cli
 import lib.meta_data as md
+from lib.config import Configuration
 from tests.defines import EXIV2_WARN_ERROR_CODE
 
 
 class ExifEditor:
 
-    def __init__(self, field_name):
-        self._field_name = field_name
+    def __init__(self, config: Configuration):
+        self._config = config
 
     def get_meta_data_safe(self, path: str) -> md.MetaData:
         """
@@ -28,7 +29,7 @@ class ExifEditor:
                     FileNotFoundError if the file could not be found
         """
         try:
-            serialized = _read_exif_field(self._field_name, path)
+            serialized = _read_exif_field(self._config.exif_field_name, path)
         except CalledProcessError as e:
             if _is_file_not_found(e):
                 raise FileNotFoundError(e)
@@ -42,7 +43,7 @@ class ExifEditor:
                     FileNotFoundError if the file could not be found
         """
         try:
-            _write_exif_field(self._field_name, data.serialize(), path)
+            _write_exif_field(self._config.exif_field_name, data.serialize(), path)
         except CalledProcessError as e:
             if _is_file_not_found(e):
                 raise FileNotFoundError(e)
@@ -55,9 +56,9 @@ def _is_file_not_found(error: CalledProcessError):
 
 
 def _read_exif_field(field_name: str, path: str) -> str:
-    std_out_lines = cli.run_cmd(['exiv2', '-q', '-K', field_name, '-n', 'UTF-8', path], EXIV2_WARN_ERROR_CODE)
+    std_out_lines = cli.run_cmd(['exiv2', '-q', '-n', 'UTF-8', '-K', field_name, path], EXIV2_WARN_ERROR_CODE)
     return " ".join(std_out_lines[0].split()[3:])
 
 
 def _write_exif_field(field_name: str, value: str, path: str):
-    cli.run_cmd(['exiv2', '-q', '-n', 'UTF-8', '-M', 'set ' + field_name + ' ' + value, path])
+    cli.run_cmd(['exiv2', '-q', '-n', 'UTF-8', '-k', '-M', 'set ' + field_name + ' ' + value, path])

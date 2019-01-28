@@ -4,6 +4,7 @@ from unittest import TestCase
 
 import lib.exif_editor as ee
 from lib import cli
+from lib.config import Configuration
 from lib.index import Index
 from tests.defines import *
 
@@ -14,7 +15,7 @@ class TestIndex(TestCase):
 
     def setUp(self):
         _remove_index()
-        self.index = Index(TEST_INDEX_LOCATION, ee.ExifEditor("Exif.Photo.UserComment"))
+        self.index = Index(TEST_INDEX_LOCATION, ee.ExifEditor(Configuration()))
         self.files_base_path = _path_to_linkname(os.path.abspath("../res"))
 
     def tearDown(self):

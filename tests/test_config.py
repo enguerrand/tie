@@ -16,7 +16,10 @@ class TestConfig(TestCase):
     def test_config_defaults(self):
         c = config.get_default_config()
         self.assertEqual("Exif.Photo.UserComment", c.exif_field_name, "Default exif field name")
-        self.assertEqual(os.path.join(str(Path.home()), ".tie"), c.index_path, "Index path does not match")
+        self.assertEqual(os.path.join(str(Path.home()), ".tie"), c.index_path, "Default index path")
+        self.assertEqual('UTF-8', c.exiv2_charset, "Default exiv2 charset")
+        self.assertEqual(True, c.exiv2_quiet, "Default exiv2 quiet")
+        self.assertEqual(True, c.exiv2_keep_time_stamps, "Default exiv2 keep timestamps")
 
     def test_config_file_location_from_envvar(self):
         os.environ["TIE_CONFIG_PATH"] = "/foo/bar"
@@ -31,6 +34,9 @@ class TestConfig(TestCase):
         c = config.load_user_config()
         self.assertEqual("Vendor.What.Ever", c.exif_field_name, "Wrong exif field name read from file")
         self.assertEqual("/home/foo/.tie/", c.index_path, "Wrong index path read from file")
+        self.assertEqual('ISO_8859-1', c.exiv2_charset, "exiv2 charset read from file")
+        self.assertEqual(False, c.exiv2_quiet, "exiv2 quiet read from file")
+        self.assertEqual(False, c.exiv2_keep_time_stamps, "exiv2 keep timestamps read from file")
         del os.environ["TIE_CONFIG_PATH"]
 
     def test_config_file_missing_key(self):
@@ -53,5 +59,5 @@ class TestConfig(TestCase):
         d['foo'] = dict()
         d['foo']['bar'] = 'found'
 
-        self.assertEqual("found", config._get_section_value_or_default(d, 'foo', 'bar', 'not_found'))
-        self.assertEqual("not_found", config._get_section_value_or_default(d, 'faa', 'bas', 'not_found'))
+        self.assertEqual("found", config._read_str_or_default(d, 'foo', 'bar', 'not_found'))
+        self.assertEqual("not_found", config._read_str_or_default(d, 'faa', 'bas', 'not_found'))

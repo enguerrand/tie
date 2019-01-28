@@ -2,6 +2,7 @@
 import os
 from unittest import TestCase
 
+from lib.config import Configuration
 from tests.test_index import TEST_INDEX_LOCATION
 import lib.exif_editor as ee
 from lib import cli
@@ -16,7 +17,7 @@ from tests.defines import *
 class TestTieCore(TestCase):
     def setUp(self):
         _remove_index()
-        self.exif = ee.ExifEditor("Exif.Photo.UserComment")
+        self.exif = ee.ExifEditor(Configuration())
         self.files_base_path = _path_to_linkname(os.path.abspath("../res"))
         self.index = Index(TEST_INDEX_LOCATION, self.exif)
         self.tie_core = TieCoreImpl(self.exif, self.index)

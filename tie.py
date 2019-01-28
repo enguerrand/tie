@@ -38,7 +38,7 @@ def main(*args):
         front_end = ff.from_type(frontend_type)
 
         index_root_dir = configuration.index_path
-        exif = ExifEditor(configuration.exif_field_name)
+        exif = ExifEditor(configuration)
         index = Index(index_root_dir, exif)
 
         core = TieCoreImpl(exif, index)

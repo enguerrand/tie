@@ -53,7 +53,7 @@ argument and before the files specification are interpreted as tags.
 CONFIGURATION:
 The default configuration file path is $HOME/.tie.ini
 This location can be overridden by setting the environment variable TIE_CONFIG_PATH to the desired path.
-The syntax follows the .ini file format except that no section header is needed.
+The syntax follows the .ini file format. See more detailed description and example below.
 
 The following settings can be configured:
     
@@ -98,9 +98,14 @@ EXAMPLES:
     Updating the index
         tie index --files /path/to/file1 [/path/to/file2..]
         
-    Example configuration file entries:
-        exif_field = Exif.Photo.UserComment
+    Example configuration file with current default values:
+        [GENERAL]
         index_path = /home/foo/.tie/
+        [EXIV2]
+        exif_field = Exif.Photo.UserComment
+        charset = UTF-8
+        quiet = yes
+        keep_time_stamps = yes
 """
 
 

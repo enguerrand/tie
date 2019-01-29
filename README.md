@@ -11,12 +11,14 @@ For fast querying purposes a symlinks-based index is maintained automatically wh
 
 ## Dependencies
 - python >=3.6
-- exiv2
+- exiv2 (tested with version 0.27.0)
 - gtk3
 - ncurses
 - inotify-tools (optional)
 
-Side note: You can also use *tie* if your are stuck on python 3.5. Just checkout the branch python3.5-compat
+Side notes: 
+- You can also use *tie* if your are stuck on python 3.5. Just checkout the branch python3.5-compat
+- Using older versions of exiv2 may work but is discouraged as it leads to undefined behavior in some cases
 
 ## Installation
 ### tie 

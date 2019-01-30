@@ -15,13 +15,34 @@ function abort(){
     exit -1
 }
 
+function handle_file_event(){
+    local file_path=$1
+    if [[ "${file_path}" =~ \.(${extension_filter})$ ]]; then
+        python3 "${tie}" index --frontend batch --files "${file_path}"
+    fi
+}
+
+function handle_dir_event(){
+    local dir_path=$1
+    for f in "${dir_path}"/*; do
+        handle_event "${f}"  
+    done
+}
+
+function handle_event(){
+    local path=$1
+    if [ -f "${path}" ]; then
+        handle_file_event "${path}"
+    elif [ -d "${path}" ]; then
+        handle_dir_event "${path}"
+    fi
+}
+
 function handle_events(){
     while read action file; do
-        if [[ "${file}" =~ \.(${extension_filter})$ ]]; then
-            echo "action:   "${action}
-            echo "file:   "${file}
-            python3 "${tie}" index --frontend batch --files "${file}"
-        fi
+        echo "action:   "${action}
+        echo "file:   "${file}
+        handle_event "${file}"
     done
 }
 
@@ -32,6 +53,8 @@ shopt -s nocasematch
 inotifywait -m -r --format "%e: %w%f" \
     -e MOVED_FROM \
     -e MOVED_TO \
+    -e MOVE_SELF \
     -e DELETE \
+    -e DELETE_SELF \
     -e CLOSE_WRITE \
      ${watch_dir} | handle_events

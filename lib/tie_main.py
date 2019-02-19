@@ -81,9 +81,8 @@ def _process_file(core, file, run_options):
 
 
 def _handle_invalid_meta_data(core, file, frontend, meta_data_error, run_options):
-    clear = frontend.get_user_confirmation(
-        "Error: Cannot read metadata from file " + file + " - " + meta_data_error.msg + "\n"
-                                                                          "Clear present meta data now?")
+    prompt = "Error: Cannot read metadata from file " + file + " - " + meta_data_error.msg + "\nClear present meta data now?"
+    clear = frontend.get_user_confirmation(prompt, "WIPE_INVALID_DATA")
     if clear:
         core.clear(file)
         # Hopefully the file is clean now. If whatever reason it isn't, this call will raise an

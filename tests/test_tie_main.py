@@ -67,6 +67,7 @@ class TestTieMain(TestCase):
 
         class FrontendAnon(FrontendAdapter):
             def __init__(self):
+                super().__init__()
                 self.provided_options = []
 
             def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:
@@ -98,6 +99,7 @@ class TestTieMain(TestCase):
 
         class FrontendAnon(FrontendAdapter):
             def __init__(self):
+                super().__init__()
                 self.provided_options = []
 
             def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:
@@ -106,6 +108,7 @@ class TestTieMain(TestCase):
 
         class TieCoreTestInteractiveUntag(TieCoreAdapter):
             def __init__(self):
+                super().__init__()
                 self.untagged_files = list()
                 self.removed_tags = list()
 

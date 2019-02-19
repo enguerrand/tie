@@ -7,21 +7,24 @@ from lib import autocomplete
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from typing import List
-from lib.abstract_frontend import Frontend
+from lib.abstract_frontend import Frontend, UserConfirmation
 from lib.multiple_choice import MultipleChoice
 
 
 class FrontendGtk(Frontend):
+    def __init__(self):
+        super().__init__()
 
     def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:
         selected_tags = _multi_select("Please choose tags: ", available_tags, allow_custom_tags)
         return selected_tags
 
-    def get_user_confirmation(self, prompt: str) -> bool:
+    def _get_user_confirmation_impl(self, prompt: str, propose_remember: bool) -> UserConfirmation:
         dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, prompt)
         response = dialog.run()
         dialog.destroy()
-        return response == Gtk.ResponseType.YES
+        remember = False  # TODO
+        return UserConfirmation(response == Gtk.ResponseType.YES, remember)
 
     def list_tags(self, files: List[str], tags: List[str]):
         dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Tags on selected files:")

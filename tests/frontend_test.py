@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 from typing import List
 
-from lib.abstract_frontend import Frontend
+from lib.abstract_frontend import Frontend, UserConfirmation
 from lib.printing import print_out_list, printerr
 
 
 class FrontendTest(Frontend):
 
     def __init__(self, user_confirmation: bool, interactive_tags: List[str]):
-        self.user_confirmation = user_confirmation
+        super().__init__()
+        self.user_confirmation = UserConfirmation(user_confirmation, False)
         self.interactive_tags = interactive_tags
 
-    def get_user_confirmation(self, prompt: str) -> bool:
+    def _get_user_confirmation_impl(self, prompt: str, propose_remember: bool) -> UserConfirmation:
         return self.user_confirmation
 
     def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:
@@ -25,8 +26,10 @@ class FrontendTest(Frontend):
 
 
 class FrontendAdapter(Frontend):
+    def __init__(self):
+        super().__init__()
 
-    def get_user_confirmation(self, prompt: str) -> bool:
+    def _get_user_confirmation_impl(self, prompt: str, propose_remember: bool) -> bool:
         return True
 
     def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:

@@ -3,9 +3,33 @@ from abc import ABC, abstractmethod
 from typing import List
 
 
+class UserConfirmation:
+    def __init__(self, value: bool, remember: bool):
+        self.value = value
+        self.remember = remember
+
+
 class Frontend(ABC):
+    def __init__(self):
+        self._user_confirmation_cache = dict()
+
+    def get_user_confirmation(self, prompt: str, question_id=None) -> bool:
+        if question_id is not None:
+            propose_remember = True
+            try:
+                return self._user_confirmation_cache[question_id]
+            except KeyError:
+                pass
+        else:
+            propose_remember = False
+
+        user_confirmation = self._get_user_confirmation_impl(prompt, propose_remember)
+        if user_confirmation.remember and question_id is not None:
+            self._user_confirmation_cache[question_id] = user_confirmation.value
+        return user_confirmation.value
+
     @abstractmethod
-    def get_user_confirmation(self, prompt: str) -> bool:
+    def _get_user_confirmation_impl(self, prompt: str, propose_remember: bool) -> UserConfirmation:
         pass
 
     @abstractmethod

@@ -13,12 +13,14 @@ class TestCli(TestCase):
     def test_batch(self):
         fe: FrontendBatch = frontend_factory.from_type(FrontendType.batch)
         self.assertIs(FrontendBatch, fe.__class__)
-        self.assertIs(False, fe.confirm)
+        self.assertIs(False, fe.confirm.value)
+        self.assertIs(True, fe.confirm.remember)
 
     def test_yes(self):
         fe: FrontendBatch = frontend_factory.from_type(FrontendType.yes)
         self.assertIs(FrontendBatch, fe.__class__)
-        self.assertIs(True, fe.confirm)
+        self.assertIs(True, fe.confirm.value)
+        self.assertIs(True, fe.confirm.remember)
 
     def test_cli(self):
         fe = frontend_factory.from_type(FrontendType.cli)

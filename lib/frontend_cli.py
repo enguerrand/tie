@@ -3,12 +3,15 @@ import curses
 from typing import List
 
 from lib import printing
-from lib.abstract_frontend import Frontend
+from lib.abstract_frontend import Frontend, UserConfirmation
 from lib.multiple_choice import MultipleChoice
 from lib.printing import printerr, print_out_list
 
 
 class FrontendCli(Frontend):
+    def __init__(self):
+        super().__init__()
+
     def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:
         backup_fd = printing.redirect_stdout()
         try:
@@ -17,15 +20,16 @@ class FrontendCli(Frontend):
         finally:
             printing.revert_stdout(backup_fd)
 
-    def get_user_confirmation(self, prompt: str) -> bool:
+    def _get_user_confirmation_impl(self, prompt: str, propose_remember: bool) -> UserConfirmation:
+        remember = False  # TODO
         backup_fd = printing.redirect_stdout()
         try:
             user_input = input(prompt + " ").lower()
             while True:
                 if user_input in ['y', 'j']:
-                    return True
+                    return UserConfirmation(True, remember)
                 elif user_input == 'n':
-                    return False
+                    return UserConfirmation(False, remember)
                 else:
                     printerr("\nInvalid input \'" + user_input + "\'. Please enter 'y' or 'n'.")
                     user_input = input(prompt + " ").lower()

@@ -10,9 +10,20 @@ from lib.options_parser import FrontendType
 from lib.printing import printerr
 
 
-def test_frontend_user_confirm(fe: Frontend):
+def test_frontend_user_confirm_simple(fe: Frontend):
     choice = fe.get_user_confirmation("Confirm?")
-    printerr("Your choice: "+str(choice))
+    printerr("Your choice simple: "+str(choice))
+
+
+def test_frontend_user_confirm_repeated(fe: Frontend):
+    choice1 = fe.get_user_confirmation("Confirm 1?", "q1")
+    printerr("Your repeated choice1: "+str(choice1))
+    choice2 = fe.get_user_confirmation("Confirm 1?", "q1")
+    printerr("Your repeated choice2: "+str(choice2))
+    choice3 = fe.get_user_confirmation("Confirm 2?", "q2")
+    printerr("Your repeated choice3: "+str(choice3))
+    choice4 = fe.get_user_confirmation("Confirm 2?", "q2")
+    printerr("Your repeated choice4: "+str(choice4))
 
 
 def test_frontend_get_tags(fe: Frontend, tags_choice: List[str]):
@@ -26,7 +37,7 @@ def test_frontend_show_message(fe: Frontend, message: str):
     fe.show_message(message)
 
 
-type = FrontendType.gtk
+type = FrontendType.cli
 
 
 if type == FrontendType.cli:
@@ -37,5 +48,6 @@ else:
     frontend = FrontendBatch()
 
 test_frontend_show_message(frontend, "This is a simple message")
-test_frontend_user_confirm(frontend)
+test_frontend_user_confirm_simple(frontend)
+test_frontend_user_confirm_repeated(frontend)
 test_frontend_get_tags(frontend, list(string.ascii_lowercase))

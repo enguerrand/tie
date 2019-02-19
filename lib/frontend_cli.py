@@ -21,17 +21,23 @@ class FrontendCli(Frontend):
             printing.revert_stdout(backup_fd)
 
     def _get_user_confirmation_impl(self, prompt: str, propose_remember: bool) -> UserConfirmation:
-        remember = False  # TODO
         backup_fd = printing.redirect_stdout()
         try:
-            user_input = input(prompt + " ").lower()
+            hint = "[y]es, [n]o"
+            if propose_remember:
+                hint = hint + ", [a]ccept all, [d]eny all"
+            user_input = input(prompt + " ("+hint+"): ").lower()
             while True:
                 if user_input in ['y', 'j']:
-                    return UserConfirmation(True, remember)
+                    return UserConfirmation(True, False)
                 elif user_input == 'n':
-                    return UserConfirmation(False, remember)
+                    return UserConfirmation(False, False)
+                elif propose_remember and user_input == 'a':
+                    return UserConfirmation(True, True)
+                elif propose_remember and user_input == 'd':
+                    return UserConfirmation(False, True)
                 else:
-                    printerr("\nInvalid input \'" + user_input + "\'. Please enter 'y' or 'n'.")
+                    printerr("\nInvalid input \'" + user_input + "\'. Expected: " + hint)
                     user_input = input(prompt + " ").lower()
         finally:
             printing.revert_stdout(backup_fd)

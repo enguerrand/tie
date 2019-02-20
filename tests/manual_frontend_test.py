@@ -16,13 +16,13 @@ def test_frontend_user_confirm_simple(fe: Frontend):
 
 
 def test_frontend_user_confirm_repeated(fe: Frontend):
-    choice1 = fe.get_user_confirmation("Confirm 1?", "q1")
+    choice1 = fe.get_user_confirmation("Do you really want to confirm 1?", "q1")
     printerr("Your repeated choice1: "+str(choice1))
-    choice2 = fe.get_user_confirmation("Confirm 1?", "q1")
+    choice2 = fe.get_user_confirmation("Do you really want to confirm 1?", "q1")
     printerr("Your repeated choice2: "+str(choice2))
-    choice3 = fe.get_user_confirmation("Confirm 2?", "q2")
+    choice3 = fe.get_user_confirmation("Do you really want to confirm 2?", "q2")
     printerr("Your repeated choice3: "+str(choice3))
-    choice4 = fe.get_user_confirmation("Confirm 2?", "q2")
+    choice4 = fe.get_user_confirmation("Do you really want to confirm 2?", "q2")
     printerr("Your repeated choice4: "+str(choice4))
 
 
@@ -37,7 +37,7 @@ def test_frontend_show_message(fe: Frontend, message: str):
     fe.show_message(message)
 
 
-type = FrontendType.cli
+type = FrontendType.gtk
 
 
 if type == FrontendType.cli:

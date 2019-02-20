@@ -20,10 +20,10 @@ class FrontendGtk(Frontend):
         return selected_tags
 
     def _get_user_confirmation_impl(self, prompt: str, propose_remember: bool) -> UserConfirmation:
-        dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, prompt)
+        dialog = UserConfirmationDialog(None, prompt, propose_remember)
         response = dialog.run()
+        remember = dialog.remember
         dialog.destroy()
-        remember = False  # TODO
         return UserConfirmation(response == Gtk.ResponseType.YES, remember)
 
     def list_tags(self, files: List[str], tags: List[str]):
@@ -38,6 +38,32 @@ class FrontendGtk(Frontend):
         dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, message)
         dialog.run()
         dialog.destroy()
+
+
+class UserConfirmationDialog(Gtk.Dialog):
+
+    def __init__(self, parent, prompt: str, propose_remember: bool):
+        Gtk.Dialog.__init__(self, "User confirmation required", parent, 0, ("No", Gtk.ResponseType.NO, "Yes", Gtk.ResponseType.YES))
+
+        self.set_default_size(150, 100)
+
+        label = Gtk.Label(prompt)
+
+        box = self.get_content_area()
+        box.add(label)
+        self.remember = False
+        _set_widget_margins(box, 10, 5, 5, 5)
+        if propose_remember:
+            remember_check_btn = Gtk.CheckButton("remember decision")
+            remember_check_btn.connect("toggled", self._toggle_remember)
+            box.add(remember_check_btn)
+            _set_widget_margins(remember_check_btn, 10, 0, 5, 0)
+
+        self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+        self.show_all()
+
+    def _toggle_remember(self, button):
+        self.remember = button.get_active()
 
 
 class TagChoiceDialog(Gtk.Dialog):

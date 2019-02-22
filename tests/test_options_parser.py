@@ -187,5 +187,8 @@ class TestOptionsParser(TestCase):
     def test_invalid_option(self):
         self.assertRaises(ParseError, lambda: RunOptions(["index", "--brr", "bar"]))
 
+    def test_invalid_frontend(self):
+        self.assertRaises(ParseError, lambda: RunOptions(["tag", "foo", "-F", "gt", "bar"]))
+
     def test_no_action(self):
         self.assertRaises(ParseError, lambda: RunOptions(["--files", "foo"]))

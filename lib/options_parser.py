@@ -188,7 +188,10 @@ class RunOptions:
                 elif Option("-F", "--frontend").matches(arg):
                     if len(args) == 0:
                         raise ParseError("Argument missing for option --frontend!")
-                    self.frontend = FrontendType[args.pop(0)]
+                    try:
+                        self.frontend = FrontendType[args.pop(0)]
+                    except KeyError:
+                        raise ParseError("Invalid frontend type "+args.pop(0))
                 elif Option("-m", "--match-type").matches(arg):
                     if len(args) == 0:
                         raise ParseError("Argument missing for option --match-type!")

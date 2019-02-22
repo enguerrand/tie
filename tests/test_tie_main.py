@@ -4,6 +4,7 @@ from typing import List
 from unittest import TestCase
 
 from lib import tie_main, cli, exif_editor
+from lib.abstract_frontend import UserReply
 from lib.config import Configuration
 from lib.exif_editor import ExifEditor
 from lib.index import Index
@@ -17,7 +18,7 @@ from tests.tie_core_test_impl import TieCoreTestImpl, TieCoreAdapter
 
 class TestTieMain(TestCase):
     def setUp(self):
-        self.frontend = FrontendTest(True, ["foo", "bar"])
+        self.frontend = FrontendTest(UserReply.yes, ["foo", "bar"])
         self.ee = ExifEditor(Configuration())
 
     def test_query(self):
@@ -32,7 +33,7 @@ class TestTieMain(TestCase):
 
     def test_query_no_tags(self):
         core = TieCoreTestImpl(Action.query, [], [])
-        self.assertRaises(ParseError, lambda: tie_main.run(core, RunOptions(["query"]), FrontendTest(True, [])))
+        self.assertRaises(ParseError, lambda: tie_main.run(core, RunOptions(["query"]), FrontendTest(UserReply.yes, [])))
 
     def test_list(self):
         core = TieCoreTestImpl(Action.list, [], ["testfile"])
@@ -140,7 +141,7 @@ class TestTieMain(TestCase):
     def test_tag_invalid_meta_data_file_confirmed(self):
         try:
             _remove_index()
-            _setup_tag_invalid_meta_data_file(True)
+            _setup_tag_invalid_meta_data_file(UserReply.yes)
             self.assertEqual('{"tags": ["foo"], "ver": 1}', self.ee._read_exif_field("Exif.Photo.UserComment", WRITE_FILE))
         finally:
             _remove_index()
@@ -149,7 +150,7 @@ class TestTieMain(TestCase):
     def test_tag_invalid_meta_data_file_cancelled(self):
         try:
             _remove_index()
-            _setup_tag_invalid_meta_data_file(False)
+            _setup_tag_invalid_meta_data_file(UserReply.no)
             self.assertEqual(TEST_READ_VALUE_FIELD, self.ee._read_exif_field("Exif.Photo.UserComment", WRITE_FILE))
         finally:
             _remove_index()

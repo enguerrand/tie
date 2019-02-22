@@ -3,7 +3,7 @@ import curses
 from typing import List
 
 from lib import printing
-from lib.abstract_frontend import Frontend, UserConfirmation
+from lib.abstract_frontend import Frontend, UserConfirmation, UserReply
 from lib.multiple_choice import MultipleChoice
 from lib.printing import printerr, print_out_list
 
@@ -29,13 +29,13 @@ class FrontendCli(Frontend):
             user_input = input(prompt + " ("+hint+"): ").lower()
             while True:
                 if user_input in ['y', 'j']:
-                    return UserConfirmation(True, False)
+                    return UserConfirmation(UserReply.yes, False)
                 elif user_input == 'n':
-                    return UserConfirmation(False, False)
+                    return UserConfirmation(UserReply.no, False)
                 elif propose_remember and user_input == 'a':
-                    return UserConfirmation(True, True)
+                    return UserConfirmation(UserReply.yes, True)
                 elif propose_remember and user_input == 'd':
-                    return UserConfirmation(False, True)
+                    return UserConfirmation(UserReply.no, True)
                 else:
                     printerr("\nInvalid input \'" + user_input + "\'. Expected: " + hint)
                     user_input = input(prompt + " ").lower()

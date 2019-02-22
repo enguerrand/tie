@@ -2,6 +2,7 @@
 from unittest import TestCase
 
 from lib import frontend_factory
+from lib.abstract_frontend import UserReply
 from lib.frontend_batch import FrontendBatch
 from lib.frontend_cli import FrontendCli
 from lib.frontend_gtk import FrontendGtk
@@ -13,13 +14,13 @@ class TestCli(TestCase):
     def test_batch(self):
         fe: FrontendBatch = frontend_factory.from_type(FrontendType.batch)
         self.assertIs(FrontendBatch, fe.__class__)
-        self.assertIs(False, fe.confirm.value)
+        self.assertIs(UserReply.no, fe.confirm.value)
         self.assertIs(True, fe.confirm.remember)
 
     def test_yes(self):
         fe: FrontendBatch = frontend_factory.from_type(FrontendType.yes)
         self.assertIs(FrontendBatch, fe.__class__)
-        self.assertIs(True, fe.confirm.value)
+        self.assertIs(UserReply.yes, fe.confirm.value)
         self.assertIs(True, fe.confirm.remember)
 
     def test_cli(self):

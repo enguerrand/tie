@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from typing import List
 
-from lib.abstract_frontend import Frontend, UserConfirmation
+from lib.abstract_frontend import Frontend, UserConfirmation, UserReply
 from lib.printing import print_out_list, printerr
 
 
 class FrontendBatch(Frontend):
 
-    def __init__(self, confirm=False):
+    def __init__(self, confirm=UserReply.no):
         super().__init__()
         self.confirm = UserConfirmation(confirm, True)
 

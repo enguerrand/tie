@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import List
 
-from lib.abstract_frontend import Frontend
+from lib.abstract_frontend import Frontend, UserReply
 from lib.meta_data import InvalidMetaDataError
 from lib.options_parser import RunOptions, Action, ParseError
 
@@ -47,7 +47,21 @@ def _run_action(core: TieCore, run_options: RunOptions, frontend: Frontend):
             try:
                 _process_file(core, file, run_options)
             except InvalidMetaDataError as meta_data_error:
-                _handle_invalid_meta_data(core, file, frontend, meta_data_error, run_options)
+                prompt = "Error: Cannot read metadata from file " + file + " - " + meta_data_error.msg \
+                         + "\nClear present meta data now?"
+                clear = frontend.get_user_confirmation(prompt, "WIPE_INVALID_DATA")
+                if clear == UserReply.yes:
+                    core.clear(file)
+                    # Hopefully the file is clean now. If whatever reason it isn't, this call will raise an
+                    # InvalidMetaDataError again. If it does, let it bubble up.
+                    _process_file(core, file, run_options)
+                elif clear == UserReply.no:
+                    printerr("Ignoring unreadable file " + file)
+                elif clear == UserReply.cancel:
+                    printerr("Operation cancelled.")
+                    return
+                else:
+                    raise ValueError("Unexpected UserReply "+clear.name)
 
 
 def _query(core, tags, match_type, frontend: Frontend):
@@ -78,15 +92,3 @@ def _process_file(core, file, run_options):
     else:
         raise Exception("Unexpected action type " + action.name)
     core.update_index(file)
-
-
-def _handle_invalid_meta_data(core, file, frontend, meta_data_error, run_options):
-    prompt = "Error: Cannot read metadata from file " + file + " - " + meta_data_error.msg + "\nClear present meta data now?"
-    clear = frontend.get_user_confirmation(prompt, "WIPE_INVALID_DATA")
-    if clear:
-        core.clear(file)
-        # Hopefully the file is clean now. If whatever reason it isn't, this call will raise an
-        # InvalidMetaDataError again. If it does, let it bubble up.
-        _process_file(core, file, run_options)
-    else:
-        printerr("Ignoring unreadable file " + file)

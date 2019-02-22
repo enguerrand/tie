@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
+from enum import Enum
 from typing import List
 
 
+class UserReply(Enum):
+    yes = 1
+    no = 2
+    cancel = 3
+
+
 class UserConfirmation:
-    def __init__(self, value: bool, remember: bool):
+    def __init__(self, value: UserReply, remember: bool):
         self.value = value
         self.remember = remember
 
@@ -13,7 +20,7 @@ class Frontend(ABC):
     def __init__(self):
         self._user_confirmation_cache = dict()
 
-    def get_user_confirmation(self, prompt: str, question_id=None) -> bool:
+    def get_user_confirmation(self, prompt: str, question_id=None) -> UserReply:
         if question_id is not None:
             propose_remember = True
             try:

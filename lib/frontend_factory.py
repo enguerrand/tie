@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from lib.abstract_frontend import Frontend
+from lib.abstract_frontend import Frontend, UserReply
 from lib.frontend_batch import FrontendBatch
 from lib.frontend_cli import FrontendCli
 from lib.frontend_gtk import FrontendGtk
@@ -14,5 +14,5 @@ def from_type(frontend_type: FrontendType) -> Frontend:
     elif frontend_type == FrontendType.batch:
         return FrontendBatch()
     elif frontend_type == FrontendType.yes:
-        return FrontendBatch(confirm=True)
+        return FrontendBatch(confirm=UserReply.yes)
     raise NotImplementedError("Frontend Type "+frontend_type.name+" is not implemented yet!")

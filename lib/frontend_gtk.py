@@ -49,7 +49,7 @@ class FrontendGtk(Frontend):
 class UserConfirmationDialog(Gtk.Dialog):
 
     def __init__(self, parent, prompt: str, propose_remember: bool):
-        Gtk.Dialog.__init__(self, "User confirmation required", parent, 0, ("No", Gtk.ResponseType.NO, "Yes", Gtk.ResponseType.YES))
+        Gtk.Dialog.__init__(self, "User confirmation required", parent, 0, ("Yes", Gtk.ResponseType.YES, "No", Gtk.ResponseType.NO, "Cancel", Gtk.ResponseType.CANCEL))
 
         self.set_default_size(150, 100)
 

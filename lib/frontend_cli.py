@@ -26,12 +26,15 @@ class FrontendCli(Frontend):
             hint = "[y]es, [n]o"
             if propose_remember:
                 hint = hint + ", [a]ccept all, [d]eny all"
+            hint = hint + ", [c]ancel"
             user_input = input(prompt + " ("+hint+"): ").lower()
             while True:
                 if user_input in ['y', 'j']:
                     return UserConfirmation(UserReply.yes, False)
                 elif user_input == 'n':
                     return UserConfirmation(UserReply.no, False)
+                elif user_input == 'c':
+                    return UserConfirmation(UserReply.cancel, False)
                 elif propose_remember and user_input == 'a':
                     return UserConfirmation(UserReply.yes, True)
                 elif propose_remember and user_input == 'd':

@@ -186,26 +186,13 @@ class RunOptions:
                 if Option("-f", "--files").matches(arg):
                     parsing_stage = ParsingStage.files
                 elif Option("-F", "--frontend").matches(arg):
-                    if len(args) == 0:
-                        raise ParseError("Argument missing for option --frontend!")
-                    try:
-                        self.frontend = FrontendType[args.pop(0)]
-                    except KeyError:
-                        raise ParseError("Invalid frontend type "+args.pop(0))
+                    self.frontend = _parse_frontend_type(args)
                 elif Option("-m", "--match-type").matches(arg):
-                    if len(args) == 0:
-                        raise ParseError("Argument missing for option --match-type!")
-                    self.match_type = MatchType[args.pop(0)]
+                    self.match_type = _parse_match_type(args)
                 else:
                     raise ParseError("Unknown option "+arg)
             elif parsing_stage == ParsingStage.action:
-                if arg in _short_actions:
-                    self.action = _short_actions[arg]
-                else:
-                    try:
-                        self.action = Action[arg]
-                    except KeyError:
-                        raise ParseError("Invalid action type: "+arg)
+                self.action = _parse_action(arg)
                 if self.needs_tags():
                     parsing_stage = ParsingStage.tags
                 else:
@@ -236,6 +223,31 @@ class RunOptions:
         elif self.action == Action.query and actual_file_count > 0:
             raise ParseError("Unexpected files count " + str(actual_file_count) +
                              " (expected 0) for action type \"" + self.action.name + "\"")
+
+
+def _parse_match_type(args):
+    if len(args) == 0:
+        raise ParseError("Argument missing for option --match-type!")
+    return MatchType[args.pop(0)]
+
+
+def _parse_frontend_type(args):
+    if len(args) == 0:
+        raise ParseError("Argument missing for option --frontend!")
+    try:
+        return FrontendType[args.pop(0)]
+    except KeyError:
+        raise ParseError("Invalid frontend type " + args.pop(0))
+
+
+def _parse_action(action_name):
+    if action_name in _short_actions:
+        return _short_actions[action_name]
+    else:
+        try:
+            return Action[action_name]
+        except KeyError:
+            raise ParseError("Invalid action type: " + action_name)
 
 
 def _is_option(arg: str):

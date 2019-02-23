@@ -7,12 +7,14 @@ from lib.printing import print_out_list, printerr
 
 class FrontendTest(Frontend):
 
-    def __init__(self, user_confirmation: UserReply, interactive_tags: List[str]):
+    def __init__(self, user_confirmation: UserReply, interactive_tags: List[str], remember=False):
         super().__init__()
-        self.user_confirmation = UserConfirmation(user_confirmation, False)
+        self.user_confirmation = UserConfirmation(user_confirmation, remember)
         self.interactive_tags = interactive_tags
+        self.user_confirmation_count = 0
 
     def _get_user_confirmation_impl(self, prompt: str, propose_remember: bool) -> UserConfirmation:
+        self.user_confirmation_count += 1
         return self.user_confirmation
 
     def get_tags(self, available_tags: List[str], allow_custom_tags) -> List[str]:

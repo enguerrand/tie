@@ -52,7 +52,7 @@ def _run_action(core: TieCore, run_options: RunOptions, frontend: Frontend):
                 clear = frontend.get_user_confirmation(prompt, "WIPE_INVALID_DATA")
                 if clear == UserReply.yes:
                     core.clear(file)
-                    # Hopefully the file is clean now. If whatever reason it isn't, this call will raise an
+                    # Hopefully the file is clean now. If for whatever reason it isn't, this call will raise an
                     # InvalidMetaDataError again. If it does, let it bubble up.
                     _process_file(core, file, run_options)
                 elif clear == UserReply.no:

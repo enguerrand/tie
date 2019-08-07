@@ -31,7 +31,7 @@ function handle_dir_event(){
 
 function handle_event(){
     local path=$1
-    if [ -f "${path}" ]; then
+    if [ -f "${path}" ] || [ ! -e "${path}" ]; then
         handle_file_event "${path}"
     elif [ -d "${path}" ]; then
         handle_dir_event "${path}"

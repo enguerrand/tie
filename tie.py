@@ -54,6 +54,9 @@ def main(*args):
     except InvalidMetaDataError as meta_data_error:
         printerr("Error: " + meta_data_error.msg)
         sys.exit(EXIT_CODE_INVALID_META_DATA)
+    except KeyboardInterrupt:
+        printerr("Application aborted by user")
+        sys.exit(EXIT_CODE_INVALID_META_DATA)
     except FileNotFoundError:
         # No need to print it. this is already done by subprocess
         sys.exit(EXIT_CODE_FILE_NOT_FOUND)

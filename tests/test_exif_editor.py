@@ -26,10 +26,11 @@ class TestExifEditor(TestCase):
         with open(WRITE_FILE, 'rb') as f:
             md5_pre = hashlib.md5(f.read()).hexdigest()
 
-            self.assertEqual("011da2f7ff8114d10b35150c2e962b26", md5_pre)
-            self.ee._write_exif_field("Exif.Photo.UserComment", "My Dummy Value öä ' \" ", WRITE_FILE)
+        self.assertEqual("c14f5570050e188e897c4f1d030edff5", md5_pre)
+        self.ee._write_exif_field("Exif.Photo.UserComment", "My Dummy Value öä ' \" ", WRITE_FILE)
+        with open(WRITE_FILE, 'rb') as f:
             md5_post = hashlib.md5(f.read()).hexdigest()
-            self.assertEqual("d41d8cd98f00b204e9800998ecf8427e", md5_post)
+            self.assertEqual("828d89558f1053c20daef859ce5f4634", md5_post)
         os.remove(WRITE_FILE)
 
     def test_read_md(self):
@@ -64,10 +65,11 @@ class TestExifEditor(TestCase):
         with open(WRITE_FILE_MD, 'rb') as f:
             md5_pre = hashlib.md5(f.read()).hexdigest()
 
-            self.assertEqual("197c10f162136a0fa984477eb911058d", md5_pre)
+            self.assertEqual("1daf4da69916978e5799fb446694549f", md5_pre)
             self.ee.set_meta_data(WRITE_FILE_MD, md.MetaData([TEST_WRITE_TAG_1, TEST_WRITE_TAG_2], "42"))
+        with open(WRITE_FILE_MD, 'rb') as f:
             md5_post = hashlib.md5(f.read()).hexdigest()
-            self.assertEqual("eebc838d12ba676fc6adab2d4d434889", md5_post)
+            self.assertEqual("b2867d616bea116475c251d8be728825", md5_post)
         os.remove(WRITE_FILE_MD)
 
     def test_read_from_non_img(self):

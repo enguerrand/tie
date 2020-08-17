@@ -69,6 +69,7 @@ class ExifEditor:
         return cmd
 
     def _build_exiv_read_command(self, base_command: List[str], field_name: str, path: str):
+        base_command.append('-b')
         base_command.append('-K')
         base_command.append(field_name)
         base_command.append(path)

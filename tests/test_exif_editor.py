@@ -37,6 +37,15 @@ class TestExifEditor(TestCase):
         self.assertEqual("42", data.ver)
         self.assertEqual([TEST_READ_TAG_1.lower(), TEST_READ_TAG_2.lower()], data.tags)
 
+    def test_read_long_meta_data(self):
+        cli.run_cmd(["cp", READ_FILE_MD, WRITE_FILE_MD])
+        long_data = '{"tags": ["whatever", "words", "something", "this-is-long", "we-need-more-tags", "foobar", "lets", "see", "if", "this", "works"], "ver": 1}'
+        with open(WRITE_FILE_MD, 'rb') as f:
+            self.ee._write_exif_field("Exif.Photo.UserComment", long_data, WRITE_FILE_MD)
+        written_md = self.ee.get_meta_data(WRITE_FILE_MD)
+        self.assertEqual(["whatever", "words", "something", "this-is-long", "we-need-more-tags", "foobar", "lets", "see", "if", "this", "works"], written_md.tags)
+        os.remove(WRITE_FILE_MD)
+
     def test_read_md_no_exif_data(self):
         self.assertRaises(CalledProcessError, lambda: self.ee.get_meta_data(READ_FILE_NO_EXIF))
 

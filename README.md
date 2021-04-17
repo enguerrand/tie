@@ -105,3 +105,7 @@ The symlinks index is stored in a user-configurable directory where each tag has
 
 As a result, one can view all files tagged with a given tag by simply opening this directory in a file manager. 
 For more complex queries, *tie* can be used to print a path list which can be used as input to other tools as described above.
+
+## License
+*tie* is free software licensed unter the GPLv3.
+

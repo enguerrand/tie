@@ -76,15 +76,15 @@ class Index:
 
     def _index_present_tags(self, meta_data, path):
         for tag in meta_data.tags:
-            absolute_tag_dir_path = os.path.abspath(self._create_tag_if_absent(tag))
-            absolute_file_path = os.path.abspath(path)
+            absolute_tag_dir_path = _abspath(self._create_tag_if_absent(tag))
+            absolute_file_path = _abspath(path)
             _create_tag(absolute_file_path, absolute_tag_dir_path)
 
     def _clear_all_tags(self, path):
         self._clear_absent_tags(md.empty(), path)
 
     def _clear_absent_tags(self, meta_data, path):
-        link_name = _build_link_name(os.path.abspath(path))
+        link_name = _build_link_name(_abspath(path))
         for tag in self.list_tags():
             self._clear_tag_if_absent(tag, link_name, meta_data)
 
@@ -95,7 +95,7 @@ class Index:
 
     def _clear_tag_if_absent(self, tag_dir, link_name, meta_data):
         tag_name = os.path.basename(tag_dir)
-        tag_path = os.path.abspath(os.path.join(self._tags_dir, tag_name))
+        tag_path = _abspath(os.path.join(self._tags_dir, tag_name))
         if tag_name not in meta_data.tags:
             _clear_tag(tag_path, link_name)
 
@@ -110,10 +110,10 @@ class Index:
                 sl.rm(t)
 
     def _find_tag_paths_pointing_into(self, parent_dir: str):
-        link_name_beginning = _build_link_name(os.path.abspath(parent_dir)) + SEPARATOR_PLACE_HOLDER
+        link_name_beginning = _build_link_name(_abspath(parent_dir)) + SEPARATOR_PLACE_HOLDER
         paths = []
         for tag in self.list_tags():
-            tag_path = os.path.abspath(os.path.join(self._tags_dir, tag))
+            tag_path = _abspath(os.path.join(self._tags_dir, tag))
             for link in os.listdir(tag_path):
                 if link.startswith(link_name_beginning):
                     paths.append(os.path.join(tag_path, link))
@@ -121,7 +121,7 @@ class Index:
 
     def _clean_obsolete_tags(self):
         for tag in self.list_tags():
-            tag_path = os.path.abspath(os.path.join(self._tags_dir, tag))
+            tag_path = _abspath(os.path.join(self._tags_dir, tag))
             try:
                 os.rmdir(tag_path)
             except OSError:
@@ -152,3 +152,5 @@ def _create_dir_if_absent(path: str):
     cli.run_cmd(["mkdir", "-p", path])
 
 
+def _abspath(p):
+    return os.path.abspath(p)

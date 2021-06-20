@@ -153,4 +153,4 @@ def _create_dir_if_absent(path: str):
 
 
 def _abspath(p):
-    return os.path.abspath(p)
+    return os.path.realpath(p)

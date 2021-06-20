@@ -124,6 +124,16 @@ class TestIndex(TestCase):
         self.index.update("../res/read_md.jpg")
         self.assertFalse(os.path.isdir(empty_tag_dir), "empty tag dir was not removed!")
 
+    def test_symlinks_followed(self):
+        self.index.update("../res/recursive.d/level1_symlinked/read_md.jpg")
+        link_name = self.files_base_path + ":recursive.d:level1:read_md.jpg"
+        self.assertTrue(
+            os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1.lower(), link_name)),
+            "no link in tagdir 1")
+        self.assertTrue(
+            os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2.lower(), link_name)),
+            "no link in tagdir 2")
+
 
 def _path_to_linkname(img):
     return img.replace(os.sep, ":")

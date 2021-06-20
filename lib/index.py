@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from subprocess import CalledProcessError
 
 from lib import cli
 import lib.exif_editor as ee
@@ -60,6 +61,8 @@ class Index:
         try:
             return self._exif.get_meta_data(path)
         except md.InvalidMetaDataError:
+            return md.empty()
+        except CalledProcessError:
             return md.empty()
 
     def _treat_as_missing_file(self, path):

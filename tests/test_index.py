@@ -134,6 +134,33 @@ class TestIndex(TestCase):
             os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2.lower(), link_name)),
             "no link in tagdir 2")
 
+    def test_unfollowed_symlinks_corrected(self):
+        link_name_right = self.files_base_path + ":recursive.d:level1:read_md.jpg"
+        link_name_wrong = self.files_base_path + ":recursive.d:level1_symlinked:read_md.jpg"
+        cli.run_cmd(["mkdir", "-p", os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1.lower())])
+        cli.run_cmd(["mkdir", "-p", os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2.lower())])
+        cli.run_cmd(
+            ["ln", "-sf", "../res/recursive.d/level1_symlinked/read_md.jpg",
+             os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1.lower(), link_name_wrong)]
+        )
+        cli.run_cmd(
+            ["ln", "-sf", "../res/recursive.d/level1_symlinked/read_md.jpg",
+             os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2.lower(), link_name_wrong)]
+        )
+        self.index.update("../res/recursive.d/level1_symlinked/read_md.jpg")
+        self.assertTrue(
+            os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1.lower(), link_name_right)),
+            "no link in tagdir 1")
+        self.assertTrue(
+            os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2.lower(), link_name_right)),
+            "no link in tagdir 2")
+        self.assertFalse(
+            os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_1.lower(), link_name_wrong)),
+            "wrong link in tagdir 1")
+        self.assertFalse(
+            os.path.islink(os.path.join(TEST_INDEX_LOCATION, "tags", TEST_READ_TAG_2.lower(), link_name_wrong)),
+            "wrong link in tagdir 2")
+
 
 def _path_to_linkname(img):
     return img.replace(os.sep, ":")

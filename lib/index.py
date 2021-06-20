@@ -41,6 +41,8 @@ class Index:
             self._update_dir_recursively(path)
         else:
             self._update_file(path)
+            parent_dir = os.path.dirname(path)
+            self._clear_orphaned_tags(parent_dir)
         self._clean_obsolete_tags()
 
     def _update_dir_recursively(self, path):
@@ -105,12 +107,19 @@ class Index:
 
     def _clear_orphaned_tags(self, parent_dir: str):
         for t in self._find_tag_paths_pointing_into(parent_dir):
-            destination = sl.readlink(t)
+            destination = _abspath(sl.readlink(t))
             if not os.path.isfile(destination):
+                sl.rm(t)
+                continue
+            expected_link_name = _build_link_name(destination)
+            current_link_name = os.path.basename(t)
+            if expected_link_name != current_link_name:
                 sl.rm(t)
 
     def _find_tag_paths_pointing_into(self, parent_dir: str):
-        link_name_beginning = _build_link_name(_abspath(parent_dir)) + SEPARATOR_PLACE_HOLDER
+        # deliberately not using realpath here - the caller told us which path should be investigated
+        abs_path = os.path.abspath(parent_dir)
+        link_name_beginning = _build_link_name(abs_path) + SEPARATOR_PLACE_HOLDER
         paths = []
         for tag in self.list_tags():
             tag_path = _abspath(os.path.join(self._tags_dir, tag))

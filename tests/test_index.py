@@ -60,6 +60,12 @@ class TestIndex(TestCase):
         self.index.update(vanished_file)
         self.assertFalse(os.path.islink(link_path), "tag of vanished file was not removed!")
 
+    def test_update_vanished_file_with_implicit_update(self):
+        vanished_file = "../res/vanished_file.jpg"
+        link_path = self._prepare_vanished_file(vanished_file, TEST_READ_TAG_2)
+        self.index.update("../res/")
+        self.assertFalse(os.path.islink(link_path), "tag of vanished file was not removed!")
+
     def test_list_vanished_file(self):
         vanished_file = "../res/vanished_file.jpg"
         link_path = self._prepare_vanished_file(vanished_file, TEST_READ_TAG_2)

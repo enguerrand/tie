@@ -44,9 +44,12 @@ class Index:
         self._clean_obsolete_tags()
 
     def _update_dir_recursively(self, path):
+        self._clear_orphaned_tags(path)
         for root, dirs, files in os.walk(path, followlinks=True):
             for file in files:
                 self._update_file(os.path.join(root, file))
+            for d in dirs:
+                self._clear_orphaned_tags(d)
 
     def _update_file(self, path: str):
         try:
@@ -97,10 +100,24 @@ class Index:
             _clear_tag(tag_path, link_name)
 
     def _clear_tags_for_vanished_dir(self, vanished_dir: str):
-        link_name_beginning = _build_link_name(os.path.abspath(vanished_dir)) + SEPARATOR_PLACE_HOLDER
+        for t in self._find_tag_paths_pointing_into(vanished_dir):
+            os.remove(t)
+
+    def _clear_orphaned_tags(self, parent_dir: str):
+        for t in self._find_tag_paths_pointing_into(parent_dir):
+            destination = sl.readlink(t)
+            if not os.path.isfile(destination):
+                sl.rm(t)
+
+    def _find_tag_paths_pointing_into(self, parent_dir: str):
+        link_name_beginning = _build_link_name(os.path.abspath(parent_dir)) + SEPARATOR_PLACE_HOLDER
+        paths = []
         for tag in self.list_tags():
             tag_path = os.path.abspath(os.path.join(self._tags_dir, tag))
-            _clear_tag_for_vanished_dir(link_name_beginning, tag_path)
+            for link in os.listdir(tag_path):
+                if link.startswith(link_name_beginning):
+                    paths.append(os.path.join(tag_path, link))
+        return paths
 
     def _clean_obsolete_tags(self):
         for tag in self.list_tags():
@@ -110,12 +127,6 @@ class Index:
             except OSError:
                 # Directory was not empty. No need to handle error, we don't want to do anything in this case anyway
                 pass
-
-
-def _clear_tag_for_vanished_dir(link_name_beginning, tag_path):
-        for link in os.listdir(tag_path):
-            if link.startswith(link_name_beginning):
-                os.remove(os.path.join(tag_path, link))
 
 
 def _create_tag(absolute_file_path, absolute_tag_dir_path):
@@ -134,7 +145,7 @@ def _build_link_abs_path(abs_tagdir_path: str, abs_file_path: str):
 
 
 def _build_link_name(abs_file_path: str):
-        return abs_file_path.replace(os.path.sep, SEPARATOR_PLACE_HOLDER)
+    return abs_file_path.replace(os.path.sep, SEPARATOR_PLACE_HOLDER)
 
 
 def _create_dir_if_absent(path: str):

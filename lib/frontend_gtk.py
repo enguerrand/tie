@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 import gi
-from gi.overrides.Gdk import Gdk
-
-from lib import autocomplete
-
+gi.require_version('Gdk', '3.0')
 gi.require_version('Gtk', '3.0')
+from gi.overrides.Gdk import Gdk
 from gi.repository import Gtk
 from typing import List
+from lib import autocomplete
 from lib.abstract_frontend import Frontend, UserConfirmation, UserReply
 from lib.multiple_choice import MultipleChoice
 
